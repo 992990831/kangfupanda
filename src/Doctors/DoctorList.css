@@ -31,3 +31,19 @@
     background-color: #fff;
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
+
+.doctorListLeft{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-left: 5px;
+}
+
+.doctorListRight{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-left: 5px;
+}
+
+.doctorListContainer{
+    display: flex;
+}

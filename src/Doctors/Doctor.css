@@ -1,7 +1,7 @@
 .doctor-container{
     background-color: #fff;
     position: relative;
-    width: 92vw;
+    width: 48vw;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 8px;
@@ -87,18 +87,38 @@
     margin-right: 5px;
 }
 
-.doctorHeadPic{
+.doctorHeadPicContainer{
     width: 70%;
     margin: auto;
 }
 
+.doctorHeadPic{
+    border-radius:50%;
+    width: 70%;
+}
+
 .doctor{
     font-weight: bold;
-    font-size: 18px;
+    font-size: 15px;
+    color: #515151;
+    padding-top: 5px;
+}
+
+.doctor-con
+{
+    display: flex;
+    margin-left: 20px;
+    width: 100%;
 }
 
 .note{
     width:80%;
     text-align: center;
     margin: auto;
+    color: #8a8a8a;
+}
+
+.doctorTag{
+    width: 120px;
+    height: 35px;
 }

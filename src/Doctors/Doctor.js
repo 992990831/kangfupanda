@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Lazyload from 'react-lazyload';
 import './Doctor.css'
 import { withRouter } from 'react-router-dom'
+import { Badge } from 'antd-mobile';
 
 class Doctor extends Component {
   constructor(props){
@@ -33,24 +34,41 @@ class Doctor extends Component {
     return (
         <div className="doctor-container">
         <div className="doctor-pic">
-            <img src={item.photo} alt="" className="doctorHeadPic" />
-        </div>
-        <div className="doctor-bottom">
-          <div className="doctor-con">
-            <p className="doctor">
-              {item.name}
-            </p>
+          <div className="doctorHeadPicContainer">
+            {/* <Badge text={item.level} corner size='large'> */}
+              <img src={item.photo} alt="" className="doctorHeadPic" />
+            {/* </Badge> */}
           </div>
-          <div className="bottom">
-            <div className="note">
-              {item.note}
+          
+            
+        </div>
+        <Badge text={'认证'} corner>
+          <div className="doctor-bottom">
+            
+              <div className="doctor-con">
+                
+                  <p className="doctor">
+                    {item.name}
+                  </p>
+                  <Badge text={item.level} hot style={{ marginLeft: 5, marginTop:20 }} />
+                
+                {/* <div style={{position:'relative', paddingTop:'12px'}}>
+                  <div style={{position:'absolute', padding:'8px 22px', color:'white'}}>治疗师</div>
+                    <img src={[require('../assets/images/tag3.png')]} className='doctorTag'></img>
+                </div> */}
+              </div>
+            
+            <div className="bottom">
+              <div className="note">
+                {item.note}
+              </div>
+              {/* <div className="star" onClick={(e) => {  }}>
+                <img src={[require("../assets/images/heart.png")]} alt="" />
+                <span>{item.starNum}</span>
+              </div> */}
             </div>
-            {/* <div className="star" onClick={(e) => {  }}>
-              <img src={[require("../assets/images/heart.png")]} alt="" />
-              <span>{item.starNum}</span>
-            </div> */}
           </div>
-        </div>
+        </Badge>
       </div>
     );
   }
