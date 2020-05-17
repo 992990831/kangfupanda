@@ -1,0 +1,104 @@
+.doctor-container{
+    background-color: #fff;
+    position: relative;
+    width: 92vw;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 8px;
+}
+
+.doctor-container .doctor-pic{
+    width: 100%;
+}
+
+.doctor-container .doctor-pic .headPic{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    width: 100%;
+}
+
+.doctor-container .doctor-pic .isVideo{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 12px;
+    right: 12px;
+}
+
+.doctor-container .doctor-bottom{
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: -20px;
+    padding: 0px 8px 10px 8px;
+}
+
+.doctor-container .doctor-bottom .title-con{
+    position: relative;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    min-height: 20px;
+}
+
+.doctor-container .doctor-bottom .title-con .title{
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 2; 
+    overflow: hidden; 
+}
+
+.doctor-container .doctor-bottom .bottom{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.doctor-container .doctor-bottom .bottom .avatar{
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+.doctor-container .doctor-bottom .bottom .avatar img{
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+}
+
+.doctor-container .doctor-bottom .bottom .name{
+    color: rgba(0,0,0,0.6);
+    font-size: 11px;
+}
+
+.doctor-container .doctor-bottom .bottom .star{
+    position: absolute;
+    right: 100px;
+    color: #666666;
+    font-size: 13px;
+}
+
+.doctor-container .doctor-bottom .bottom img{
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.doctorHeadPic{
+    width: 70%;
+    margin: auto;
+}
+
+.doctor{
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.note{
+    width:80%;
+    text-align: center;
+    margin: auto;
+}

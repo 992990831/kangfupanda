@@ -1,0 +1,16 @@
+.list-container{
+    background-color: #f1f4f6;
+    padding: 6px;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 55px;
+    padding-bottom: 60px;
+}
+
+.list-container .left{
+    margin-right: 5px;
+}
+
+.list-container .single{
+    margin-right: 5px;
+}
