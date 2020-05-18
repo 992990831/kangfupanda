@@ -60,7 +60,8 @@ const doctorListMockData = {
             name: 'Albert',
             photo: 'http://106.75.216.135/resources/doctor1.jpg',
             years: 15,
-            level: 'Lv1',
+            level: 'L1',
+            verified: true,
             scholar: '博士生导师',
             starNum: 999,
             note: '卫健部执业认证康复治疗师，对运动损伤方面的康复有丰富经验。'
@@ -69,14 +70,15 @@ const doctorListMockData = {
             name: 'Brad',
             photo: 'http://106.75.216.135/resources/brad.jpg',
             years: 10,
-            level: 'Lv1',
+            level: 'L1',
+            verified: true,
             scholar: '博士生导师',
             starNum: 999,
             note: '主要擅长下肢生物力学调整，关节障碍无痛调整，肌肉骨骼急慢性疼痛及运动损伤调理。'
         },
         {
             name: 'Ciel',
-            level: 'Lv1',
+            level: 'L1',
             photo: 'http://106.75.216.135/resources/Ciel.jpg',
             years: 25,
             scholar: '博士生导师',
@@ -85,7 +87,7 @@ const doctorListMockData = {
         },
         {
             name: 'Delicia',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/Delicia.jpg',
             years: 20,
             scholar: '博士生导师',
@@ -94,7 +96,7 @@ const doctorListMockData = {
         },
         {
             name: 'Henry',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/Henry.jpg',
             years: 28,
             scholar: '博士生导师',
@@ -105,7 +107,8 @@ const doctorListMockData = {
     right: [
         {
             name: 'Delicia',
-            level: 'Lv1',
+            level: 'L1',
+            verified: true,
             photo: 'http://106.75.216.135/resources/Delicia.jpg',
             years: 20,
             scholar: '博士生导师',
@@ -114,7 +117,7 @@ const doctorListMockData = {
         },
         {
             name: 'Henry',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/Henry.jpg',
             years: 28,
             scholar: '博士生导师',
@@ -123,7 +126,7 @@ const doctorListMockData = {
         },
         {
             name: 'Leo',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/Leo.jpg',
             years: 28,
             scholar: '博士生导师',
@@ -132,7 +135,7 @@ const doctorListMockData = {
         },
         {
             name: 'SunnyChu',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/SunnyChu.png',
             years: 28,
             scholar: '博士生导师',
@@ -141,7 +144,7 @@ const doctorListMockData = {
         },
         {
             name: 'TitoHo',
-            level: 'Lv2',
+            level: 'L2',
             photo: 'http://106.75.216.135/resources/TitoHo.jpg',
             years: 28,
             scholar: '博士生导师',

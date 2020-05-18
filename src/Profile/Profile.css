@@ -1,0 +1,75 @@
+.profileHeadPic{
+    border-radius:50%;
+    width: 70%;
+}
+
+.profileHeader{
+    padding-top: 10px;
+    background-color: white;
+    display: flex;
+}
+
+.profileName{
+    padding-bottom: 10px;
+    padding-left: 20px;
+    background-color: white;
+    display: flex;
+    font-weight: bold;
+    font-size: 15px;
+    color: #515151;
+}
+
+
+.profileHeaderPicContainer{
+    width: 250px;
+    height: 115px;
+}
+
+.profileHeaderContentContainer{
+    width: 100%;
+    margin-right: 20px;
+    color: #8a8a8a;
+}
+
+.profileHeaderContent{
+    width:33%;
+}
+
+.profileHeaderRow{
+    display: flex;
+    width: 100%;   
+    margin-top: 5px;     
+}
+
+.profileHeaderRowCount{
+    display: flex;
+    width: 100%;    
+    color: black;
+    margin-top: 5px;
+}
+
+.videoContainer{
+    background-color: #fff;
+    position: relative;
+    height: 200px;
+    width: 48vw;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+}
+
+.videoContainer .publish{
+    border: 0;
+    background-color: transparent;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+}
+
+.videoContainer .publish img{
+    width: 60px;
+   
+  }

@@ -5,14 +5,14 @@ import { withRouter } from 'react-router-dom'
 import { Badge } from 'antd-mobile';
 
 class Doctor extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       item: [],
       isStar: true
     }
   }
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       item: this.props.item
     })
@@ -26,49 +26,46 @@ class Doctor extends Component {
   NavToDetail = (url) => {
     this.props.history.push({
       pathname: url,
-      state: {data: this.state.item}
+      state: { data: this.state.item }
     })
   }
   render() {
     const { item } = this.state;
     return (
-        <div className="doctor-container">
+      <div className="doctor-container">
         <div className="doctor-pic">
           <div className="doctorHeadPicContainer">
-            {/* <Badge text={item.level} corner size='large'> */}
-              <img src={item.photo} alt="" className="doctorHeadPic" />
-            {/* </Badge> */}
+            <img src={item.photo} alt="" className="doctorHeadPic" />
           </div>
-          
-            
+
         </div>
-        <Badge text={'认证'} corner>
-          <div className="doctor-bottom">
-            
-              <div className="doctor-con">
-                
-                  <p className="doctor">
-                    {item.name}
-                  </p>
-                  <Badge text={item.level} hot style={{ marginLeft: 5, marginTop:20 }} />
-                
-                {/* <div style={{position:'relative', paddingTop:'12px'}}>
+        <div className="doctor-bottom">
+          <div className="doctor-con">
+
+            <p className="doctor">
+              {item.name}
+            </p>
+            <Badge text={item.level} hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)' }} />
+            {
+              item.verified? <Badge text='已认证' hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)'}}/>
+              : <div/>  
+            }
+            {/* <div style={{position:'relative', paddingTop:'12px'}}>
                   <div style={{position:'absolute', padding:'8px 22px', color:'white'}}>治疗师</div>
                     <img src={[require('../assets/images/tag3.png')]} className='doctorTag'></img>
                 </div> */}
-              </div>
-            
-            <div className="bottom">
-              <div className="note">
-                {item.note}
-              </div>
-              {/* <div className="star" onClick={(e) => {  }}>
+          </div>
+
+          <div className="bottom">
+            <div className="note">
+              {item.note}
+            </div>
+            {/* <div className="star" onClick={(e) => {  }}>
                 <img src={[require("../assets/images/heart.png")]} alt="" />
                 <span>{item.starNum}</span>
               </div> */}
-            </div>
           </div>
-        </Badge>
+        </div>
       </div>
     );
   }
