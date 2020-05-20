@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './Profile.css';
-import { Button } from 'antd-mobile';
+
+
+import ProfileHeader from './ProfileHeader';
 
 class Profile extends Component {
     openCamera()
@@ -16,7 +18,8 @@ class Profile extends Component {
                     <div className="profileHeaderPicContainer">
                         <img src="http://106.75.216.135/resources/doctor1.jpg" alt="" className="profileHeadPic" />
                     </div>
-                    <div className="profileHeaderContentContainer">
+                    <ProfileHeader />
+                    {/* <div className="profileHeaderContentContainer">
                         <div className="profileHeaderRow">
                             <div className="profileHeaderContent">粉丝</div>
                             <div className="profileHeaderContent">关注</div>
@@ -30,7 +33,7 @@ class Profile extends Component {
                         <div className="profileHeaderRow">
                             <Button style={{ width: '90%', margin: 'auto' }}>编辑个人信息</Button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="profileName">
                     治疗师Albert
