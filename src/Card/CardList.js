@@ -14,7 +14,7 @@ class CardList extends Component {
       <div className="list-container">
           <div className="single">
             {
-              list.single.map((item, index) => {
+              list.map((item, index) => {
                 return (
                   <Card item={item} type={type} key={index} />
                 )

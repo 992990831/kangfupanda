@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Lazyload from 'react-lazyload';
 import './Card.css'
 import { withRouter } from 'react-router-dom'
+import { Constants } from '../Utils/Constants';
 
 
 class Card extends Component {
@@ -31,6 +32,7 @@ class Card extends Component {
   }
   render() {
     const { isStar,item } = this.state;
+    debugger;
     return (
     //   <div className="card-container" onClick={() => this.NavToDetail(`peopleDetail/${item.userId}`)}>
     <div className="card-container">
@@ -53,12 +55,12 @@ class Card extends Component {
                   <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.isVideo ? {} : { display: 'none' }} 
                    onClick={() => {
                       this.props.history.push({
-                        pathname: `cardDetail/${item.userId}`,
+                        pathname: `cardDetail/${item.id}`,
                         state: {data: this.state.item}
                       })
                     }} 
                   />
-                  <img src={item.headPic} alt="" className="headPic" onClick={() => {
+                  <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
                     this.props.history.push({
                       pathname: `cardDetail/${item.userId}`,
                       state: {data: this.state.item}
@@ -81,7 +83,7 @@ class Card extends Component {
           <div className="bottom">
             <div className="avatar">
               <Lazyload height={25} width={25}>
-                <img src={item.avatar} alt="" />
+                <img src='https://img.xiaohongshu.com/avatar/5a7753acd2c8a562cbb7adc4.jpg@80w_80h_90q_1e_1c_1x.jpg' alt="" />
               </Lazyload>
             </div>
             <div className="name">
@@ -89,7 +91,7 @@ class Card extends Component {
             </div>
             <div className="star" onClick={(e) => {  }}>
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart2.png")]} alt="" />
-              <span>{item.starNum}</span>
+              <span>{999}</span>
             </div>
           </div>
         </div>
