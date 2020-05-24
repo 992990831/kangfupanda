@@ -6,27 +6,27 @@ import ProfileHeader from './ProfileHeader';
 import URI from 'URIjs';
 import axios from 'axios';
 
-import {Constants} from '../Utils/Constants';
+import { Constants } from '../Utils/Constants';
 
 function generateGetCodeUrl(redirectURL) {
-  return new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
-      .addQuery("appid", Constants.AppId)
-      .addQuery("redirect_uri", encodeURI(Constants.RedirectUrl) )
-      .addQuery("response_type", "code")
-      .addQuery("scope", "snsapi_userinfo")
-      .addQuery("response_type", "code")
-      .hash("wechat_redirect")
-      .toString();
+    return new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
+        .addQuery("appid", Constants.AppId)
+        .addQuery("redirect_uri", encodeURI(Constants.RedirectUrl))
+        .addQuery("response_type", "code")
+        .addQuery("scope", "snsapi_userinfo")
+        .addQuery("response_type", "code")
+        .hash("wechat_redirect")
+        .toString();
 };
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          code: '',
-          userInfo: {}
+            code: '',
+            userInfo: {}
         };
-      }
+    }
 
     // getUserInfo(token, openId)
     // {
@@ -39,21 +39,20 @@ class Profile extends Component {
     //     });   
     // }
 
-    componentDidMount(){
-            let userInfo =  localStorage.getItem("userInfo");
-            if(!userInfo){
-              const uri = new URI(document.location.href);
-              const query = uri.query(true);
-              const {code} = query;
-
-              if(!code)
-              {
+    componentDidMount() {
+        let userInfo = localStorage.getItem("userInfo");
+        if (!userInfo) {
+            const uri = new URI(document.location.href);
+            const query = uri.query(true);
+            const { code } = query;
+           
+            if (!code) {
                 window.location.href = generateGetCodeUrl(document.location.href);
-              }
-              else{
+            }
+            else {
                 axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
                     headers: { 'Content-Type': 'application/json' }
-                  })
+                })
                     .then(res => {
                         //alert(JSON.stringify(res));
                         // data {
@@ -61,25 +60,31 @@ class Profile extends Component {
                         //     nickname
                         //     headimgurl
                         //     }
-                        alert(res.data)
-                        localStorage.setItem("userInfo",res.data);
-                        this.setState({userInfo: JSON.parse(res.data)});
+                        if(!res.data)
+                        {
+                            return;
+                        }
+
+                        localStorage.setItem("userInfo", res.data);
+                        this.setState({ userInfo: JSON.parse(res.data) });
                     })
                     .catch(function (error) {
                         alert('获取用户token失败,' + error);
                     });
 
-              }
             }
-            else{
-                let userInfo = localStorage.getItem("userInfo");
-                this.setState({userInfo: JSON.parse(userInfo)});
+        }
+        else {
+            let userInfo = localStorage.getItem("userInfo");
+            if(userInfo)
+            {
+                this.setState({ userInfo: JSON.parse(userInfo) });
             }
+        }
     }
 
-    openCamera()
-    {
-      this.refs.btnCamera.click();
+    openCamera() {
+        this.refs.btnCamera.click();
     }
 
     render() {
@@ -110,15 +115,15 @@ class Profile extends Component {
                     {this.state.userInfo.nickname}
                 </div>
                 <div>
-                    <span style={{color: 'rgb(105, 164, 43)', fontWeight:'bold'}}>我的视频</span> 
+                    <span style={{ color: 'rgb(105, 164, 43)', fontWeight: 'bold' }}>我的视频</span>
                 </div>
                 <div className='videoContainer'>
                     <button className="publish" onClick={this.openCamera.bind(this)}>
                         <img src={[require("../assets/images/publish2.png")]} alt="" />
                     </button>
                 </div>
-                <input type="file" accept="image/*" ref='btnCamera' style={{display:'none'}}>
-              </input>
+                <input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
+                </input>
             </React.Fragment>
         )
     }
