@@ -24,13 +24,15 @@ class Home extends Component {
   }
 
   GetList() {
-    axios.get(`${Constants.APIBaseUrl}/video/GetVideos`, {
+    axios.get(`${Constants.APIBaseUrl}/video/GetVideosFront`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {
         this.setState({
           videos: res.data,
         });
+
+        localStorage.setItem("videos", JSON.stringify(res.data));
       })
       .catch(function (error) {
         console.log(error);

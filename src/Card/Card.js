@@ -24,15 +24,14 @@ class Card extends Component {
       isStar: !this.state.isStar
     })
   }
-  NavToDetail = (url) => {
-    this.props.history.push({
-      pathname: url,
-      state: {data: this.state.item}
-    })
-  }
+  // NavToDetail = (url) => {
+  //   this.props.history.push({
+  //     pathname: url,
+  //     state: {data: this.state.item}
+  //   })
+  // }
   render() {
     const { isStar,item } = this.state;
-    debugger;
     return (
     //   <div className="card-container" onClick={() => this.NavToDetail(`peopleDetail/${item.userId}`)}>
     <div className="card-container">
@@ -62,7 +61,7 @@ class Card extends Component {
                   />
                   <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
                     this.props.history.push({
-                      pathname: `cardDetail/${item.userId}`,
+                      pathname: `cardDetail/${item.id}`,
                       state: {data: this.state.item}
                     })
                   }} />

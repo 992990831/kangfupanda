@@ -10,7 +10,7 @@
 .card-detail .card-header{
     line-height: 45px;
     box-sizing: border-box;
-    padding-top: 7px;
+    padding-top: 0px;
     padding-left:  45px;
     position: fixed;
     top: 0;
@@ -18,6 +18,8 @@
     height: 45px;
     background-color: #fff;
     z-index: 10;
+    color: rgb(148,148,148);
+    text-align: left;
 }
 
 .card-detail .card-header .card-left{

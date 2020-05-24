@@ -6,16 +6,47 @@ import { Player } from 'video-react';
 
 import Hammer from "react-hammerjs";
 
-import { mockData } from '../mock/mockData';
+//import { mockData } from '../mock/mockData';
+import { Constants } from '../Utils/Constants';
+
+//import wx from 'weixin-js-sdk';
+import axios from 'axios';
 
 class CardDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            videos: JSON.parse(localStorage.getItem("videos"))
         }
     }
+
+    // componentDidMount()
+    // {
+    //     //初始化微信接口
+    //     axios.get(`${Constants.APIBaseUrl}/video/getShareMessage`, {
+    //         headers: { 'Content-Type': 'application/json' }
+    //       })
+    //         .then(res => {
+    //             let {appId, timestamp, nonceStr, signature} = res.data;
+    //             window.wx.config({
+    //                 debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    //                 appId: appId, // 必填，公众号的唯一标识
+    //                 timestamp: timestamp, // 必填，生成签名的时间戳
+    //                 nonceStr: nonceStr, // 必填，生成签名的随机串
+    //                 signature: signature, // 必填，签名
+    //                 jsApiList: [
+    //                     'onMenuShareAppMessage',
+    //                     'onMenuShareTimeline'
+    //                   ] // 必填，需要使用的JS接口列表
+    //               });
+    //         })
+    //         .catch(function (error) {
+    //           console.log(error);
+    //         });
+      
+    // }
+
     componentWillMount() {
-        
         if(this.props.location.state && this.props.location.state.data)
         {
             this.setState({
@@ -23,8 +54,9 @@ class CardDetail extends Component {
             })    
         }
         else{
-            var currentItem = mockData.single.filter(data => {
-                return data.userId === parseInt(this.props.match.params.id) ;
+            
+            var currentItem = this.state.videos.filter(data => {
+                return data.id === parseInt(this.props.match.params.id) ;
             });
 
             if(currentItem && currentItem.length>0)
@@ -37,34 +69,6 @@ class CardDetail extends Component {
     }
 
     componentDidMount() {
-        // var ctx = this.refs.playerCanvas.getContext('2d');
-        // this.refs.playerCanvas.width = 640;  
-        // this.refs.playerCanvas.height = 1136; 
-        // var cwidth = this.refs.playerCanvas.offsetWidth;
-        // var cheight = this.refs.playerCanvas.offsetHeight;
-        // // 初始化定时器
-        // var i=null;
-        // this.refs.playerCanvas.addEventListener("click",() => {
-        //     this.refs.player.play()
-        // });
-        // // 播放
-        // this.refs.player.addEventListener("play", () => {
-        //     this.refs.player.style.cssText = " display:none ";
-        //     var i = window.setInterval(() => {
-        //         ctx.drawImage(this.refs.player, 0, 0, cwidth, cheight);
-        //     }, 20);  // 每0.02秒画一张图片
-        // }, false);
-
-        // // 暂停
-        // this.refs.player.addEventListener("pause", function() {
-        //     window.clearInterval(i);  // 暂停绘画
-        // }, false);
-
-        // // 结束
-        // this.refs.player.addEventListener("ended", function() {
-        //     clearInterval(i);
-        // }, false);
-
         window.setTimeout(()=>{
             this.refs.player.play();
         }, 500)
@@ -83,8 +87,8 @@ class CardDetail extends Component {
         {
             
             const { item } = this.state;
-           var nextItem = mockData.single.filter(data => {
-                return data.userId === (item.userId + 1) ;
+           var nextItem = this.state.videos.filter(data => {
+                return data.id === (item.id - 1) ;  //因为现在视频列表是按照createdAt倒序，随意是减一，不是加一
             });
             
             if(nextItem && nextItem.length>0)
@@ -106,8 +110,8 @@ class CardDetail extends Component {
         else  //下划
         {
             const { item } = this.state;
-           var nextItem = mockData.single.filter(data => {
-                return data.userId === (item.userId - 1) ;
+           var nextItem = this.state.videos.filter(data => {
+                return data.id === (item.id + 1) ;
             });
             
             if(nextItem && nextItem.length>0)
@@ -133,6 +137,11 @@ class CardDetail extends Component {
         
     }
 
+    share(){
+
+
+    }
+
     // hadlePan(e) {
     //     debugger;
     // }
@@ -149,19 +158,21 @@ class CardDetail extends Component {
                             <div className="card-header">
                                 <img src={[require('../assets/images/arrow.png')]} alt="" className="card-left"
                                     onClick={() => this.handleBack()} />
-                                <div className="card-avatar">
-                                </div>
+                                主页
                             </div>
                             <div className="card-description">         
                                  <div className="people-content">
                                     {
-                                    item.detailText.map((item, index) => {
-                                        return (
-                                        <p className="people-content__item" key={index}>
-                                            {item}
+                                        <p className="people-content__item">
+                                            {item.name}
                                         </p>
-                                        )
-                                    })
+                                    // item.detailText.map((item, index) => {
+                                    //     return (
+                                    //     <p className="people-content__item" key={index}>
+                                    //         {item}
+                                    //     </p>
+                                    //     )
+                                    // })
                                     }
                                 </div>
                             </div>
@@ -178,7 +189,7 @@ class CardDetail extends Component {
                                     </canvas> */}
                                    <div style={{position:'absolute', transform:'translateY(-50%)', top:'50%'}}>
                                          <video ref='player' style={{zIndex:'1'}}
-                                         poster={item.headPic} src={item.videoUri} 
+                                         poster={`${Constants.ResourceUrl}/${item.posterUri}`} src={`${Constants.ResourceUrl}/${item.videoUri}`} 
                                          x5-playsinline="true" 
                                         //  x5-video-player-type="h5"
                                          playsinline="true" 
@@ -208,6 +219,7 @@ class CardDetail extends Component {
                                 <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>99点赞</span>   
                                 <img src={[require("../assets/images/wechat-full.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
                                 <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>转发</span>   
+                                
                             </div>
                         </div>
                         : <div></div>
