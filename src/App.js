@@ -145,7 +145,8 @@ class App extends Component {
               <Route path="/home" component={Home} />
               <Route path="/cardDetail/:id" component={CardDetail} />
               <Route path="/found" component={DoctorList} />
-              <Route path="/profile" component={Profile} />
+              <Route path="/profile" component={Profile}>
+              </Route>
               <Route path="/" render={() => {
                 return false ?
                   <div>home</div> : <Redirect to={{
