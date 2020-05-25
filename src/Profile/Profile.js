@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
+import { ActionSheet } from 'antd-mobile';
 
 import URI from 'URIjs';
 import axios from 'axios';
+
+import { createHashHistory } from 'history';
 
 import { Constants } from '../Utils/Constants';
 
@@ -39,8 +42,49 @@ class Profile extends Component {
     //     });   
     // }
 
+    registerUser(user)
+    {
+        axios.post(`${Constants.APIBaseUrl}/user/register`, user).then().catch(function (error) {
+            alert('register user fail,' + error);
+        });
+    }
+
+    showActionSheet = () => {
+        const BUTTONS = ['退出', '取消'];
+        ActionSheet.showActionSheetWithOptions({
+            options: BUTTONS,
+            cancelButtonIndex: BUTTONS.length - 1,
+            destructiveButtonIndex: BUTTONS.length - 2,
+            message: '请选择',
+            maskClosable: true,
+        },
+            (buttonIndex) => {
+                //this.setState({ clicked: BUTTONS[buttonIndex] });
+                if(buttonIndex==0)
+                {
+                    localStorage.removeItem("userInfo");
+
+                    const history = createHashHistory();
+                    history.push('/home');
+                }
+            });
+    }
+
     componentDidMount() {
-        let userInfo = localStorage.getItem("userInfo");
+        // localStorage.setItem("userInfo", 
+        //    JSON.stringify({
+        //         nickname:'AndyTest',
+        //         openid: '1234567890',
+        //         province: 'Shanghai',
+        //         city: 'Shanghai',
+        //         sex:'1',
+        //         phone: '13600000000',
+        //         headimgurl:'http://106.75.216.135/resources/A001.png'
+        //     })
+        // );
+
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
         if (!userInfo) {
             const uri = new URI(document.location.href);
             const query = uri.query(true);
@@ -67,6 +111,19 @@ class Profile extends Component {
 
                         localStorage.setItem("userInfo", res.data);
                         this.setState({ userInfo: JSON.parse(res.data) });
+                        
+                        let originalUser = JSON.parse(res.data);
+                        let toUser={
+                            nickName: originalUser.nickname,
+                            openId: originalUser.openid,
+                            province: originalUser.province,
+                            city: originalUser.city,
+                            sex: originalUser.sex,
+                            phone: originalUser.phone,
+                            headpic: originalUser.headimgurl
+                        };
+
+                        this.registerUser(toUser);
                     })
                     .catch(function (error) {
                         alert('获取用户token失败,' + error);
@@ -75,11 +132,7 @@ class Profile extends Component {
             }
         }
         else {
-            let userInfo = localStorage.getItem("userInfo");
-            if(userInfo)
-            {
-                this.setState({ userInfo: JSON.parse(userInfo) });
-            }
+            this.setState({ userInfo:  userInfo});
         }
     }
 
@@ -91,25 +144,10 @@ class Profile extends Component {
         return (
             <React.Fragment>
                 <div className="profileHeader">
-                    <div className="profileHeaderPicContainer">
-                        <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic" />
+                    <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
+                        <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic"/>
                     </div>
                     <ProfileHeader />
-                    {/* <div className="profileHeaderContentContainer">
-                        <div className="profileHeaderRow">
-                            <div className="profileHeaderContent">粉丝</div>
-                            <div className="profileHeaderContent">关注</div>
-                            <div className="profileHeaderContent">获赞</div>
-                        </div>
-                        <div className="profileHeaderRowCount">
-                            <div className="profileHeaderContent">666</div>
-                            <div className="profileHeaderContent">777</div>
-                            <div className="profileHeaderContent">888</div>
-                        </div>
-                        <div className="profileHeaderRow">
-                            <Button style={{ width: '90%', margin: 'auto' }}>编辑个人信息</Button>
-                        </div>
-                    </div> */}
                 </div>
                 <div className="profileName">
                     {this.state.userInfo.nickname}
