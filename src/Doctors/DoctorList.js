@@ -1,15 +1,38 @@
 import React, { Component } from 'react';
 import './DoctorList.css'
 import Doctor from './Doctor'
+import axios from 'axios';
+import { Constants } from '../Utils/Constants';
 
 class DoctorList extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            doctors: []
         }
     }
+
+    componentDidMount(){
+        this.GetList();
+    }
+
+    GetList() {
+        axios.get(`${Constants.APIBaseUrl}/user/doctor/list`, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => {
+            this.setState({
+              doctors: res.data,
+            });
+    
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+
     render() {
-        const { list, type } = this.props;
+        //const { list, type } = this.props;
         return (
             <React.Fragment>
                 <div className="header">
@@ -17,7 +40,7 @@ class DoctorList extends Component {
                         console.log('click search')
                     }}>
                         <img src={[require("../assets/images/search.png")]} alt="" className="search-icon" />
-                        <span>大家都在搜"张文宏"</span>
+                        <span>大家都在搜"XXX"</span>
                     </div>
                 </div>
                 <div className='doctorListContainer'>
@@ -32,19 +55,25 @@ class DoctorList extends Component {
                     </div> */}
                     <div className="doctorListLeft">
                         {
-                            doctorListMockData.left.map((item, index) => {
-                            return (
-                                <Doctor item={item} type={type} key={index} />
-                            )
+                           
+                            this.state.doctors.map((item, index) => {
+                                if(index%2==0){
+                                    
+                                    return (
+                                        <Doctor item={item} key={index} />
+                                    )
+                                }
                             })
                         }
                     </div>
                     <div className="doctorListRight">
                         {
-                            doctorListMockData.right.map((item, index) => {
-                            return (
-                                <Doctor item={item} type={type} key={index} />
-                            )
+                            this.state.doctors.map((item, index) => {
+                                if(index%2==1){
+                                    return (
+                                        <Doctor item={item} key={index} />
+                                    )
+                                }
                             })
                         }
                     </div>

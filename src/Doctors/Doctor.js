@@ -35,7 +35,7 @@ class Doctor extends Component {
       <div className="doctor-container">
         <div className="doctor-pic">
           <div className="doctorHeadPicContainer">
-            <img src={item.photo} alt="" className="doctorHeadPic" />
+            <img src={item.headpic} alt="" className="doctorHeadPic" />
           </div>
 
         </div>
@@ -43,7 +43,7 @@ class Doctor extends Component {
           <div className="doctor-con">
 
             <p className="doctor">
-              {item.name}
+              {item.nickName}
             </p>
             <Badge text={item.level} hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)' }} />
             {
