@@ -36,13 +36,13 @@ class Doctor extends Component {
     const { item } = this.state;
     return (
       <div className="doctor-container">
-        <Badge text={'认证'} corner>
+        {/* <Badge text={'认证'} corner> */}
         <div className="doctor-pic">
             <div className="doctorHeadPicContainer">
               <img src={item.headpic} alt="" className="doctorHeadPic" />
             </div>
           </div>
-        </Badge>
+        {/* </Badge> */}
         
         {/* {
           item.verified?
