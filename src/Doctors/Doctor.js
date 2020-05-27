@@ -29,25 +29,37 @@ class Doctor extends Component {
       state: { data: this.state.item }
     })
   }
+
+  
+
   render() {
     const { item } = this.state;
     return (
       <div className="doctor-container">
+        <Badge text={'认证'} corner>
         <div className="doctor-pic">
-          <div className="doctorHeadPicContainer">
-            <img src={item.headpic} alt="" className="doctorHeadPic" />
+            <div className="doctorHeadPicContainer">
+              <img src={item.headpic} alt="" className="doctorHeadPic" />
+            </div>
           </div>
-
-        </div>
+        </Badge>
+        
+        {/* {
+          item.verified?
+          <Badge style={{width:'100%'}} text={'认证'} corner>
+            <div></div>
+          </Badge> :
+          <div />
+        } */}
+        
         <div className="doctor-bottom">
           <div className="doctor-con">
-
             <p className="doctor">
               {item.nickName}
             </p>
-            <Badge text={item.level} hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)' }} />
+            {/* <Badge text={item.level} hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)' }} /> */}
             {
-              item.verified? <Badge text='已认证' hot style={{ marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)'}}/>
+              item.verified? <Badge text='已认证' hot style={{ width:'40px', marginLeft: 5, marginTop: 20, background:'rgb(128, 227, 22)'}}/>
               : <div/>  
             }
             {/* <div style={{position:'relative', paddingTop:'12px'}}>
