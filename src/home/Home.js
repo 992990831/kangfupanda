@@ -24,7 +24,7 @@ class Home extends Component {
   }
 
   GetList() {
-    axios.get(`${Constants.APIBaseUrl}/video/GetVideosFront`, {
+    axios.get(`${Constants.APIBaseUrl}/club/list`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {

@@ -51,7 +51,7 @@ class Card extends Component {
               <Lazyload height={200} width={172}>
                 <div>
                   <span className="video-title">{item.title}</span>
-                  <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.isVideo ? {} : { display: 'none' }} 
+                  <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType=='video' ? {} : { display: 'none' }} 
                    onClick={() => {
                       this.props.history.push({
                         pathname: `cardDetail/${item.id}`,
