@@ -3,6 +3,7 @@ import Lazyload from 'react-lazyload';
 import './Doctor.css'
 import { withRouter } from 'react-router-dom'
 import { Badge } from 'antd-mobile';
+import { Constants } from '../Utils/Constants';
 
 class Doctor extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ class Doctor extends Component {
         {/* <Badge text={'认证'} corner> */}
         <div className="doctor-pic">
             <div className="doctorHeadPicContainer">
-              <img src={item.headpic} alt="" className="doctorHeadPic" />
+              <img src={item.headpic.substring(0,4)=='http'?  item.headpic : `${Constants.ResourceUrl}/${item.headpic}`} alt="" className="doctorHeadPic" />
             </div>
           </div>
         {/* </Badge> */}
