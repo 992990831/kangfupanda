@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Lazyload from 'react-lazyload';
 import './CardDetail.css'
 import { withRouter } from 'react-router-dom'
-import { Player } from 'video-react';
+//import { Player } from 'video-react';
 
 import Hammer from "react-hammerjs";
 import { Carousel, Drawer, ListView, List } from 'antd-mobile';
@@ -11,6 +11,12 @@ import { Constants } from '../Utils/Constants';
 
 //import wx from 'weixin-js-sdk';
 import axios from 'axios';
+
+import { getJSSDK } from '../Utils/wxshare';
+
+//微信分享
+//前端参考：https://www.cnblogs.com/wang715100018066/p/12066579.html
+//后端参考：https://www.cnblogs.com/wuhuacong/p/5482848.html
 
 const comments = [{
     id: 1,
@@ -78,37 +84,28 @@ class CardDetail extends Component {
         }
     }
 
-    // componentDidMount()
-    // {
-    //     //初始化微信接口
-    //     axios.get(`${Constants.APIBaseUrl}/video/getShareMessage`, {
-    //         headers: { 'Content-Type': 'application/json' }
-    //       })
-    //         .then(res => {
-    //             let {appId, timestamp, nonceStr, signature} = res.data;
-    //             window.wx.config({
-    //                 debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    //                 appId: appId, // 必填，公众号的唯一标识
-    //                 timestamp: timestamp, // 必填，生成签名的时间戳
-    //                 nonceStr: nonceStr, // 必填，生成签名的随机串
-    //                 signature: signature, // 必填，签名
-    //                 jsApiList: [
-    //                     'onMenuShareAppMessage',
-    //                     'onMenuShareTimeline'
-    //                   ] // 必填，需要使用的JS接口列表
-    //               });
-    //         })
-    //         .catch(function (error) {
-    //           console.log(error);
-    //         });
-      
-    // }
+    prepareShare(){
+        let obj={
+            title: '一键康复',// 分享标题
+            des: this.state.item.text,// 分享描述
+            linkurl:window.location.href,// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            img:'http://app.kangfupanda.com/resources/logo.jpeg' // 分享图标
+        }
+        // let url = encodeURIComponent(window.location.href.split('#')[0]);
+        let url = window.location.href.split('#')[0];
+
+        //alert(JSON.stringify(obj));
+        getJSSDK(url, obj)
+        
+      }
 
     componentWillMount() {
         if(this.props.location.state && this.props.location.state.data)
         {
             this.setState({
                 item: this.props.location.state && this.props.location.state.data
+            }, ()=>{
+                this.prepareShare();
             })    
         }
         else{
@@ -121,9 +118,13 @@ class CardDetail extends Component {
             {
                 this.setState({
                     item: currentItem[0]
+                }, ()=>{
+                    this.prepareShare();
                 })    
             }
         }
+
+       
     }
 
     componentDidMount() {
@@ -210,11 +211,6 @@ class CardDetail extends Component {
 
     handleTap = (e) => {
         
-    }
-
-    share(){
-
-
     }
 
     onOpenChange = (...args) => {
