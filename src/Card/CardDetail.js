@@ -100,6 +100,35 @@ class CardDetail extends Component {
       }
 
     componentWillMount() {
+        if(this.state.videos)
+        {
+            this.loadItem();
+        }
+        else{
+            this.GetList();
+        }
+        
+    }
+
+    GetList() {
+        axios.get(`${Constants.APIBaseUrl}/club/list`, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => {
+            this.setState({
+              videos: res.data,
+            }, ()=>{
+                localStorage.setItem("videos", JSON.stringify(res.data));
+                this.loadItem();
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }    
+
+    loadItem()
+    {
         if(this.props.location.state && this.props.location.state.data)
         {
             this.setState({
@@ -109,7 +138,6 @@ class CardDetail extends Component {
             })    
         }
         else{
-            
             var currentItem = this.state.videos.filter(data => {
                 return data.id === parseInt(this.props.match.params.id) ;
             });
@@ -124,7 +152,6 @@ class CardDetail extends Component {
             }
         }
 
-       
     }
 
     componentDidMount() {
