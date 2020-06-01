@@ -5,19 +5,76 @@ import { withRouter } from 'react-router-dom'
 import { Player } from 'video-react';
 
 import Hammer from "react-hammerjs";
-import { Carousel } from 'antd-mobile';
+import { Carousel, Drawer, ListView, List } from 'antd-mobile';
 
-//import { mockData } from '../mock/mockData';
 import { Constants } from '../Utils/Constants';
 
 //import wx from 'weixin-js-sdk';
 import axios from 'axios';
 
+const comments = [{
+    id: 1,
+    text: '这是第一条评论',
+    subComments: [
+        {
+            id: 100,
+            text: '顶楼上'
+        },
+        {
+            id: 101,
+            text: '楼上666'
+        }
+    ]
+},
+{
+    id: 2,
+    text: '这是第二条评论',
+    subComments: [
+        {
+            id: 200,
+            text: '第二条评论的子评论'
+        },
+        {
+            id: 201,
+            text: '又是一条子评论'
+        }
+    ]
+}
+]
+
+const sidebar = (<List>
+    {comments.map((comment, index) => {
+        return (<div key={index} style={{ padding: '0 15px' }}>
+            <div
+                style={{
+                    lineHeight: '50px',
+                    color: '#888',
+                    fontSize: 18,
+                    borderTop: '2px solid #F6F6F6',
+                }}
+            >{comment.text}</div>
+            <div style={{ display: '-webkit-box', display: 'inline-block', padding: '15px 0' }}>
+                {
+                    comment.subComments.map((subCom, index)=>{
+                        return(
+                            <div style={{ lineHeight: 1 }}>
+                                <div style={{ marginBottom: '8px', fontWeight: 'bold', color:'rgb(136, 136, 136)' }}>{subCom.text}</div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        </div>)
+    })}
+  </List>);
+
+
 class CardDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            videos: JSON.parse(localStorage.getItem("videos"))
+            videos: JSON.parse(localStorage.getItem("videos")),
+            isCommentVisible: false
         }
     }
 
@@ -160,6 +217,11 @@ class CardDetail extends Component {
 
     }
 
+    onOpenChange = (...args) => {
+        console.log(args);
+        this.setState({ isCommentVisible: !this.state.isCommentVisible });
+    }
+
     // hadlePan(e) {
     //     debugger;
     // }
@@ -250,7 +312,21 @@ class CardDetail extends Component {
                                     {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
                                 </>
                             }
-                            
+                                <Drawer
+                                    className="comment-drawer"
+                                    //如果position=left，左侧的样式
+                                    // style={{ minHeight: document.documentElement.clientHeight }} 
+                                    //position=bottom时的样式
+                                    style={{ minHeight: (document.documentElement.clientHeight-200), marginBottom: '50px' }}
+                                    position='bottom'
+                                    enableDragHandle
+                                    contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
+                                    sidebar={sidebar}
+                                    open={this.state.isCommentVisible}
+                                    onOpenChange={this.onOpenChange.bind(this)}
+                                >
+                                    评论区
+                                </Drawer>
                                 <div>
                                     
                                     <div className="card-profile">         
@@ -265,15 +341,20 @@ class CardDetail extends Component {
                                     <div className="card-message">   
                                         <img src={[require("../assets/images/pen-white.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} /> 
                                         <input style={{fontSize:'12px', width:'60px'}} placeholder="说点什么..."></input>     
-                                        <img src={[require("../assets/images/message.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
-                                        <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>99评论</span>   
+                                        <img src={[require("../assets/images/message.png")]} onClick={
+                                           this.onOpenChange.bind(this)
+                                        } alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
+                                        <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}} onClick={
+                                           this.onOpenChange.bind(this)
+                                        }>99评论</span>   
                                         <img src={[require("../assets/images/heart-white.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
                                         <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>99点赞</span>   
-                                        <img src={[require("../assets/images/wechat-full.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
-                                        <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>转发</span>   
+                                        {/* <img src={[require("../assets/images/wechat-full.png")]} alt="" style={{width:'20px', height:'20px', marginLeft:'10px'}} />
+                                        <span style={{marginLeft:'3px', fontSize:'12px', paddingTop:'2px'}}>转发</span>    */}
                                         
                                     </div>
                                 </div>
+                                
                         </div>
                         : <div></div>
                     }

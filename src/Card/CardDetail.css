@@ -64,3 +64,9 @@
     height: 100%;
     z-index: 999;
 }
+
+.comment-drawer {
+    position: absolute;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
