@@ -86,10 +86,10 @@ class CardDetail extends Component {
 
     prepareShare(){
         let obj={
-            title: '一键康复',// 分享标题
+            title: '一健点评',// 分享标题
             des: this.state.item.text,// 分享描述
             linkurl:window.location.href,// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            img:'http://app.kangfupanda.com/resources/logo.jpeg' // 分享图标
+            img:'http://app.kangfupanda.com/resources/logo2.jpg' // 分享图标
         }
         // let url = encodeURIComponent(window.location.href.split('#')[0]);
         let url = window.location.href.split('#')[0];
