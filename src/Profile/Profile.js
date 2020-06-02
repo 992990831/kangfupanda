@@ -98,12 +98,6 @@ class Profile extends Component {
                     headers: { 'Content-Type': 'application/json' }
                 })
                     .then(res => {
-                        //alert(JSON.stringify(res));
-                        // data {
-                        //     openid:
-                        //     nickname
-                        //     headimgurl
-                        //     }
                         if(!res.data)
                         {
                             return;
