@@ -330,6 +330,18 @@ class CardDetail extends Component {
                                         onClick={() => this.handleBack()} />
                                 主页
                             </div>
+                                <Drawer
+                                    className="comment-drawer"
+                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
+                                    position='bottom'
+                                    enableDragHandle
+                                    contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
+                                    sidebar={sidebar}
+                                    open={this.state.isCommentVisible}
+                                    onOpenChange={this.onOpenChange.bind(this)}
+                                >
+                                    评论区
+                                </Drawer>
                                 {
                                     item.itemType == 'video' ?
                                         <>
@@ -386,18 +398,7 @@ class CardDetail extends Component {
                                             {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
                                         </>
                                 }
-                                <Drawer
-                                    className="comment-drawer"
-                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
-                                    position='bottom'
-                                    enableDragHandle
-                                    contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
-                                    sidebar={sidebar}
-                                    open={this.state.isCommentVisible}
-                                    onOpenChange={this.onOpenChange.bind(this)}
-                                >
-                                    评论区
-                                </Drawer>
+                                
                                 <div>
 
                                     <div className="card-profile">
