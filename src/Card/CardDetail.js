@@ -17,37 +17,6 @@ import { getJSSDK } from '../Utils/wxshare';
 //微信分享
 //前端参考：https://www.cnblogs.com/wang715100018066/p/12066579.html
 //后端参考：https://www.cnblogs.com/wuhuacong/p/5482848.html
-
-const comments = [{
-    id: 1,
-    text: '这是第一条评论',
-    subComments: [
-        {
-            id: 100,
-            text: '顶楼上'
-        },
-        {
-            id: 101,
-            text: '楼上666'
-        }
-    ]
-},
-{
-    id: 2,
-    text: '这是第二条评论',
-    subComments: [
-        {
-            id: 200,
-            text: '第二条评论的子评论'
-        },
-        {
-            id: 201,
-            text: '又是一条子评论'
-        }
-    ]
-}
-]
-
 class CardDetail extends Component {
     constructor(props) {
         super(props)
@@ -75,6 +44,8 @@ class CardDetail extends Component {
     }
 
     componentWillMount() {
+        this.checkLogin();
+
         if (this.state.videos) {
             this.GetCommentList();
             this.loadItem();
@@ -84,6 +55,18 @@ class CardDetail extends Component {
         }
 
     }
+
+    checkLogin(){
+        let userInfoStr = localStorage.getItem("userInfo");
+       
+        if (!userInfoStr) {
+            this.props.history.push({
+                pathname: `../profile`,
+            })
+        }
+
+        return true;
+    };
 
     GetList() {
         axios.get(`${Constants.APIBaseUrl}/club/list`, {
@@ -228,7 +211,7 @@ class CardDetail extends Component {
 
     }
 
-    onOpenChange = (...args) => {
+    onOpenCommentChange = (...args) => {
         console.log(args);
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
@@ -338,7 +321,7 @@ class CardDetail extends Component {
                                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
                                     sidebar={sidebar}
                                     open={this.state.isCommentVisible}
-                                    onOpenChange={this.onOpenChange.bind(this)}
+                                    onOpenChange={this.onOpenCommentChange.bind(this)}
                                 >
                                     评论区
                                 </Drawer>
@@ -414,10 +397,10 @@ class CardDetail extends Component {
                                         <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
                                         <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input>
                                         <img src={[require("../assets/images/message.png")]} onClick={
-                                            this.onOpenChange.bind(this)
+                                            this.onOpenCommentChange.bind(this)
                                         } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
                                         <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
-                                            this.onOpenChange.bind(this)
+                                            this.onOpenCommentChange.bind(this)
                                         }>99评论</span>
                                         <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
                                         <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>99点赞</span>
