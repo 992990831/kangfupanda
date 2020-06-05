@@ -24,6 +24,9 @@ class CardDetail extends Component {
             videos: JSON.parse(localStorage.getItem("videos")),
             item: {},
             comments: [],
+            commentsCount:0,
+            isLiked: false,
+            likeCount: 0,
             isCommentVisible: false
         }
     }
@@ -101,6 +104,37 @@ class CardDetail extends Component {
             .then(res => {
                 this.setState({
                     comments: res.data,
+                    commentsCount: res.data? res.data.length : 0
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    getLiked(){
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}/${userInfo.openid}`, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(res => {
+                this.setState({
+                    isLiked: res.data,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    getLikeCount(){
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}`, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(res => {
+                this.setState({
+                    likeCount: res.data,
                 });
             })
             .catch(function (error) {
@@ -114,6 +148,8 @@ class CardDetail extends Component {
                 item: this.props.location.state && this.props.location.state.data
             }, () => {
                 this.prepareShare();
+                this.getLiked();
+                this.getLikeCount();
             })
         }
         else {
@@ -126,10 +162,49 @@ class CardDetail extends Component {
                     item: currentItem[0]
                 }, () => {
                     this.prepareShare();
+                    this.getLiked();
+                    this.getLikeCount();
                 })
             }
         }
+    }
 
+    like(){
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+        let body = {
+            itemId: this.state.item.postId,
+            itemType: this.state.item.itemType,
+            likeByOpenId: userInfo.openid
+        }
+
+        axios.post(`${Constants.APIBaseUrl}/like`, body).then((res)=>{
+            this.setState({
+                isLiked: true,
+                likeCount: this.state.likeCount+1
+            })
+        }).catch(function (error) {
+            alert('点赞失败');
+        });
+    }
+
+    dislike(){
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+        let body = {
+            itemId: this.state.item.postId,
+            itemType: this.state.item.itemType,
+            likeByOpenId: userInfo.openid
+        }
+
+        axios.post(`${Constants.APIBaseUrl}/dislike`, body).then((res)=>{
+            this.setState({
+                isLiked: false,
+                likeCount: this.state.likeCount-1
+            })
+        }).catch(function (error) {
+            alert('点赞失败');
+        });
     }
 
     componentDidMount() {
@@ -237,7 +312,6 @@ class CardDetail extends Component {
         }
 
         axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(()=>{
-            debugger;
             this.refs.refComment.value='';
             this.GetCommentList();
         }).catch(function (error) {
@@ -291,7 +365,7 @@ class CardDetail extends Component {
                         </div>)
                     })}
                 </List>
-                <div style={{ background: 'white', display: 'flex' }}>
+                <div style={{ background: 'white', display: 'flex', paddingTop:'10px', paddingBottom:'10px' }}>
                     <div style={{ margin: 'auto', display: 'flex' }}>
                         <input placeholder='请评论' ref='refComment'></input>
                         <div>
@@ -394,16 +468,25 @@ class CardDetail extends Component {
 
                                     </div>
                                     <div className="card-message">
-                                        <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                        <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input>
+                                        {/* <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
+                                        <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input> */}
                                         <img src={[require("../assets/images/message.png")]} onClick={
                                             this.onOpenCommentChange.bind(this)
                                         } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
                                         <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
                                             this.onOpenCommentChange.bind(this)
-                                        }>99评论</span>
-                                        <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>99点赞</span>
+                                        }>{this.state.commentsCount}条评论</span>
+
+                                        {
+                                            this.state.isLiked?
+                                            <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} 
+                                            onClick={this.dislike.bind(this)}/>
+                                            :
+                                            <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} 
+                                            onClick={this.like.bind(this)}/>
+                                        }
+                                        
+                                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.likeCount}点赞</span>
                                     </div>
                                 </div>
 

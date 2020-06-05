@@ -31,9 +31,11 @@
 }
 
 .card-detail .card-message{
-    bottom: 52px;
+    bottom: 65px;
     position: absolute;
     display: flex;
+    left: 50%;
+    margin-left: -80px;
 }
 
 .card-detail .card-description{
@@ -45,7 +47,7 @@
 }
 
 .card-detail .card-profile{
-    bottom: 75px;
+    bottom: 85px;
     position: absolute;
     display: flex;
     z-index: 999;

@@ -89,7 +89,7 @@ class Card extends Component {
               {item.author}
             </div>
             <div className="star" onClick={(e) => {  }}>
-              <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart2.png")]} alt="" />
+              <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
               <span>{999}</span>
             </div>
           </div>
