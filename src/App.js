@@ -3,7 +3,7 @@ import './App.css';
 
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import Home from './home/Home';
-import CardDetail from './Card/CardDetail';
+import PostDetail from './Post/PostDetail';
 import Profile from './Profile/Profile';
 import DoctorList from './Doctors/DoctorList';
 import { TabBar } from 'antd-mobile';
@@ -143,7 +143,7 @@ class App extends Component {
           <div className="redBook-main">
             <Switch>
               <Route path="/home" component={Home} />
-              <Route path="/cardDetail/:id" component={CardDetail} />
+              <Route path="/PostDetail/:id" component={PostDetail} />
               <Route path="/found" component={DoctorList} />
               <Route path="/profile" component={Profile}>
               </Route>

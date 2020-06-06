@@ -1,4 +1,4 @@
-.card-container{
+.post-container{
     background-color: #fff;
     position: relative;
     width: 92vw;
@@ -6,19 +6,19 @@
     margin-bottom: 5px;
 }
 
-.card-container .card-pic{
+.post-container .post-pic{
     width: 100%;
     position:relative;
     padding-top: 3px;
 }
 
-.card-container .card-pic .headPic{
+.post-container .post-pic .headPic{
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     width: 100%;
 }
 
-.card-container .card-pic .isVideo{
+.post-container .post-pic .isVideo{
     position: absolute;
     width: 60px;
     height: 60px;
@@ -31,13 +31,13 @@
     opacity: 0.8;
 }
 
-.card-container .card-bottom{
+.post-container .post-bottom{
     width: 100%;
     box-sizing: border-box;
     padding: 10px 8px 10px 8px;
 }
 
-.card-container .card-bottom .title-con{
+.post-container .post-bottom .title-con{
     position: relative;
     font-size: 13px;
     font-weight: 500;
@@ -45,7 +45,7 @@
     min-height: 20px;
 }
 
-.card-container .card-bottom .title-con .title{
+.post-container .post-bottom .title-con .title{
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -54,38 +54,38 @@
     overflow: hidden; 
 }
 
-.card-container .card-bottom .bottom{
+.post-container .post-bottom .bottom{
     display: flex;
     justify-content: flex-start;
     align-items: center;
     margin-top: 5px;
 }
 
-.card-container .card-bottom .bottom .avatar{
+.post-container .post-bottom .bottom .avatar{
     width: 25px;
     height: 25px;
     margin-right: 5px;
 }
 
-.card-container .card-bottom .bottom .avatar img{
+.post-container .post-bottom .bottom .avatar img{
     border-radius: 50%;
     width: 100%;
     height: 100%;
 }
 
-.card-container .card-bottom .bottom .name{
+.post-container .post-bottom .bottom .name{
     color: rgba(0,0,0,0.6);
     font-size: 11px;
 }
 
-.card-container .card-bottom .bottom .star{
+.post-container .post-bottom .bottom .star{
     position: absolute;
     right: 10px;
     color: #666666;
     font-size: 13px;
 }
 
-.card-container .card-bottom .bottom img{
+.post-container .post-bottom .bottom img{
     width: 16px;
     height: 16px;
     vertical-align: middle;

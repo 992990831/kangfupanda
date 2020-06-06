@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Lazyload from 'react-lazyload';
-import './Card.css'
+import './Post.css'
 import { withRouter } from 'react-router-dom'
 import { Constants } from '../Utils/Constants';
 
 
-class Card extends Component {
+class Post extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -33,9 +33,9 @@ class Card extends Component {
   render() {
     const { isStar,item } = this.state;
     return (
-    //   <div className="card-container" onClick={() => this.NavToDetail(`peopleDetail/${item.userId}`)}>
-    <div className="card-container">
-        <div className="card-pic">
+    //   <div className="post-container" onClick={() => this.NavToDetail(`peopleDetail/${item.userId}`)}>
+    <div className="post-container">
+        <div className="post-pic">
             {
                 // !item.isVideo ?
                 //     <Lazyload height={200} width={172}>
@@ -54,14 +54,14 @@ class Card extends Component {
                   <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType=='video' ? {} : { display: 'none' }} 
                    onClick={() => {
                       this.props.history.push({
-                        pathname: `cardDetail/${item.id}`,
+                        pathname: `postDetail/${item.id}`,
                         state: {data: this.state.item}
                       })
                     }} 
                   />
                   <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
                     this.props.history.push({
-                      pathname: `cardDetail/${item.id}`,
+                      pathname: `postDetail/${item.id}`,
                       state: {data: this.state.item}
                     })
                   }} />
@@ -73,7 +73,7 @@ class Card extends Component {
            </Lazyload>
            <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.isVideo ? {} : { display: 'none' }} /> */}
         </div>
-        <div className="card-bottom">
+        <div className="post-bottom">
           {/* <div className="title-con">
             <p className="title">
               {item.title}
@@ -99,4 +99,4 @@ class Card extends Component {
   }
 }
 
-export default withRouter(Card)
+export default withRouter(Post)

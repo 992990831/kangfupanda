@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
-import { ActionSheet } from 'antd-mobile';
+import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
 
 import URI from 'URIjs';
 import axios from 'axios';
@@ -10,6 +10,14 @@ import axios from 'axios';
 import { createHashHistory } from 'history';
 
 import { Constants } from '../Utils/Constants';
+
+import ProfileItem from './ProfileItem';
+import ProfileComment from './ProfileComment';
+
+const tabs = [
+    { title: <Badge text={'3'}>作品</Badge> },
+    { title: <Badge text={'8'}>评论</Badge> }
+  ];
 
 function generateGetCodeUrl(redirectURL) {
     return new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
@@ -71,18 +79,6 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        // localStorage.setItem("userInfo", 
-        //    JSON.stringify({
-        //         nickname:'AndyTest',
-        //         openid: '1234567890',
-        //         province: 'Shanghai',
-        //         city: 'Shanghai',
-        //         sex:'1',
-        //         phone: '13600000000',
-        //         headimgurl:'http://106.75.216.135/resources/A001.png'
-        //     })
-        // );
-
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
         if (!userInfo) {
@@ -135,27 +131,88 @@ class Profile extends Component {
     }
 
     render() {
+        let workItems = JSON.parse(localStorage.getItem("videos"));
+        
         return (
             <React.Fragment>
                 <div className="profileHeader">
                     <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
                         <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic"/>
                     </div>
-                    <ProfileHeader />
+                    {/* <ProfileHeader /> */}
+                    <div className="profileHeaderContentContainer">
+                        <div style={{width:'50%', float:'left'}}>
+                            <div style={{fontSize:'18px'}}>
+                                {this.state.userInfo.nickname}
+                            </div>
+                            <div style={{marginTop:'10px'}}>
+                                专家
+                            </div>
+                        </div>
+                        <div style={{width:'50%', float:'left'}}>
+                            <Button style={{ width: '90%', height:'90%', margin: 'auto' }}>+关注</Button>
+                        </div>
+                        
+                        {/* <div className="profileHeaderRow">
+                            <div className="profileHeaderContent">粉丝</div>
+                            <div className="profileHeaderContent">关注</div>
+                            <div className="profileHeaderContent">获赞</div>
+                        </div>
+                        <div className="profileHeaderRowCount">
+                            <div className="profileHeaderContent">666</div>
+                            <div className="profileHeaderContent">777</div>
+                            <div className="profileHeaderContent">888</div>
+                        </div> */}
+                    </div>
                 </div>
                 <div className="profileName">
-                    {this.state.userInfo.nickname}
+                    <span>粉丝数 99</span>
                 </div>
-                <div>
+                <div style={{height:'8px', backgroundColor:'transparent'}}></div>
+                <Tabs tabs={tabs}
+                
+                initialPage={0}
+                onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                >
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px', backgroundColor: '#fff' }}>
+                        {
+                            workItems.map( workItem =>{
+                                return (
+                                    <div style={{width:'48%', float:'left', 
+                                    margin:'3px',
+                                    padding:'5px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
+                                        <ProfileItem workItem={workItem} />
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px', backgroundColor: '#fff' }}>
+                        {
+                            workItems.map( workItem =>{
+                                return (
+                                    <div style={{width:'98%', float:'left', 
+                                    margin:'3px',
+                                    padding:'5px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
+                                        <ProfileComment workItem={workItem} />
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                </Tabs>
+                {/* <div>
                     <span style={{ color: 'rgb(105, 164, 43)', fontWeight: 'bold' }}>我的视频</span>
                 </div>
                 <div className='videoContainer'>
                     <button className="publish" onClick={this.openCamera.bind(this)}>
                         <img src={[require("../assets/images/publish2.png")]} alt="" />
                     </button>
+                    
                 </div>
-                <input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
-                </input>
+                {<input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
+                </input> */}
             </React.Fragment>
         )
     }

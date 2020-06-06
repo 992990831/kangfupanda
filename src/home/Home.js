@@ -5,7 +5,7 @@ import './Home.css';
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css";
 
-import CardList from '../Card/CardList';
+import PostList from '../Post/PostList';
 
 import { mockData } from '../mock/mockData';
 import { Constants } from '../Utils/Constants';
@@ -63,7 +63,7 @@ class Home extends Component {
         </input>
 
         <div className="Found-container">
-          <CardList list={listData} />
+          <PostList list={listData} />
         </div>
       </div>
     );
