@@ -4,6 +4,7 @@ import './Post.css'
 import { withRouter } from 'react-router-dom'
 import { Constants } from '../Utils/Constants';
 
+import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
 
 class Post extends Component {
   constructor(props){
@@ -83,11 +84,14 @@ class Post extends Component {
             <div className="avatar">
               <Lazyload height={25} width={25}>
                 <img src='https://img.xiaohongshu.com/avatar/5a7753acd2c8a562cbb7adc4.jpg@80w_80h_90q_1e_1c_1x.jpg' alt="" />
-              </Lazyload>
+              </Lazyload>             
             </div>
             <div className="name">
               {item.author}
             </div>
+            <div style={{ width: '35%', float: 'left', position:'absolute', right:'50px' }}>
+                <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight:'30px' }}>+关注</Button>
+              </div>
             <div className="star" onClick={(e) => {  }}>
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
               <span>{999}</span>

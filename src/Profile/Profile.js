@@ -39,17 +39,6 @@ class Profile extends Component {
         };
     }
 
-    // getUserInfo(token, openId)
-    // {
-    //     let url = `https://api.weixin.qq.com/sns/userinfo?access_token=${token}&openid=${openId}&lang=zh_CN`;
-    //     axios.get(url).then(res=>{
-    //         alert(res.text);
-    //     })
-    //     .catch(function (error) {
-    //         alert('获取用户信息失败,' + error);
-    //     });   
-    // }
-
     registerUser(user)
     {
         axios.post(`${Constants.APIBaseUrl}/user/register`, user).then().catch(function (error) {
@@ -118,7 +107,6 @@ class Profile extends Component {
                     .catch(function (error) {
                         alert('获取用户token失败,' + error);
                     });
-
             }
         }
         else {
@@ -126,12 +114,14 @@ class Profile extends Component {
         }
     }
 
-    openCamera() {
-        this.refs.btnCamera.click();
-    }
-
     render() {
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
         let workItems = JSON.parse(localStorage.getItem("videos"));
+
+        workItems=workItems.filter(workItem => {
+           return  workItem.openId == userInfo.openid;
+        });
         
         return (
             <React.Fragment>
@@ -152,17 +142,6 @@ class Profile extends Component {
                         <div style={{width:'50%', float:'left'}}>
                             <Button style={{ width: '90%', height:'90%', margin: 'auto' }}>+关注</Button>
                         </div>
-                        
-                        {/* <div className="profileHeaderRow">
-                            <div className="profileHeaderContent">粉丝</div>
-                            <div className="profileHeaderContent">关注</div>
-                            <div className="profileHeaderContent">获赞</div>
-                        </div>
-                        <div className="profileHeaderRowCount">
-                            <div className="profileHeaderContent">666</div>
-                            <div className="profileHeaderContent">777</div>
-                            <div className="profileHeaderContent">888</div>
-                        </div> */}
                     </div>
                 </div>
                 <div className="profileName">
@@ -188,13 +167,13 @@ class Profile extends Component {
                             })
                         }
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px', backgroundColor: '#fff' }}>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px' }}>
                         {
                             workItems.map( workItem =>{
                                 return (
                                     <div style={{width:'98%', float:'left', 
-                                    margin:'3px',
-                                    padding:'5px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
+                                    margin:'3px', backgroundColor:'white', textAlign:'left',
+                                    padding:'5px', paddingLeft:'20px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
                                         <ProfileComment workItem={workItem} />
                                     </div>
                                 )
@@ -202,17 +181,6 @@ class Profile extends Component {
                         }
                     </div>
                 </Tabs>
-                {/* <div>
-                    <span style={{ color: 'rgb(105, 164, 43)', fontWeight: 'bold' }}>我的视频</span>
-                </div>
-                <div className='videoContainer'>
-                    <button className="publish" onClick={this.openCamera.bind(this)}>
-                        <img src={[require("../assets/images/publish2.png")]} alt="" />
-                    </button>
-                    
-                </div>
-                {<input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
-                </input> */}
             </React.Fragment>
         )
     }
