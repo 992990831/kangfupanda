@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import Lazyload from 'react-lazyload';
 import './Post.css'
 import { withRouter } from 'react-router-dom'
-import { Constants } from '../Utils/Constants';
 
 import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
 
+import axios from 'axios';
+import { createHashHistory } from 'history';
+import { Constants } from '../Utils/Constants';
+
 class Post extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       item: [],
       isStar: true
     }
   }
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       item: this.props.item
     })
@@ -25,74 +28,84 @@ class Post extends Component {
       isStar: !this.state.isStar
     })
   }
-  // NavToDetail = (url) => {
-  //   this.props.history.push({
-  //     pathname: url,
-  //     state: {data: this.state.item}
-  //   })
-  // }
+
+  follow() {
+    let userInfoStr = localStorage.getItem("userInfo");
+    if(!userInfoStr)
+    {
+      if (!userInfoStr) {
+        this.props.history.push({
+            pathname: `../profile`,
+        })
+        return;
+      }
+    }
+
+    let userInfo = JSON.parse(userInfoStr); 
+
+    if (this.state.item) {
+      let body = {
+        followee: this.state.item.openId,
+        follower: userInfo.openid
+      }
+      axios.post(`${Constants.APIBaseUrl}/follow`, body).then((res)=>{
+        if(this.props.onFollowed)
+        {
+          this.props.onFollowed(this.state.item.openId);
+        }
+      }).catch(function (error) {
+        alert('关注失败');
+      });
+    }
+
+  }
+
   render() {
-    const { isStar,item } = this.state;
+    const { isStar, item } = this.state;
     return (
-    //   <div className="post-container" onClick={() => this.NavToDetail(`peopleDetail/${item.userId}`)}>
-    <div className="post-container">
+      <div className="post-container">
         <div className="post-pic">
-            {
-                // !item.isVideo ?
-                //     <Lazyload height={200} width={172}>
-                //         <img src={item.headPic} alt="" className="headPic" />
-                //     </Lazyload>
-                //  :
-                //  <Player
-                //     playsInline
-                //     poster={item.headPic}
-                //     src={item.videoUri}
-                //     autoPlay={ item.autoPlay }
-                // />
-              <Lazyload height={200} width={172}>
-                <div>
-                  <span className="video-title">{item.title}</span>
-                  <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType=='video' ? {} : { display: 'none' }} 
-                   onClick={() => {
-                      this.props.history.push({
-                        pathname: `postDetail/${item.id}`,
-                        state: {data: this.state.item}
-                      })
-                    }} 
-                  />
-                  <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
+          {
+            <Lazyload height={200} width={172}>
+              <div>
+                <span className="video-title">{item.title}</span>
+                <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType == 'video' ? {} : { display: 'none' }}
+                  onClick={() => {
                     this.props.history.push({
                       pathname: `postDetail/${item.id}`,
-                      state: {data: this.state.item}
+                      state: { data: this.state.item }
                     })
-                  }} />
-                </div>
-              </Lazyload>
-            }
-        {/*    <Lazyload height={200} width={172}>
-             <img src={item.headPic} alt="" className="headPic" />
-           </Lazyload>
-           <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.isVideo ? {} : { display: 'none' }} /> */}
+                  }}
+                />
+                <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
+                  this.props.history.push({
+                    pathname: `postDetail/${item.id}`,
+                    state: { data: this.state.item }
+                  })
+                }} />
+              </div>
+            </Lazyload>
+          }
         </div>
         <div className="post-bottom">
-          {/* <div className="title-con">
-            <p className="title">
-              {item.title}
-            </p>
-          </div> */}
           <div className="bottom">
             <div className="avatar">
               <Lazyload height={25} width={25}>
                 <img src='https://img.xiaohongshu.com/avatar/5a7753acd2c8a562cbb7adc4.jpg@80w_80h_90q_1e_1c_1x.jpg' alt="" />
-              </Lazyload>             
+              </Lazyload>
             </div>
             <div className="name">
               {item.author}
             </div>
-            <div style={{ width: '35%', float: 'left', position:'absolute', right:'50px' }}>
-                <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight:'30px' }}>+关注</Button>
-              </div>
-            <div className="star" onClick={(e) => {  }}>
+            <div style={{ width: '35%', float: 'left', position: 'absolute', right: '50px' }}>
+              {
+                item.followed?
+                <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
+                :
+                <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }} onClick={this.follow.bind(this)}>+关注</Button>
+              }
+            </div>
+            <div className="star" onClick={(e) => { }}>
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
               <span>{999}</span>
             </div>

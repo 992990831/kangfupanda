@@ -67,10 +67,11 @@ class Profile extends Component {
             });
     }
 
-    componentDidMount() {
-        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    componentDidMount(){
+        debugger
+        let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(localStorage.getItem("userInfo"));
 
-        if (!userInfo) {
+        if (!userInfoStr) {
             const uri = new URI(document.location.href);
             const query = uri.query(true);
             const { code } = query;
@@ -110,18 +111,24 @@ class Profile extends Component {
             }
         }
         else {
+            let userInfo = JSON.parse(localStorage.getItem("userInfo"));
             this.setState({ userInfo:  userInfo});
         }
     }
 
     render() {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        let workItems = [];
+        let videosStr = localStorage.getItem("videos");
+        
+        if(userInfo && videosStr)
+        {
+            workItems = JSON.parse(videosStr);
 
-        let workItems = JSON.parse(localStorage.getItem("videos"));
-
-        workItems=workItems.filter(workItem => {
-           return  workItem.openId == userInfo.openid;
-        });
+            workItems=workItems.filter(workItem => {
+            return  workItem.openId == userInfo.openid;
+            });
+        }
         
         return (
             <React.Fragment>

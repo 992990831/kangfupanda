@@ -6,17 +6,44 @@ class PostList extends Component {
   constructor(props){
     super(props)
     this.state = {
+      list: [],
+      type: '',
     }
   }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      list: nextProps.list
+    }, ()=>{
+
+    });
+  }
+
+  /*关注之后更新 */
+  onFollowed(openId){
+    let userInfo = JSON.parse(localStorage.getItem("userInfo")); 
+    let newList = this.state.list;
+    newList.forEach(post => {
+      if(post.openId == openId)
+      {
+          post.followed=true;
+      }
+    });
+    
+    this.setState({
+      list: newList
+    })
+  }
+
   render() {
-    const { list, type } = this.props;
+    
     return (
       <div className="list-container">
           <div className="single">
             {
-              list.map((item, index) => {
+              this.state.list.map((item, index) => {
                 return (
-                  <Post item={item} type={type} key={index} />
+                  <Post item={item} key={index} onFollowed={this.onFollowed.bind(this)}/>
                 )
               })
             }

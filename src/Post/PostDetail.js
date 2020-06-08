@@ -34,7 +34,7 @@ class PostDetail extends Component {
     prepareShare() {
         let obj = {
             title: '一健点评',// 分享标题
-            des: this.state.item.text,// 分享描述
+            des: this.state.item.name,// 分享描述
             linkurl: window.location.href,// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             img: 'http://app.kangfupanda.com/resources/logo2.jpg' // 分享图标
         }
@@ -47,7 +47,10 @@ class PostDetail extends Component {
     }
 
     componentWillMount() {
-        this.checkLogin();
+        let isLogin = this.checkLogin();
+
+        if (!isLogin)
+            return;
 
         if (this.state.videos) {
             this.GetCommentList();
@@ -66,6 +69,8 @@ class PostDetail extends Component {
             this.props.history.push({
                 pathname: `../profile`,
             })
+
+            return false;
         }
 
         return true;
@@ -376,138 +381,145 @@ class PostDetail extends Component {
             </React.Fragment>
         );
 
+        let isLogin = this.checkLogin();
+
         return (
             <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)} direction='DIRECTION_ALL'>
-                <div style={{ height: innerHeight }}>
-                    {
-                        item ?
-                            <div className="post-detail">
-                                <div className="post-header">
-                                    <img src={[require('../assets/images/arrow.png')]} alt="" className="post-left"
-                                        onClick={() => this.handleBack()} />
+                {
+                    isLogin ?
+                        <div style={{ height: innerHeight }}>
+                            {
+                                item ?
+                                    <div className="post-detail">
+                                        <div className="post-header">
+                                            <img src={[require('../assets/images/arrow.png')]} alt="" className="post-left"
+                                                onClick={() => this.handleBack()} />
                                 主页
                                 </div>
 
-                                {
-                                    this.state.isCommentVisible?
-                                    <Drawer
-                                        className="comment-drawer"
-                                        style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
-                                        position='bottom'
-                                        contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
-                                        sidebar={sidebar}
-                                        open={this.state.isCommentVisible}
-                                        onOpenChange={this.onOpenCommentChange.bind(this)}
-                                        enableDragHandle={false}
-                                        touch={false}
-                                        transitions={false}
-                                    >
-                                        评论区
-                                    </Drawer>
-                                    :
-                                    <div></div>
-                                }
-
-
-                                <div>
-                                    {
-                                        item.itemType == 'video' ?
-                                            <>
-                                                <div className="post-description">
-                                                    <div className="people-content">
-                                                        {
-                                                            <p className="people-content__item">
-                                                                {item.name}
-                                                            </p>
-                                                        }
-                                                    </div>
-                                                </div>
-                                                <div style={{ margin: 'auto', width: '100%', height: '100%' }}>
-                                                    <div style={{ position: 'absolute', transform: 'translateY(-50%)', top: '50%' }}>
-                                                        <video ref='player' style={{ zIndex: '1' }}
-                                                            poster={`${Constants.ResourceUrl}/${item.posterUri}`} src={`${Constants.ResourceUrl}/${item.videoUri}`}
-                                                            x5-playsinline="true"
-                                                            //  x5-video-player-type="h5"
-                                                            playsinline="true"
-                                                            webkit-playsinline="true"
-                                                            controls="controls"
-                                                            width="100%" height="100%">
-                                                            您的浏览器不支持视频播放
-                                                </video>
-                                                    </div>
-                                                </div>
-                                            </> :
-                                            <>
-                                                <Carousel
-                                                    autoplay={false}
-                                                    infinite
-                                                    beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-                                                    afterChange={index => console.log('slide to', index)}
+                                        {
+                                            this.state.isCommentVisible ?
+                                                <Drawer
+                                                    className="comment-drawer"
+                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
+                                                    position='bottom'
+                                                    contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
+                                                    sidebar={sidebar}
+                                                    open={this.state.isCommentVisible}
+                                                    onOpenChange={this.onOpenCommentChange.bind(this)}
+                                                    enableDragHandle={false}
+                                                    touch={false}
+                                                    transitions={false}
                                                 >
-                                                    {this.state.item.pics.map(val => (
-                                                        <img
-                                                            src={`${Constants.ResourceUrl}/${val}`}
-                                                            alt=""
-                                                            style={{ width: '100%', verticalAlign: 'top' }}
-                                                            onLoad={() => {
-                                                                // fire window resize event to change height
-                                                                window.dispatchEvent(new Event('resize'));
-                                                                this.setState({ imgHeight: 'auto' });
-                                                            }}
-                                                        />
-                                                    ))}
+                                                    评论区
+                                    </Drawer>
+                                                :
+                                                <div></div>
+                                        }
 
-                                                </Carousel>
 
-                                                <div>
-                                                    {item.text}
-                                                </div>
-
-                                                {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
-                                            </>
-                                    }
-
-                                    <div>
-
-                                        <div className="post-profile">
-                                            <div className="profileAvator">
-                                                <Lazyload height={25} width={25}>
-                                                    <img src={item.avatar} alt="" />
-                                                </Lazyload>
-                                            </div>
-                                            <span style={{ marginLeft: '15px' }}>资深治疗师-Tom</span>
-
-                                        </div>
-                                        <div className="post-message">
-                                            {/* <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                        <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input> */}
-                                            <img src={[require("../assets/images/message.png")]} onClick={
-                                                this.onOpenCommentChange.bind(this)
-                                            } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                            <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
-                                                this.onOpenCommentChange.bind(this)
-                                            }>{this.state.commentsCount}条评论</span>
-
+                                        <div>
                                             {
-                                                this.state.isLiked ?
-                                                    <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                                        onClick={this.dislike.bind(this)} />
-                                                    :
-                                                    <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                                        onClick={this.like.bind(this)} />
+                                                item.itemType == 'video' ?
+                                                    <>
+                                                        <div className="post-description">
+                                                            <div className="people-content">
+                                                                {
+                                                                    <p className="people-content__item">
+                                                                        {item.name}
+                                                                    </p>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div style={{ margin: 'auto', width: '100%', height: '100%' }}>
+                                                            <div style={{ position: 'absolute', transform: 'translateY(-50%)', top: '50%' }}>
+                                                                <video ref='player' style={{ zIndex: '1' }}
+                                                                    poster={`${Constants.ResourceUrl}/${item.posterUri}`} src={`${Constants.ResourceUrl}/${item.videoUri}`}
+                                                                    x5-playsinline="true"
+                                                                    //  x5-video-player-type="h5"
+                                                                    playsinline="true"
+                                                                    webkit-playsinline="true"
+                                                                    controls="controls"
+                                                                    width="100%" height="100%">
+                                                                    您的浏览器不支持视频播放
+                                                </video>
+                                                            </div>
+                                                        </div>
+                                                    </> :
+                                                    <>
+                                                        <Carousel
+                                                            autoplay={false}
+                                                            infinite
+                                                            beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
+                                                            afterChange={index => console.log('slide to', index)}
+                                                        >
+                                                            {this.state.item.pics.map(val => (
+                                                                <img
+                                                                    src={`${Constants.ResourceUrl}/${val}`}
+                                                                    alt=""
+                                                                    style={{ width: '100%', verticalAlign: 'top' }}
+                                                                    onLoad={() => {
+                                                                        // fire window resize event to change height
+                                                                        window.dispatchEvent(new Event('resize'));
+                                                                        this.setState({ imgHeight: 'auto' });
+                                                                    }}
+                                                                />
+                                                            ))}
+
+                                                        </Carousel>
+
+                                                        <div>
+                                                            {item.text}
+                                                        </div>
+
+                                                        {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
+                                                    </>
                                             }
 
-                                            <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.likeCount}点赞</span>
+                                            <div>
+
+                                                <div className="post-profile">
+                                                    <div className="profileAvator">
+                                                        <Lazyload height={25} width={25}>
+                                                            <img src={item.avatar} alt="" />
+                                                        </Lazyload>
+                                                    </div>
+                                                    <span style={{ marginLeft: '15px' }}>资深治疗师-Tom</span>
+
+                                                </div>
+                                                <div className="post-message">
+                                                    {/* <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
+                                        <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input> */}
+                                                    <img src={[require("../assets/images/message.png")]} onClick={
+                                                        this.onOpenCommentChange.bind(this)
+                                                    } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
+                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
+                                                        this.onOpenCommentChange.bind(this)
+                                                    }>{this.state.commentsCount}条评论</span>
+
+                                                    {
+                                                        this.state.isLiked ?
+                                                            <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                                                onClick={this.dislike.bind(this)} />
+                                                            :
+                                                            <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                                                onClick={this.like.bind(this)} />
+                                                    }
+
+                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.likeCount}点赞</span>
+                                                </div>
+                                            </div>
                                         </div>
+
                                     </div>
-                                </div>
+                                    :
+                                    <div></div>
+                            }
 
-                            </div>
-                            : 
-                            <div></div>
-                    }
-
-                </div>
+                        </div>
+                        :
+                        <div></div>
+                }
             </Hammer>
         );
     }

@@ -24,7 +24,16 @@ class Home extends Component {
   }
 
   GetList() {
-    axios.get(`${Constants.APIBaseUrl}/club/list`, {
+    let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(); 
+
+    let followerOpenId = '';
+
+    if(userInfoStr)
+    {
+      followerOpenId = JSON.parse(userInfoStr).openid
+    }
+
+    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {
