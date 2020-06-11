@@ -10,6 +10,8 @@ import { TabBar } from 'antd-mobile';
 
 import { createHashHistory } from 'history';
 
+import { ProfileEditorForm }  from './Profile/ProfileEditor';
+
 class App extends Component {
   // let btnCamera = null;
 
@@ -145,8 +147,8 @@ class App extends Component {
               <Route path="/home" component={Home} />
               <Route path="/PostDetail/:id" component={PostDetail} />
               <Route path="/found" component={DoctorList} />
-              <Route path="/profile" component={Profile}>
-              </Route>
+              <Route path="/profile" exact  component={Profile} />
+              <Route path="/profile/edit" component={ProfileEditorForm} />
               <Route path="/" render={() => {
                 return false ?
                   <div>home</div> : <Redirect to={{

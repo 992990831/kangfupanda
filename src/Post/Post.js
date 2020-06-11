@@ -90,9 +90,17 @@ class Post extends Component {
         <div className="post-bottom">
           <div className="bottom">
             <div className="avatar">
-              <Lazyload height={25} width={25}>
+              {
+                item ?
+                  <Lazyload height={25} width={25}>
+                    <img src={item.authorHeadPic} alt="" />
+                  </Lazyload>
+                  :
+                  <div />
+              }
+              {/* <Lazyload height={25} width={25}>
                 <img src='https://img.xiaohongshu.com/avatar/5a7753acd2c8a562cbb7adc4.jpg@80w_80h_90q_1e_1c_1x.jpg' alt="" />
-              </Lazyload>
+              </Lazyload> */}
             </div>
             <div className="name">
               {item.author}
@@ -107,7 +115,7 @@ class Post extends Component {
             </div>
             <div className="star" onClick={(e) => { }}>
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
-              <span>{999}</span>
+              <span>{item.likeCount}</span>
             </div>
           </div>
         </div>

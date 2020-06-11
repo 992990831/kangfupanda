@@ -24,8 +24,8 @@ function ProfileItem(props) {
                 <div className="profileItemContent">获赞</div>
             </div>
             <div className="profileItemHeader">
-                <div className="profileItemContent">10</div>
-                <div className="profileItemContent">88</div>
+                <div className="profileItemContent">{props.workItem.commentCount}</div>
+                <div className="profileItemContent">{props.workItem.likeCount}</div>
             </div>
         </div>
     </div>)

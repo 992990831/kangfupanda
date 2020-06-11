@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
 import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
@@ -17,7 +17,7 @@ import ProfileComment from './ProfileComment';
 const tabs = [
     { title: <Badge text={'3'}>作品</Badge> },
     { title: <Badge text={'8'}>评论</Badge> }
-  ];
+];
 
 function generateGetCodeUrl(redirectURL) {
     return new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
@@ -35,12 +35,12 @@ class Profile extends Component {
         super(props);
         this.state = {
             code: '',
-            userInfo: {}
+            userInfo: {},
+            toEditor: false,
         };
     }
 
-    registerUser(user)
-    {
+    registerUser(user) {
         axios.post(`${Constants.APIBaseUrl}/user/register`, user).then().catch(function (error) {
             alert('register user fail,' + error);
         });
@@ -57,8 +57,7 @@ class Profile extends Component {
         },
             (buttonIndex) => {
                 //this.setState({ clicked: BUTTONS[buttonIndex] });
-                if(buttonIndex==0)
-                {
+                if (buttonIndex == 0) {
                     localStorage.removeItem("userInfo");
 
                     const history = createHashHistory();
@@ -67,15 +66,14 @@ class Profile extends Component {
             });
     }
 
-    componentDidMount(){
-        debugger
+    componentDidMount() {
         let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(localStorage.getItem("userInfo"));
 
         if (!userInfoStr) {
             const uri = new URI(document.location.href);
             const query = uri.query(true);
             const { code } = query;
-           
+
             if (!code) {
                 window.location.href = generateGetCodeUrl(document.location.href);
             }
@@ -84,16 +82,15 @@ class Profile extends Component {
                     headers: { 'Content-Type': 'application/json' }
                 })
                     .then(res => {
-                        if(!res.data)
-                        {
+                        if (!res.data) {
                             return;
                         }
 
                         localStorage.setItem("userInfo", res.data);
                         this.setState({ userInfo: JSON.parse(res.data) });
-                        
+
                         let originalUser = JSON.parse(res.data);
-                        let toUser={
+                        let toUser = {
                             nickName: originalUser.nickname,
                             openId: originalUser.openid,
                             province: originalUser.province,
@@ -112,7 +109,7 @@ class Profile extends Component {
         }
         else {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            this.setState({ userInfo:  userInfo});
+            this.setState({ userInfo: userInfo });
         }
     }
 
@@ -120,75 +117,87 @@ class Profile extends Component {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         let workItems = [];
         let videosStr = localStorage.getItem("videos");
-        
-        if(userInfo && videosStr)
-        {
+
+        if (userInfo && videosStr) {
             workItems = JSON.parse(videosStr);
 
-            workItems=workItems.filter(workItem => {
-            return  workItem.openId == userInfo.openid;
+            workItems = workItems.filter(workItem => {
+                return workItem.openId == userInfo.openid;
             });
         }
-        
+        const history = createHashHistory();
+
         return (
-            <React.Fragment>
-                <div className="profileHeader">
-                    <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
-                        <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic"/>
-                    </div>
-                    {/* <ProfileHeader /> */}
-                    <div className="profileHeaderContentContainer">
-                        <div style={{width:'50%', float:'left'}}>
-                            <div style={{fontSize:'18px'}}>
-                                {this.state.userInfo.nickname}
+            
+                this.state.toEditor ?
+                    <Redirect to={{
+                        pathname: '/profile/edit',
+                    }} />
+                    :
+                    <React.Fragment>
+                        <div className="profileHeader">
+                            <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
+                                <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic" />
                             </div>
-                            <div style={{marginTop:'10px'}}>
-                                专家
+                            <div className="profileHeaderContentContainer">
+                                <div style={{ width: '50%', float: 'left' }}>
+                                    <div style={{ fontSize: '18px' }}>
+                                        {this.state.userInfo.nickname}
+                                    </div>
+                                    <div style={{ marginTop: '10px' }}>
+                                        专家
+                            </div>
+                                </div>
+                                <div style={{ width: '50%', float: 'left' }}>
+                                    <Button style={{ width: '90%', height: '90%', margin: 'auto' }} onClick={() => {
+                                        this.setState({ toEditor: true });
+                                        //history.push('/profile/edit');
+                                    }}>编辑</Button>
+                                </div>
                             </div>
                         </div>
-                        <div style={{width:'50%', float:'left'}}>
-                            <Button style={{ width: '90%', height:'90%', margin: 'auto' }}>+关注</Button>
+                        <div className="profileName">
+                            <span>粉丝数 99</span>
                         </div>
-                    </div>
-                </div>
-                <div className="profileName">
-                    <span>粉丝数 99</span>
-                </div>
-                <div style={{height:'8px', backgroundColor:'transparent'}}></div>
-                <Tabs tabs={tabs}
-                
-                initialPage={0}
-                onChange={(tab, index) => { console.log('onChange', index, tab); }}
-                onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
-                >
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px', backgroundColor: '#fff' }}>
-                        {
-                            workItems.map( workItem =>{
-                                return (
-                                    <div style={{width:'48%', float:'left', 
-                                    margin:'3px',
-                                    padding:'5px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
-                                        <ProfileItem workItem={workItem} />
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom:'55px' }}>
-                        {
-                            workItems.map( workItem =>{
-                                return (
-                                    <div style={{width:'98%', float:'left', 
-                                    margin:'3px', backgroundColor:'white', textAlign:'left',
-                                    padding:'5px', paddingLeft:'20px', borderBottomColor:'rgb(215, 215, 215)', borderBottomStyle:'solid', borderBottomWidth:'1px'}}>
-                                        <ProfileComment workItem={workItem} />
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                </Tabs>
-            </React.Fragment>
+                        <div style={{ height: '8px', backgroundColor: 'transparent' }}></div>
+                        <Tabs tabs={tabs}
+
+                            initialPage={0}
+                            onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                            onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                        >
+                            <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
+                                {
+                                    workItems.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '48%', float: 'left',
+                                                margin: '3px',
+                                                padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileItem workItem={workItem} />
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                            <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
+                                {
+                                    workItems.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '98%', float: 'left',
+                                                margin: '3px', backgroundColor: 'white', textAlign: 'left',
+                                                padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileComment workItem={workItem} />
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </Tabs>
+                    </React.Fragment>
         )
     }
 }

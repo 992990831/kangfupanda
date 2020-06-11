@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 //import { Player } from 'video-react';
 
 import Hammer from "react-hammerjs";
-import { Carousel, Drawer, ListView, List, Button } from 'antd-mobile';
+import { Carousel, Drawer, Toast, List, Button } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
 
@@ -132,20 +132,20 @@ class PostDetail extends Component {
             });
     }
 
-    getLikeCount() {
-        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}`, {
-            headers: { 'Content-Type': 'application/json' }
-        })
-            .then(res => {
-                this.setState({
-                    likeCount: res.data,
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
+    // getLikeCount() {
+    //     let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    //     axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}`, {
+    //         headers: { 'Content-Type': 'application/json' }
+    //     })
+    //         .then(res => {
+    //             this.setState({
+    //                 likeCount: res.data,
+    //             });
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+    // }
 
     loadItem() {
         if (this.props.location.state && this.props.location.state.data) {
@@ -154,7 +154,7 @@ class PostDetail extends Component {
             }, () => {
                 this.prepareShare();
                 this.getLiked();
-                this.getLikeCount();
+                //this.getLikeCount();
             })
         }
         else {
@@ -168,7 +168,7 @@ class PostDetail extends Component {
                 }, () => {
                     this.prepareShare();
                     this.getLiked();
-                    this.getLikeCount();
+                    //this.getLikeCount();
                 })
             }
         }
@@ -317,6 +317,7 @@ class PostDetail extends Component {
         }
 
         axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(() => {
+            Toast.info('评论已提交', 2);
             this.refs.refComment.value = '';
             this.GetCommentList();
         }).catch(function (error) {
@@ -356,17 +357,6 @@ class PostDetail extends Component {
                                     margin: 'auto'
                                 }}
                             >{comment.comment_content}</div>
-                            {/* <div style={{ display: '-webkit-box', display: 'inline-block', padding: '15px 0' }}>
-                                {
-                                    comment.subComments.map((subCom, index) => {
-                                        return (
-                                            <div style={{ lineHeight: 1 }}>
-                                                <div style={{ marginBottom: '8px', fontWeight: 'bold', color: 'rgb(136, 136, 136)' }}>{subCom.text}</div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div> */}
                         </div>)
                     })}
                 </List>
@@ -480,11 +470,17 @@ class PostDetail extends Component {
 
                                                 <div className="post-profile">
                                                     <div className="profileAvator">
-                                                        <Lazyload height={25} width={25}>
-                                                            <img src={item.avatar} alt="" />
-                                                        </Lazyload>
+                                                        {
+                                                            item && !this.state.isCommentVisible?
+                                                            <Lazyload height={25} width={25}>
+                                                                <img src={ item.authorHeadPic } alt="" />
+                                                            </Lazyload>
+                                                            :
+                                                            <div />
+                                                        }
+                                                        
                                                     </div>
-                                                    <span style={{ marginLeft: '15px' }}>资深治疗师-Tom</span>
+                                                    <span style={{ marginLeft: '15px' }}>{item? item.author:''}</span>
 
                                                 </div>
                                                 <div className="post-message">
@@ -506,7 +502,7 @@ class PostDetail extends Component {
                                                                 onClick={this.like.bind(this)} />
                                                     }
 
-                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.likeCount}点赞</span>
+                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item? this.state.item.likeCount : 0}点赞</span>
                                                 </div>
                                             </div>
                                         </div>

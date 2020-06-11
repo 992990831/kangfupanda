@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { forceCheck } from 'react-lazyload';
 import './Home.css';
-import { Player } from 'video-react';
-import "video-react/dist/video-react.css";
+// import { Player } from 'video-react';
+// import "video-react/dist/video-react.css";
 
 import PostList from '../Post/PostList';
 
