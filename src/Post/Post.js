@@ -3,7 +3,7 @@ import Lazyload from 'react-lazyload';
 import './Post.css'
 import { withRouter } from 'react-router-dom'
 
-import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
+import { ActionSheet, Button, Tabs, Badge, Toast } from 'antd-mobile';
 
 import axios from 'axios';
 import { createHashHistory } from 'history';
@@ -78,10 +78,18 @@ class Post extends Component {
                   }}
                 />
                 <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
-                  this.props.history.push({
-                    pathname: `postDetail/${item.id}`,
-                    state: { data: this.state.item }
-                  })
+                  if(item.followed)
+                  {
+                    this.props.history.push({
+                      pathname: `postDetail/${item.id}`,
+                      state: { data: this.state.item }
+                    })
+                  }
+                  else
+                  {
+                    Toast.info('请先关注该用户', 2);
+                  }
+                  
                 }} />
               </div>
             </Lazyload>
