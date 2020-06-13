@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
-import { ActionSheet, Button, Tabs, Badge } from 'antd-mobile';
+import { ActionSheet, Button, Tabs, Badge, Modal } from 'antd-mobile';
 
 import URI from 'URIjs';
 import axios from 'axios';
@@ -13,6 +13,8 @@ import { Constants } from '../Utils/Constants';
 
 import ProfileItem from './ProfileItem';
 import ProfileComment from './ProfileComment';
+
+const alert = Modal.alert;
 
 const tabs = [
     { title: <Badge text={'3'}>作品</Badge> },
@@ -70,46 +72,65 @@ class Profile extends Component {
         let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(localStorage.getItem("userInfo"));
 
         if (!userInfoStr) {
-            const uri = new URI(document.location.href);
-            const query = uri.query(true);
-            const { code } = query;
-
-            if (!code) {
-                window.location.href = generateGetCodeUrl(document.location.href);
-            }
-            else {
-                axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                    .then(res => {
-                        if (!res.data) {
-                            return;
-                        }
-
-                        localStorage.setItem("userInfo", res.data);
-                        this.setState({ userInfo: JSON.parse(res.data) });
-
-                        let originalUser = JSON.parse(res.data);
-                        let toUser = {
-                            nickName: originalUser.nickname,
-                            openId: originalUser.openid,
-                            province: originalUser.province,
-                            city: originalUser.city,
-                            sex: originalUser.sex,
-                            phone: originalUser.phone,
-                            headpic: originalUser.headimgurl
-                        };
-
-                        this.registerUser(toUser);
+            alert('登录', '是否使用登录微信?', [
+                { text: '取消', onPress: () => {
+                    this.props.history.push({
+                        pathname: `../home`,
                     })
-                    .catch(function (error) {
-                        alert('获取用户token失败,' + error);
-                    });
-            }
+                } },
+                {
+                  text: '同意',
+                  onPress: () =>
+                    {
+                        this.wechatLogin();
+                    },
+                },
+              ])
+
         }
         else {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
             this.setState({ userInfo: userInfo });
+        }
+    }
+
+    wechatLogin()
+    {
+        const uri = new URI(document.location.href);
+        const query = uri.query(true);
+        const { code } = query;
+
+        if (!code) {
+            window.location.href = generateGetCodeUrl(document.location.href);
+        }
+        else {
+            axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(res => {
+                    if (!res.data) {
+                        return;
+                    }
+
+                    localStorage.setItem("userInfo", res.data);
+                    this.setState({ userInfo: JSON.parse(res.data) });
+
+                    let originalUser = JSON.parse(res.data);
+                    let toUser = {
+                        nickName: originalUser.nickname,
+                        openId: originalUser.openid,
+                        province: originalUser.province,
+                        city: originalUser.city,
+                        sex: originalUser.sex,
+                        phone: originalUser.phone,
+                        headpic: originalUser.headimgurl
+                    };
+
+                    this.registerUser(toUser);
+                })
+                .catch(function (error) {
+                    alert('获取用户token失败,' + error);
+                });
         }
     }
 
