@@ -132,21 +132,6 @@ class PostDetail extends Component {
             });
     }
 
-    // getLikeCount() {
-    //     let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    //     axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}`, {
-    //         headers: { 'Content-Type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             this.setState({
-    //                 likeCount: res.data,
-    //             });
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
-
     loadItem() {
         if (this.props.location.state && this.props.location.state.data) {
             this.setState({
@@ -432,7 +417,7 @@ class PostDetail extends Component {
                                                                     controls="controls"
                                                                     width="100%" height="100%">
                                                                     您的浏览器不支持视频播放
-                                                </video>
+                                                                </video>
                                                             </div>
                                                         </div>
                                                     </> :
@@ -457,7 +442,16 @@ class PostDetail extends Component {
                                                             ))}
 
                                                         </Carousel>
-
+                                                        <div style={{backgroundColor:'white'}}>
+                                                                {
+                                                                    this.state.item.audioes?
+                                                                    this.state.item.audioes.map( audio => (
+                                                                        <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
+                                                                    ))
+                                                                    :
+                                                                    <></>
+                                                                }
+                                                        </div>                  
                                                         <div>
                                                             {item.text}
                                                         </div>

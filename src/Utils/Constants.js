@@ -10,6 +10,6 @@ export const Constants = {
     ResourceUrl: process.env.NODE_ENV === "production"? "https://api.kangfupanda.com/Upload/" : "https://localhost:44362/Upload/",
     AppId:'wxc10ff63ecf588c90',
     AppSecret: '7289786fae8511cbe9e94a8aec93e125',
-    RedirectUrl: 'http://app.kangfupanda.com/#/profile',    
+    RedirectUrl: 'https://app.kangfupanda.com/#/profile',    
 }
 
