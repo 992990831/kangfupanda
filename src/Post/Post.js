@@ -61,9 +61,22 @@ class Post extends Component {
   }
 
   render() {
+    let userInfo = null;
+    let userInfoStr = localStorage.getItem("userInfo");
+    if(userInfoStr)
+    {
+      userInfo = JSON.parse(userInfoStr); 
+    }
+
     const { isStar, item } = this.state;
     return (
       <div className="post-container">
+        <div className="post-top">
+          <div className="top">
+            <span>{item.name}</span>
+          </div>
+        </div>
+        
         <div className="post-pic">
           {
             <Lazyload height={200} width={172}>
@@ -78,7 +91,7 @@ class Post extends Component {
                   }}
                 />
                 <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
-                  if(item.followed)
+                  if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
                     this.props.history.push({
                       pathname: `postDetail/${item.id}`,
@@ -97,7 +110,7 @@ class Post extends Component {
         </div>
         <div className="post-bottom">
           <div className="bottom">
-            <div className="avatar">
+          <div className="avatar">
               {
                 item ?
                   <Lazyload height={25} width={25}>
@@ -106,25 +119,59 @@ class Post extends Component {
                   :
                   <div />
               }
-              {/* <Lazyload height={25} width={25}>
-                <img src='https://img.xiaohongshu.com/avatar/5a7753acd2c8a562cbb7adc4.jpg@80w_80h_90q_1e_1c_1x.jpg' alt="" />
-              </Lazyload> */}
             </div>
             <div className="name">
               {item.author}
             </div>
-            <div style={{ width: '35%', float: 'left', position: 'absolute', right: '50px' }}>
+            <div style={{ width: '28%', float: 'left', position: 'absolute', right: '50px' }}>
               {
-                item.followed?
-                <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
+                (userInfoStr && item.openId == userInfo.openid)? //如果是本人发的贴，不用关注
+                <></>
                 :
-                <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }} onClick={this.follow.bind(this)}>+关注</Button>
+                (
+                  item.followed?
+                  <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
+                  :
+                  <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px', border:'1px solid rgb(128, 190, 58)', borderRadius:'10px', color:'rgb(128, 190, 58)' }} onClick={this.follow.bind(this)}>+关注</Button>
+                )              
               }
             </div>
             <div className="star" onClick={(e) => { }}>
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
               <span>{item.likeCount}</span>
             </div>
+            {/*<div className="avatar">
+              {
+                item ?
+                  <Lazyload height={25} width={25}>
+                    <img src={item.authorHeadPic} alt="" />
+                  </Lazyload>
+                  :
+                  <div />
+              }
+            </div>
+             <div className="name">
+              {item.author}
+            </div>
+            <div style={{ width: '35%', float: 'left', position: 'absolute', right: '50px' }}>
+              {
+                (userInfoStr && item.openId == userInfo.openid)? //如果是本人发的贴，不用关注
+                <></>
+                :
+                (
+                  item.followed?
+                  <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
+                  :
+                  <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }} onClick={this.follow.bind(this)}>+关注</Button>
+                )
+                
+                
+              }
+            </div>
+            <div className="star" onClick={(e) => { }}>
+              <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
+              <span>{item.likeCount}</span>
+            </div> */}
           </div>
         </div>
       </div>

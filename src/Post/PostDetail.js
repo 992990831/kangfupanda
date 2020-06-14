@@ -397,8 +397,6 @@ class PostDetail extends Component {
                                                 :
                                                 <div></div>
                                         }
-
-
                                         <div>
                                             {
                                                 item.itemType == 'video' ?
