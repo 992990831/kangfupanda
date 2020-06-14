@@ -46,9 +46,20 @@
     z-index: 999;
 }
 
+.post-detail .post-text{
+    /* bottom: 85px;
+    position: absolute; */
+    text-align: left;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+
 .post-detail .post-profile{
-    bottom: 85px;
-    position: absolute;
+    /* bottom: 85px;
+    position: absolute; */
+    margin-top: 10px;
+    margin-bottom: 5px;
     display: flex;
     z-index: 999;
 }

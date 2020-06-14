@@ -26,7 +26,7 @@ class PostDetail extends Component {
             comments: [],
             commentsCount: 0,
             isLiked: false,
-            likeCount: 0,
+            //likeCount: 0,
             isCommentVisible: false
         }
     }
@@ -169,9 +169,12 @@ class PostDetail extends Component {
         }
 
         axios.post(`${Constants.APIBaseUrl}/like`, body).then((res) => {
+            let item = this.state.item;
+            item.likeCount++;
             this.setState({
                 isLiked: true,
-                likeCount: this.state.likeCount + 1
+                item
+                //likeCount: this.state.likeCount + 1
             })
         }).catch(function (error) {
             alert('点赞失败');
@@ -188,9 +191,12 @@ class PostDetail extends Component {
         }
 
         axios.post(`${Constants.APIBaseUrl}/dislike`, body).then((res) => {
+            let item = this.state.item;
+            item.likeCount--;
             this.setState({
                 isLiked: false,
-                likeCount: this.state.likeCount - 1
+                item
+                //likeCount: this.state.likeCount - 1
             })
         }).catch(function (error) {
             alert('点赞失败');
@@ -453,7 +459,25 @@ class PostDetail extends Component {
                                                                 }
                                                         </div>                  
                                                         <div>
-                                                            {item.text}
+                                                            <div className="post-profile">
+                                                                <div className="profileAvator">
+                                                                    {
+                                                                        item && !this.state.isCommentVisible?
+                                                                        <Lazyload height={25} width={25}>
+                                                                            <img src={ item.authorHeadPic } alt="" />
+                                                                        </Lazyload>
+                                                                        :
+                                                                        <div />
+                                                                    }
+                                                                    
+                                                                </div>
+                                                                <span style={{ marginLeft: '15px' }}>{item? item.author:''}</span>
+
+                                                            </div>
+                                                            <div className="post-text">
+                                                                {item.text}
+                                                            </div>
+                                                            
                                                         </div>
 
                                                         {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
@@ -461,22 +485,6 @@ class PostDetail extends Component {
                                             }
 
                                             <div>
-
-                                                <div className="post-profile">
-                                                    <div className="profileAvator">
-                                                        {
-                                                            item && !this.state.isCommentVisible?
-                                                            <Lazyload height={25} width={25}>
-                                                                <img src={ item.authorHeadPic } alt="" />
-                                                            </Lazyload>
-                                                            :
-                                                            <div />
-                                                        }
-                                                        
-                                                    </div>
-                                                    <span style={{ marginLeft: '15px' }}>{item? item.author:''}</span>
-
-                                                </div>
                                                 <div className="post-message">
                                                     {/* <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
                                         <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input> */}
@@ -496,7 +504,7 @@ class PostDetail extends Component {
                                                                 onClick={this.like.bind(this)} />
                                                     }
 
-                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item? this.state.item.likeCount : 0}点赞</span>
+                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount? this.state.item.likeCount : 0}点赞</span>
                                                 </div>
                                             </div>
                                         </div>
