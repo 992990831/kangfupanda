@@ -62,7 +62,7 @@ class Home extends Component {
             console.log('click search')
           }}>
             <img src={[require("../assets/images/search.png")]} alt="" className="search-icon" />
-            <span>大家都在搜"颈椎康复"</span>
+            <span>大家都在搜"医学护肤，医学减重"</span>
             <button className="publish" onClick={this.openCamera.bind(this)}>
               <img src={[require("../assets/images/publish2.png")]} alt="" />
             </button>

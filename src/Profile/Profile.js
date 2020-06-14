@@ -71,21 +71,35 @@ class Profile extends Component {
     componentDidMount() {
         let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(localStorage.getItem("userInfo"));
 
+        const uri = new URI(document.location.href);
+        const query = uri.query(true);
+        const { code } = query;
+        //如果有code，说明是从微信登录页面redirect回来的，此时就算没有localStorage，也不用再提示
         if (!userInfoStr) {
-            alert('登录', '是否使用登录微信?', [
-                { text: '取消', onPress: () => {
-                    this.props.history.push({
-                        pathname: `../home`,
-                    })
-                } },
-                {
-                  text: '同意',
-                  onPress: () =>
+
+            if(!code)
+            {
+                alert('登录', '是否使用登录微信?', [
+                    { text: '取消', onPress: () => {
+                        this.props.history.push({
+                            pathname: `../home`,
+                        })
+                    } },
                     {
-                        this.wechatLogin();
+                      text: '同意',
+                      onPress: () =>
+                        {
+                            //this.wechatLogin();
+                            window.location.href = generateGetCodeUrl(document.location.href);
+                        },
                     },
-                },
-              ])
+                  ])
+            }
+            else
+            {
+                this.wechatLogin(code);
+            }
+            
 
         }
         else {
@@ -94,44 +108,35 @@ class Profile extends Component {
         }
     }
 
-    wechatLogin()
+    wechatLogin(code)
     {
-        const uri = new URI(document.location.href);
-        const query = uri.query(true);
-        const { code } = query;
+        axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(res => {
+                if (!res.data) {
+                    return;
+                }
 
-        if (!code) {
-            window.location.href = generateGetCodeUrl(document.location.href);
-        }
-        else {
-            axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
-                headers: { 'Content-Type': 'application/json' }
+                localStorage.setItem("userInfo", res.data);
+                this.setState({ userInfo: JSON.parse(res.data) });
+
+                let originalUser = JSON.parse(res.data);
+                let toUser = {
+                    nickName: originalUser.nickname,
+                    openId: originalUser.openid,
+                    province: originalUser.province,
+                    city: originalUser.city,
+                    sex: originalUser.sex,
+                    phone: originalUser.phone,
+                    headpic: originalUser.headimgurl
+                };
+
+                this.registerUser(toUser);
             })
-                .then(res => {
-                    if (!res.data) {
-                        return;
-                    }
-
-                    localStorage.setItem("userInfo", res.data);
-                    this.setState({ userInfo: JSON.parse(res.data) });
-
-                    let originalUser = JSON.parse(res.data);
-                    let toUser = {
-                        nickName: originalUser.nickname,
-                        openId: originalUser.openid,
-                        province: originalUser.province,
-                        city: originalUser.city,
-                        sex: originalUser.sex,
-                        phone: originalUser.phone,
-                        headpic: originalUser.headimgurl
-                    };
-
-                    this.registerUser(toUser);
-                })
-                .catch(function (error) {
-                    alert('获取用户token失败,' + error);
-                });
-        }
+            .catch(function (error) {
+                alert('获取用户token失败,' + error);
+            });
     }
 
     render() {
