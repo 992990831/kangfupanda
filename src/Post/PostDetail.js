@@ -320,7 +320,8 @@ class PostDetail extends Component {
     render() {
         const { item } = this.state;
         let innerHeight = window.innerHeight + 'px';
-
+        let carouselWidth = window.innerWidth + 'px';
+        let carouselHeight = parseInt(window.innerHeight/2) + 'px';
         const sidebar = (
             <React.Fragment>
                 <List>
@@ -380,7 +381,7 @@ class PostDetail extends Component {
 
                                         {
                                             this.state.isCommentVisible ?
-                                                <Drawer
+                                            <Drawer
                                                     className="comment-drawer"
                                                     style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
                                                     position='bottom'
@@ -393,7 +394,7 @@ class PostDetail extends Component {
                                                     transitions={false}
                                                 >
                                                     评论区
-                                    </Drawer>
+                                            </Drawer>
                                                 :
                                                 <div></div>
                                         }
@@ -431,18 +432,32 @@ class PostDetail extends Component {
                                                             infinite
                                                             beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
                                                             afterChange={index => console.log('slide to', index)}
+                                                            style={{marginTop:'50px', backgroundColor:'white'}}
                                                         >
                                                             {this.state.item.pics.map(val => (
-                                                                <img
-                                                                    src={`${Constants.ResourceUrl}/${val}`}
-                                                                    alt=""
-                                                                    style={{ width: '100%', verticalAlign: 'top' }}
-                                                                    onLoad={() => {
-                                                                        // fire window resize event to change height
-                                                                        window.dispatchEvent(new Event('resize'));
-                                                                        this.setState({ imgHeight: 'auto' });
-                                                                    }}
-                                                                />
+                                                                <div key={val.id} style={{background:`url(${Constants.ResourceUrl}/${val}) no-repeat`, 
+                                                                backgroundPosition:'center',
+                                                                backgroundSize:`${carouselWidth} auto`,
+                                                                paddingBottom: '100%'
+                                                                }}>
+                                                                    <img
+                                                                        key={val.id}
+                                                                        style={{ width: '100%', height:'100%', color:'transparent', verticalAlign: 'top'     }}
+                                                                        src={`url(${Constants.ResourceUrl}/${val})`}
+                                                                        alt=""
+                                                                    />
+                                                                </div>
+                                                                // <img
+                                                                //     src={`${Constants.ResourceUrl}/${val}`}
+                                                                //     alt=""
+                                                                //     style={{ width: '100%', verticalAlign: 'top'     }}
+                                                                //     onLoad={() => {
+                                                                //         // fire window resize event to change height
+                                                                //         window.dispatchEvent(new Event('resize'));
+                                                                //         this.setState({ imgHeight: 'auto' });
+                                                                //     }}
+                                                                // />
+                                                                
                                                             ))}
 
                                                         </Carousel>
