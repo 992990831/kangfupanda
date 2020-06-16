@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Lazyload from 'react-lazyload';
 import './PostDetail.css'
 import { withRouter } from 'react-router-dom'
@@ -284,6 +284,7 @@ class PostDetail extends Component {
 
     onOpenCommentChange = (...args) => {
         console.log(args);
+        window.scrollTo({left:0, top: window.innerHeight});
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
 
@@ -321,7 +322,7 @@ class PostDetail extends Component {
         const { item } = this.state;
         let innerHeight = window.innerHeight + 'px';
         let carouselWidth = window.innerWidth + 'px';
-        let carouselHeight = parseInt(window.innerHeight/2) + 'px';
+        let carouselHeight = parseInt(window.innerHeight / 2) + 'px';
         const sidebar = (
             <React.Fragment>
                 <List>
@@ -366,10 +367,13 @@ class PostDetail extends Component {
         let isLogin = this.checkLogin();
 
         return (
-            <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)} direction='DIRECTION_ALL'>
+            // <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)} direction='DIRECTION_ALL'>
+            //</Hammer>
+            <Fragment>
                 {
                     isLogin ?
-                        <div style={{ height: innerHeight }}>
+                        // <div style={{ height: innerHeight }}>
+                        <div style={{ height: '100%' }}>
                             {
                                 item ?
                                     <div className="post-detail">
@@ -381,9 +385,9 @@ class PostDetail extends Component {
 
                                         {
                                             this.state.isCommentVisible ?
-                                            <Drawer
+                                                <Drawer
                                                     className="comment-drawer"
-                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
+                                                    style={{ minHeight: (document.documentElement.clientHeight - 200) }}
                                                     position='bottom'
                                                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
                                                     sidebar={sidebar}
@@ -432,17 +436,18 @@ class PostDetail extends Component {
                                                             infinite
                                                             beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
                                                             afterChange={index => console.log('slide to', index)}
-                                                            style={{marginTop:'50px', backgroundColor:'white'}}
+                                                            style={{ marginTop: '50px', backgroundColor: 'white' }}
                                                         >
                                                             {this.state.item.pics.map(val => (
-                                                                <div key={val.id} style={{background:`url(${Constants.ResourceUrl}/${val}) no-repeat`, 
-                                                                backgroundPosition:'center',
-                                                                backgroundSize:`${carouselWidth} auto`,
-                                                                paddingBottom: '100%'
+                                                                <div key={val.id} style={{
+                                                                    background: `url(${Constants.ResourceUrl}/${val}) no-repeat`,
+                                                                    backgroundPosition: 'center',
+                                                                    backgroundSize: `${carouselWidth} auto`,
+                                                                    paddingBottom: '100%'
                                                                 }}>
                                                                     <img
                                                                         key={val.id}
-                                                                        style={{ width: '100%', height:'100%', color:'transparent', verticalAlign: 'top'     }}
+                                                                        style={{ width: '100%', height: '100%', color: 'transparent', verticalAlign: 'top' }}
                                                                         src={`url(${Constants.ResourceUrl}/${val})`}
                                                                         alt=""
                                                                     />
@@ -457,81 +462,81 @@ class PostDetail extends Component {
                                                                 //         this.setState({ imgHeight: 'auto' });
                                                                 //     }}
                                                                 // />
-                                                                
+
                                                             ))}
 
                                                         </Carousel>
-                                                        <div style={{backgroundColor:'white'}}>
-                                                                {
-                                                                    this.state.item.audioes?
-                                                                    this.state.item.audioes.map( audio => (
+                                                        <div style={{ backgroundColor: 'white' }}>
+                                                            {
+                                                                this.state.item.audioes ?
+                                                                    this.state.item.audioes.map(audio => (
                                                                         <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
                                                                     ))
                                                                     :
                                                                     <></>
-                                                                }
-                                                        </div>                  
+                                                            }
+                                                        </div>
                                                         <div>
                                                             <div className="post-profile">
                                                                 <div className="profileAvator">
                                                                     {
-                                                                        item && !this.state.isCommentVisible?
-                                                                        <Lazyload height={25} width={25}>
-                                                                            <img src={ item.authorHeadPic } alt="" />
-                                                                        </Lazyload>
-                                                                        :
-                                                                        <div />
+                                                                        item && !this.state.isCommentVisible ?
+                                                                            <Lazyload height={25} width={25}>
+                                                                                <img src={item.authorHeadPic} alt="" />
+                                                                            </Lazyload>
+                                                                            :
+                                                                            <div />
                                                                     }
-                                                                    
+
                                                                 </div>
-                                                                <span style={{ marginLeft: '15px' }}>{item? item.author:''}</span>
+                                                                <span style={{ marginLeft: '15px' }}>{item ? item.author : ''}</span>
 
                                                             </div>
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
-                                                            
+
                                                         </div>
 
                                                         {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
                                                     </>
                                             }
 
-                                            <div>
-                                                <div className="post-message">
-                                                    {/* <img src={[require("../assets/images/pen-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                        <input style={{ fontSize: '12px', width: '60px' }} placeholder="说点什么..."></input> */}
-                                                    <img src={[require("../assets/images/message.png")]} onClick={
-                                                        this.onOpenCommentChange.bind(this)
-                                                    } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
-                                                        this.onOpenCommentChange.bind(this)
-                                                    }>{this.state.commentsCount}条评论</span>
 
-                                                    {
-                                                        this.state.isLiked ?
-                                                            <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                                                onClick={this.dislike.bind(this)} />
-                                                            :
-                                                            <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                                                onClick={this.like.bind(this)} />
-                                                    }
-
-                                                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount? this.state.item.likeCount : 0}点赞</span>
-                                                </div>
-                                            </div>
                                         </div>
+
+
 
                                     </div>
                                     :
                                     <div></div>
                             }
-
                         </div>
                         :
                         <div></div>
                 }
-            </Hammer>
+                <div>
+                    <div className="post-message">
+                        <img src={[require("../assets/images/message.png")]} onClick={
+                            this.onOpenCommentChange.bind(this)
+                        } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
+                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
+                            this.onOpenCommentChange.bind(this)
+                        }>{this.state.commentsCount}条评论</span>
+
+                        {
+                            this.state.isLiked ?
+                                <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                    onClick={this.dislike.bind(this)} />
+                                :
+                                <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                    onClick={this.like.bind(this)} />
+                        }
+
+                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}点赞</span>
+                    </div>
+                </div>
+            </Fragment>
         );
     }
 }

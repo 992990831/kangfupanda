@@ -23,6 +23,7 @@
 }
 
 .post-detail .post-header .post-left{
+    position: relative;
     width: 20px;
     height: 30px;
     position: absolute;
@@ -30,9 +31,12 @@
     left: 15px;
 }
 
-.post-detail .post-message{
+.post-message{
     bottom: 65px;
-    position: absolute;
+    background-color: rgba(24, 25, 26, 0.5);
+    color: white;
+    font-size: 16px;
+    position: fixed;
     display: flex;
     left: 50%;
     margin-left: -80px;
@@ -51,6 +55,7 @@
     position: absolute; */
     text-align: left;
     margin-left: 10px;
+    margin-bottom: 50px;
     font-size: 12px;
 }
 
