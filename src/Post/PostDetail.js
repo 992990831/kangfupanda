@@ -387,7 +387,7 @@ class PostDetail extends Component {
                                             this.state.isCommentVisible ?
                                                 <Drawer
                                                     className="comment-drawer"
-                                                    style={{ minHeight: (document.documentElement.clientHeight - 200) }}
+                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom:'50px' }}
                                                     position='bottom'
                                                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
                                                     sidebar={sidebar}
