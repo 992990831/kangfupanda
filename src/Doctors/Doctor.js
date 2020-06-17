@@ -36,16 +36,16 @@ class Doctor extends Component {
   render() {
     const { item } = this.state;
     return (
-      <div className="doctor-container">
+      <div className="doctor-container" onClick={
+        () => {
+          this.NavToDetail(item.detailimage);
+        } 
+      }>
         {/* <Badge text={'认证'} corner> */}
         <div className="doctor-pic">
             <div className="doctorHeadPicContainer">
               <img src={item.headpic.substring(0,4)=='http'?  item.headpic : `${Constants.ResourceUrl}/${item.headpic}`} alt="" className="doctorHeadPic"
-                onClick={
-                  () => {
-                    this.NavToDetail(item.detailimage);
-                  } 
-                }
+                
               />
             </div>
           </div>
