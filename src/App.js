@@ -6,6 +6,7 @@ import Home from './home/Home';
 import PostDetail from './Post/PostDetail';
 import Profile from './Profile/Profile';
 import DoctorList from './Doctors/DoctorList';
+import DoctorDetail from './Doctors/DoctorDetail';
 import { TabBar } from 'antd-mobile';
 
 import { createHashHistory } from 'history';
@@ -146,7 +147,8 @@ class App extends Component {
             <Switch>
               <Route path="/home" component={Home} />
               <Route path="/PostDetail/:id" component={PostDetail} />
-              <Route path="/found" component={DoctorList} />
+              <Route path="/found" exact component={DoctorList} />
+              <Route path="/found/detail"  component={DoctorDetail} />
               <Route path="/profile" exact  component={Profile} />
               <Route path="/profile/edit" component={ProfileEditorForm} />
               <Route path="/" render={() => {

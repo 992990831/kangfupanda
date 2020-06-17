@@ -24,14 +24,14 @@ class Doctor extends Component {
       isStar: !this.state.isStar
     })
   }
-  NavToDetail = (url) => {
+  NavToDetail = (detailimage) => {
     this.props.history.push({
-      pathname: url,
-      state: { data: this.state.item }
+      pathname: '/found/detail',
+      state: { detailimage: detailimage }
     })
   }
-
   
+
 
   render() {
     const { item } = this.state;
@@ -40,7 +40,13 @@ class Doctor extends Component {
         {/* <Badge text={'认证'} corner> */}
         <div className="doctor-pic">
             <div className="doctorHeadPicContainer">
-              <img src={item.headpic.substring(0,4)=='http'?  item.headpic : `${Constants.ResourceUrl}/${item.headpic}`} alt="" className="doctorHeadPic" />
+              <img src={item.headpic.substring(0,4)=='http'?  item.headpic : `${Constants.ResourceUrl}/${item.headpic}`} alt="" className="doctorHeadPic"
+                onClick={
+                  () => {
+                    this.NavToDetail(item.detailimage);
+                  } 
+                }
+              />
             </div>
           </div>
         {/* </Badge> */}
