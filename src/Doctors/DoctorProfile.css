@@ -1,0 +1,103 @@
+.profileHeadPic{
+    border-radius:50%;
+    width: 70%;
+}
+
+.profileHeader{
+    padding-top: 10px;
+    background-color: white;
+    display: flex;
+}
+
+.profileName{
+    padding-bottom: 10px;
+    padding-left: 20px;
+    background-color: white;
+    display: flex;
+    font-size: 12px;
+    color: #8a8a8a;
+}
+
+
+.profileHeaderPicContainer{
+    width: 180px;
+    height: 90px;
+}
+
+.profileHeaderContentContainer{
+    width: 100%;
+    margin-right: 20px;
+    color: #8a8a8a;
+}
+
+.profileHeaderContent{
+    width:33%;
+}
+
+.profileHeaderRow{
+    display: flex;
+    width: 100%;   
+    margin-top: 5px;     
+}
+
+.profileHeaderRowCount{
+    display: flex;
+    width: 100%;    
+    color: black;
+    margin-top: 5px;
+}
+
+.videoContainer{
+    background-color: #fff;
+    position: relative;
+    height: 200px;
+    width: 48vw;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+}
+
+.videoContainer .publish{
+    border: 0;
+    background-color: transparent;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+}
+
+.videoContainer .publish img{
+    width: 60px;
+   
+  }
+
+
+  .profileItem{
+      width: 60%;
+    margin: auto;
+  }
+
+  .profileItem .profileItemHeader{
+    display: flex;
+    color: rgb(128,128,128);
+    font-size: 12px;
+}
+
+.profileItem .profileItemHeader .profileItemContent{
+    width: 50%
+}
+
+.profileComment{
+    color: rgb(128,128,128);
+}
+
+.profileComment .profileCommentHeader{
+
+
+}
+
+.profileComment .profileCommentContent{
+    color: rgb(128,128,128);
+}

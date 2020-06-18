@@ -60,6 +60,18 @@ class Post extends Component {
 
   }
 
+  navigateDoctorProfile(){
+    if(this.props.history)
+    {
+      //this.props.history.push(`../profile/doctor/${this.state.item.openId}`);
+
+      this.props.history.push({
+        pathname: `../profile/doctor/${this.state.item.openId}`,
+        state: { followed: this.state.item.followed }
+      });
+    }
+  }
+
   render() {
     let userInfo = null;
     let userInfoStr = localStorage.getItem("userInfo");
@@ -114,7 +126,7 @@ class Post extends Component {
               {
                 item ?
                   <Lazyload height={25} width={25}>
-                    <img src={item.authorHeadPic} alt="" />
+                    <img src={item.authorHeadPic} alt="" onClick={this.navigateDoctorProfile.bind(this)} />
                   </Lazyload>
                   :
                   <div />

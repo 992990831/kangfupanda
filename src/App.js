@@ -13,6 +13,8 @@ import { createHashHistory } from 'history';
 
 import { ProfileEditorForm }  from './Profile/ProfileEditor';
 
+import DoctorProfile  from './Doctors/DoctorProfile';
+
 class App extends Component {
   // let btnCamera = null;
 
@@ -147,6 +149,7 @@ class App extends Component {
             <Switch>
               <Route path="/home" component={Home} />
               <Route path="/PostDetail/:id" component={PostDetail} />
+              <Route path="/profile/doctor/:openid" component={DoctorProfile} />
               <Route path="/found" exact component={DoctorList} />
               <Route path="/found/detail"  component={DoctorDetail} />
               <Route path="/profile" exact  component={Profile} />
