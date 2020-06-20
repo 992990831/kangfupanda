@@ -284,7 +284,7 @@ class PostDetail extends Component {
 
     onOpenCommentChange = (...args) => {
         console.log(args);
-        window.scrollTo({left:0, top: window.innerHeight});
+        window.scrollTo({ left: 0, top: window.innerHeight });
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
 
@@ -325,7 +325,7 @@ class PostDetail extends Component {
         let carouselHeight = parseInt(window.innerHeight / 2) + 'px';
         const sidebar = (
             <React.Fragment>
-                <List>
+                {/* <List>
                     {this.state.comments.map((comment, index) => {
 
                         return (<div key={index} style={{ padding: '0 15px', display: 'flex', width: '100%' }}>
@@ -352,7 +352,7 @@ class PostDetail extends Component {
                             >{comment.comment_content}</div>
                         </div>)
                     })}
-                </List>
+                </List> */}
                 <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
                     <div style={{ margin: 'auto', display: 'flex' }}>
                         <input placeholder='请评论' ref='refComment'></input>
@@ -380,14 +380,27 @@ class PostDetail extends Component {
                                         <div className="post-header">
                                             <img src={[require('../assets/images/arrow.png')]} alt="" className="post-left"
                                                 onClick={() => this.handleBack()} />
-                                主页
-                                </div>
+                                            <div className="post-profile">
+                                                <div className="profileAvator">
+                                                    {
+                                                        item && !this.state.isCommentVisible ?
+                                                            <Lazyload height={25} width={25}>
+                                                                <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http')? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" />
+                                                            </Lazyload>
+                                                            :
+                                                            <div />
+                                                    }
+                                                    
+                                                </div>
+                                                <span style={{ marginLeft: '15px', lineHeight:'35px' }}>{item ? item.author : ''}</span>
+                                            </div>
+                                        </div>
 
                                         {
                                             this.state.isCommentVisible ?
                                                 <Drawer
                                                     className="comment-drawer"
-                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom:'50px' }}
+                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
                                                     position='bottom'
                                                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
                                                     sidebar={sidebar}
@@ -452,17 +465,6 @@ class PostDetail extends Component {
                                                                         alt=""
                                                                     />
                                                                 </div>
-                                                                // <img
-                                                                //     src={`${Constants.ResourceUrl}/${val}`}
-                                                                //     alt=""
-                                                                //     style={{ width: '100%', verticalAlign: 'top'     }}
-                                                                //     onLoad={() => {
-                                                                //         // fire window resize event to change height
-                                                                //         window.dispatchEvent(new Event('resize'));
-                                                                //         this.setState({ imgHeight: 'auto' });
-                                                                //     }}
-                                                                // />
-
                                                             ))}
 
                                                         </Carousel>
@@ -476,29 +478,57 @@ class PostDetail extends Component {
                                                                     <></>
                                                             }
                                                         </div>
-                                                        <div>
-                                                            <div className="post-profile">
-                                                                <div className="profileAvator">
-                                                                    {
-                                                                        item && !this.state.isCommentVisible ?
-                                                                            <Lazyload height={25} width={25}>
-                                                                                <img src={item.authorHeadPic} alt="" />
-                                                                            </Lazyload>
-                                                                            :
-                                                                            <div />
-                                                                    }
-
-                                                                </div>
-                                                                <span style={{ marginLeft: '15px' }}>{item ? item.author : ''}</span>
-
+                                                        <div style={{padding:'10px 10px 15px 0px'}}>
+                                                            <div className="post-title">
+                                                                {item.name}
                                                             </div>
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
+                                                            <div style={{marginBottom:'80px'}}>
+                                                                <List>
+                                                                    {this.state.comments.map((comment, index) => {
+                                                                        return (
+                                                                            <div>
+                                                                                <div key={index} style={{ padding: '0 15px', display: 'flex' }}>
+                                                                                    <div className="comment-avator">
+                                                                                        <img src={comment.comment_user_pic} alt="" />
+                                                                                    </div>
+                                                                                    <div
+                                                                                        style={{
+                                                                                            lineHeight: '40px',
+                                                                                            color: 'black',
+                                                                                            fontSize: 12,
+                                                                                            borderTop: '2px solid #F6F6F6',
+                                                                                            marginLeft: '10px'
+                                                                                        }}
+                                                                                    >
+                                                                                        <div style={{lineHeight:'20px'}}>
+                                                                                            {comment.comment_user_name}
+                                                                                        </div>
+                                                                                        <div style={{lineHeight:'12px', fontSize:'10px', color:'rgb(128,128,128)'}}>
+                                                                                            {comment.createdAt.substring(0,10)}
+                                                                                        </div>
+                                                                                    
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                        style={{
+                                                                                            lineHeight: '35px',
+                                                                                            color: 'black',
+                                                                                            fontSize: 12,
+                                                                                            // borderTop: '2px solid #F6F6F6',
+                                                                                            marginLeft: '50px',
+                                                                                            textAlign: 'left'
+                                                                                        }}
+                                                                                    >{comment.comment_content}</div>
+                                                                            </div>
+                                                                        )
+                                                                    })}
+                                                                </List>
+                                                            </div>
 
                                                         </div>
-
-                                                        {/* <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" ></img> */}
                                                     </>
                                             }
 

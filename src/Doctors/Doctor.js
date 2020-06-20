@@ -76,9 +76,9 @@ class Doctor extends Component {
           </div>
 
           <div className="bottom">
-            <div className="note">
+            <span className="note">
               {item.note}
-            </div>
+            </span>
             {/* <div className="star" onClick={(e) => {  }}>
                 <img src={[require("../assets/images/heart.png")]} alt="" />
                 <span>{item.starNum}</span>

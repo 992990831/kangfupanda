@@ -106,7 +106,7 @@ class Post extends Component {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
                     this.props.history.push({
-                      pathname: `postDetail/${item.id}`,
+                      pathname: `postDetail/${item.id}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`,
                       state: { data: this.state.item }
                     })
                   }
@@ -126,7 +126,7 @@ class Post extends Component {
               {
                 item ?
                   <Lazyload height={25} width={25}>
-                    <img src={item.authorHeadPic} alt="" onClick={this.navigateDoctorProfile.bind(this)} />
+                    <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http')? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" onClick={this.navigateDoctorProfile.bind(this)} />
                   </Lazyload>
                   :
                   <div />
