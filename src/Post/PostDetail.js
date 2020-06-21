@@ -278,7 +278,6 @@ class PostDetail extends Component {
     }
 
     onOpenCommentChange = (...args) => {
-        debugger;
         window.scrollTo({ left: 0, top: window.innerHeight });
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
@@ -321,7 +320,7 @@ class PostDetail extends Component {
             <React.Fragment>
                 <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
                     <div style={{ margin: 'auto', display: 'flex' }}>
-                        <input placeholder='请评论' ref='refComment'></input>
+                        <input style={{width:'280px'}} placeholder='请评论' ref='refComment'></input>
                         <div>
                             <Button onClick={this.submit.bind(this)} type="ghost" inline size="small" style={{ marginLeft: '4px', marginRight: '4px' }}>提交</Button>
                         </div>
@@ -510,12 +509,14 @@ class PostDetail extends Component {
                         Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
                     }} />
                     
-                    <img src={[require("../assets/images/message.png")]} onClick={
+                    <img src={[require("../assets/images/message.png")]}  alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
+                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.commentsCount}</span>
+                    <div className="comment-input" onClick={
                         this.onOpenCommentChange.bind(this)
-                    } alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
-                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
-                        this.onOpenCommentChange.bind(this)
-                    }>{this.state.commentsCount}条评论</span>
+                    }>
+                        <img src={[require("../assets/images/pen-white.png")]} alt="" className="search-icon" />
+                        <span>留下您的评论</span>
+                    </div>
 
                     {
                         this.state.isLiked ?
@@ -526,16 +527,16 @@ class PostDetail extends Component {
                                 onClick={this.like.bind(this)} />
                     }
 
-                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}点赞</span>
-
+                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}</span>
+                    
                     <div className='wechatButton' onClick={()=>{
                         Toast.info(<div>
                             <img src={[require("../assets/images/arrow_up_right.png")]} alt="" style={{ width: '100px', height: '100px', margin: '0px 0px 5px 10px', display:'flex' }} />
                             <span>请点击右上角的菜单分享</span>
                         </div>, 4, ()=>{}, true);
                     }}>
-                        <img src={[require("../assets/images/wechat-white.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
-                        <span style={{ marginLeft: '8px', fontSize: '12px', paddingTop: '5px' }}>发给好友</span>
+                        <img src={[require("../assets/images/forward.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
+                        <span style={{ marginLeft: '8px', fontSize: '12px', paddingTop: '5px' }}>转发</span>
                     </div>
                     
                 </div>

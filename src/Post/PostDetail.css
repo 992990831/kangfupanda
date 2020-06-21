@@ -49,10 +49,30 @@
     background-color: rgb(128, 227, 22);
     margin-left: 10px;
     margin-right: 10px;
-    width: 120px;
+    width: 85px;
     margin-top: -3px;
     height: 25px;
     display: flex;
+}
+
+.comment-input{
+    border-radius: 5px;
+    height: 20px;
+    width: 100px;
+    margin-left: 5px;
+    background-color: rgba(28,28,28,0.9);
+    line-height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 5px;
+    font-size: 10px;
+}
+
+.comment-icon{
+    height: 15px;
+    width: 15px;
+    margin-right: 2px;
 }
 
 .post-detail .post-description{
