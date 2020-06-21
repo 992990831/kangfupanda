@@ -14,6 +14,8 @@ import axios from 'axios';
 
 import { getJSSDK } from '../Utils/wxshare';
 
+Toast.config({mask: true})
+
 //微信分享
 //前端参考：https://www.cnblogs.com/wang715100018066/p/12066579.html
 //后端参考：https://www.cnblogs.com/wuhuacong/p/5482848.html
@@ -38,10 +40,8 @@ class PostDetail extends Component {
             linkurl: window.location.href,// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
             img: 'http://app.kangfupanda.com/resources/logo2.jpg' // 分享图标
         }
-        // let url = encodeURIComponent(window.location.href.split('#')[0]);
         let url = window.location.href.split('#')[0];
 
-        //alert(JSON.stringify(obj));
         getJSSDK(url, obj)
 
     }
@@ -69,7 +69,6 @@ class PostDetail extends Component {
             this.props.history.push({
                 pathname: `../profile`,
             })
-
             return false;
         }
 
@@ -278,12 +277,8 @@ class PostDetail extends Component {
         }
     }
 
-    handleTap = (e) => {
-
-    }
-
     onOpenCommentChange = (...args) => {
-        console.log(args);
+        debugger;
         window.scrollTo({ left: 0, top: window.innerHeight });
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
@@ -317,7 +312,6 @@ class PostDetail extends Component {
         });
     }
 
-
     render() {
         const { item } = this.state;
         let innerHeight = window.innerHeight + 'px';
@@ -325,34 +319,6 @@ class PostDetail extends Component {
         let carouselHeight = parseInt(window.innerHeight / 2) + 'px';
         const sidebar = (
             <React.Fragment>
-                {/* <List>
-                    {this.state.comments.map((comment, index) => {
-
-                        return (<div key={index} style={{ padding: '0 15px', display: 'flex', width: '100%' }}>
-                            <div className="comment-avator">
-                                <img src={comment.comment_user_pic} alt="" />
-                            </div>
-                            <div
-                                style={{
-                                    lineHeight: '50px',
-                                    color: '#888',
-                                    fontSize: 12,
-                                    borderTop: '2px solid #F6F6F6',
-                                    marginLeft: '10px'
-                                }}
-                            >{comment.comment_user_name}</div>
-                            <div
-                                style={{
-                                    lineHeight: '50px',
-                                    color: '#888',
-                                    fontSize: 12,
-                                    borderTop: '2px solid #F6F6F6',
-                                    margin: 'auto'
-                                }}
-                            >{comment.comment_content}</div>
-                        </div>)
-                    })}
-                </List> */}
                 <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
                     <div style={{ margin: 'auto', display: 'flex' }}>
                         <input placeholder='请评论' ref='refComment'></input>
@@ -385,14 +351,13 @@ class PostDetail extends Component {
                                                     {
                                                         item && !this.state.isCommentVisible ?
                                                             <Lazyload height={25} width={25}>
-                                                                <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http')? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" />
+                                                                <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http') ? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" />
                                                             </Lazyload>
                                                             :
                                                             <div />
                                                     }
-                                                    
                                                 </div>
-                                                <span style={{ marginLeft: '15px', lineHeight:'35px' }}>{item ? item.author : ''}</span>
+                                                <span style={{ marginLeft: '15px', lineHeight: '35px' }}>{item ? item.author : ''}</span>
                                             </div>
                                         </div>
 
@@ -400,7 +365,7 @@ class PostDetail extends Component {
                                             this.state.isCommentVisible ?
                                                 <Drawer
                                                     className="comment-drawer"
-                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '50px' }}
+                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
                                                     position='bottom'
                                                     contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
                                                     sidebar={sidebar}
@@ -478,14 +443,14 @@ class PostDetail extends Component {
                                                                     <></>
                                                             }
                                                         </div>
-                                                        <div style={{padding:'10px 10px 15px 0px'}}>
+                                                        <div style={{ padding: '10px 10px 15px 0px' }}>
                                                             <div className="post-title">
                                                                 {item.name}
                                                             </div>
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
-                                                            <div style={{marginBottom:'80px'}}>
+                                                            <div style={{ marginBottom: '80px' }}>
                                                                 <List>
                                                                     {this.state.comments.map((comment, index) => {
                                                                         return (
@@ -503,40 +468,34 @@ class PostDetail extends Component {
                                                                                             marginLeft: '10px'
                                                                                         }}
                                                                                     >
-                                                                                        <div style={{lineHeight:'20px'}}>
+                                                                                        <div style={{ lineHeight: '20px' }}>
                                                                                             {comment.comment_user_name}
                                                                                         </div>
-                                                                                        <div style={{lineHeight:'12px', fontSize:'10px', color:'rgb(128,128,128)'}}>
-                                                                                            {comment.createdAt.substring(0,10)}
+                                                                                        <div style={{ lineHeight: '12px', fontSize: '10px', color: 'rgb(128,128,128)' }}>
+                                                                                            {comment.createdAt.substring(0, 10)}
                                                                                         </div>
-                                                                                    
+
                                                                                     </div>
                                                                                 </div>
                                                                                 <div
-                                                                                        style={{
-                                                                                            lineHeight: '35px',
-                                                                                            color: 'black',
-                                                                                            fontSize: 12,
-                                                                                            // borderTop: '2px solid #F6F6F6',
-                                                                                            marginLeft: '50px',
-                                                                                            textAlign: 'left'
-                                                                                        }}
-                                                                                    >{comment.comment_content}</div>
+                                                                                    style={{
+                                                                                        lineHeight: '35px',
+                                                                                        color: 'black',
+                                                                                        fontSize: 12,
+                                                                                        // borderTop: '2px solid #F6F6F6',
+                                                                                        marginLeft: '50px',
+                                                                                        textAlign: 'left'
+                                                                                    }}
+                                                                                >{comment.comment_content}</div>
                                                                             </div>
                                                                         )
                                                                     })}
                                                                 </List>
                                                             </div>
-
                                                         </div>
                                                     </>
                                             }
-
-
                                         </div>
-
-
-
                                     </div>
                                     :
                                     <div></div>
@@ -545,26 +504,40 @@ class PostDetail extends Component {
                         :
                         <div></div>
                 }
-                <div>
-                    <div className="post-message">
-                        <img src={[require("../assets/images/message.png")]} onClick={
-                            this.onOpenCommentChange.bind(this)
-                        } alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }} />
-                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
-                            this.onOpenCommentChange.bind(this)
-                        }>{this.state.commentsCount}条评论</span>
+                <div className="post-message">
+                    <img src={[require("../assets/images/ellipsis.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} 
+                    onClick={()=>{
+                        Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
+                    }} />
+                    
+                    <img src={[require("../assets/images/message.png")]} onClick={
+                        this.onOpenCommentChange.bind(this)
+                    } alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
+                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }} onClick={
+                        this.onOpenCommentChange.bind(this)
+                    }>{this.state.commentsCount}条评论</span>
 
-                        {
-                            this.state.isLiked ?
-                                <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                    onClick={this.dislike.bind(this)} />
-                                :
-                                <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
-                                    onClick={this.like.bind(this)} />
-                        }
+                    {
+                        this.state.isLiked ?
+                            <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                onClick={this.dislike.bind(this)} />
+                            :
+                            <img src={[require("../assets/images/heart-white.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
+                                onClick={this.like.bind(this)} />
+                    }
 
-                        <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}点赞</span>
+                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}点赞</span>
+
+                    <div className='wechatButton' onClick={()=>{
+                        Toast.info(<div>
+                            <img src={[require("../assets/images/arrow_up_right.png")]} alt="" style={{ width: '100px', height: '100px', margin: '0px 0px 5px 10px', display:'flex' }} />
+                            <span>请点击右上角的菜单分享</span>
+                        </div>, 4, ()=>{}, true);
+                    }}>
+                        <img src={[require("../assets/images/wechat-white.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
+                        <span style={{ marginLeft: '8px', fontSize: '12px', paddingTop: '5px' }}>发给好友</span>
                     </div>
+                    
                 </div>
             </Fragment>
         );
