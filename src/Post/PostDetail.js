@@ -14,6 +14,9 @@ import axios from 'axios';
 
 import { getJSSDK } from '../Utils/wxshare';
 
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+
 Toast.config({mask: true})
 
 //微信分享
@@ -29,7 +32,8 @@ class PostDetail extends Component {
             commentsCount: 0,
             isLiked: false,
             //likeCount: 0,
-            isCommentVisible: false
+            isCommentVisible: false,
+            isAudioPlaying: false
         }
     }
 
@@ -432,12 +436,37 @@ class PostDetail extends Component {
                                                             ))}
 
                                                         </Carousel>
+                                                        {/* 播放器控件 */}
+                                                        {/* <div className='audio-tool-container'>
+                                                            {
+                                                                this.state.isAudioPlaying?
+                                                                <img src={[require("../assets/images/audio-stop.png")]} className='audio-stop'
+                                                                onClick={
+                                                                    this.setState({isAudioPlaying:false})
+                                                                }
+                                                                />
+                                                                :
+                                                                <img src={[require("../assets/images/audio-play.png")]} className='audio-play'
+                                                                onClick={
+                                                                    this.setState({isAudioPlaying:true})
+                                                                }
+                                                                />
+                                                            }
+                                                            
+                                                        </div> */}
                                                         <div style={{ backgroundColor: 'white' }}>
                                                             {
                                                                 this.state.item.audioes ?
-                                                                    this.state.item.audioes.map(audio => (
-                                                                        <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
-                                                                    ))
+                                                                    // this.state.item.audioes.map(audio => (
+                                                                    //     <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
+                                                                    // ))
+                                                                    <AudioPlayer
+                                                                        autoPlay
+                                                                        src={`${Constants.ResourceUrl}/${this.state.item.audioes[0]}`}
+                                                                        onPlay={e => console.log("onPlay")}
+                                                                        customVolumeControls={[]} //禁用音量
+                                                                        // other props here
+                                                                    />
                                                                     :
                                                                     <></>
                                                             }

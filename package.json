@@ -12,6 +12,7 @@
     "rc-form": "^2.4.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-h5-audio-player": "^3.2.0",
     "react-hammerjs": "^1.0.1",
     "react-lazyload": "^2.6.7",
     "react-router-dom": "^5.1.2",

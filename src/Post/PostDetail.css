@@ -69,6 +69,24 @@
     font-size: 10px;
 }
 
+.audio-stop{
+    height: 18px;
+    width: 18px;
+}
+
+.audio-play{
+    height: 18px;
+    width: 18px;
+}
+
+.audio-tool-container{
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    border: solid 1px rgb(168,168,168);
+    padding: 3px;
+}
+
 .comment-icon{
     height: 15px;
     width: 15px;

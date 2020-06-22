@@ -14,6 +14,9 @@ const gotoPostDetail = (postId) =>{
 
 function ProfileItem(props) {
     return(<div>
+        <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
+            <span>{props.workItem.name}</span>
+        </div>
         <img style={{height:'80px'}} src={`${Constants.ResourceUrl}${props.workItem.posterUri}`} 
         onClick={()=> {gotoPostDetail(props.workItem.id)}}
         />
