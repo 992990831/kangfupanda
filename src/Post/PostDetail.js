@@ -436,24 +436,6 @@ class PostDetail extends Component {
                                                             ))}
 
                                                         </Carousel>
-                                                        {/* 播放器控件 */}
-                                                        {/* <div className='audio-tool-container'>
-                                                            {
-                                                                this.state.isAudioPlaying?
-                                                                <img src={[require("../assets/images/audio-stop.png")]} className='audio-stop'
-                                                                onClick={
-                                                                    this.setState({isAudioPlaying:false})
-                                                                }
-                                                                />
-                                                                :
-                                                                <img src={[require("../assets/images/audio-play.png")]} className='audio-play'
-                                                                onClick={
-                                                                    this.setState({isAudioPlaying:true})
-                                                                }
-                                                                />
-                                                            }
-                                                            
-                                                        </div> */}
                                                         <div style={{ backgroundColor: 'white' }}>
                                                             {
                                                                 this.state.item.audioes ?
@@ -535,7 +517,11 @@ class PostDetail extends Component {
                 <div className="post-message">
                     <img src={[require("../assets/images/ellipsis.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} 
                     onClick={()=>{
-                        Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
+                        //Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
+                        this.props.history.push({
+                            pathname: `../complain`,
+                            state: { ...this.state.item }
+                        });
                     }} />
                     
                     <img src={[require("../assets/images/message.png")]}  alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />

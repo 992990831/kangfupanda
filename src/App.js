@@ -15,6 +15,8 @@ import { ProfileEditorForm }  from './Profile/ProfileEditor';
 
 import DoctorProfile  from './Doctors/DoctorProfile';
 
+import ComplainForm from './Complain/ComplainForm';
+
 class App extends Component {
   // let btnCamera = null;
 
@@ -148,6 +150,7 @@ class App extends Component {
           <div className="redBook-main">
             <Switch>
               <Route path="/home" component={Home} />
+              <Route path="/complain" component={ComplainForm} />
               <Route path="/PostDetail/:id" component={PostDetail} />
               <Route path="/profile/doctor/:openid" component={DoctorProfile} />
               <Route path="/found" exact component={DoctorList} />
