@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
-import { ActionSheet, Button, Tabs, Badge, Modal } from 'antd-mobile';
+import { ActionSheet, Button, Tabs, Badge, Modal, Toast } from 'antd-mobile';
 
 import URI from 'URIjs';
 import axios from 'axios';
 
-import { createHashHistory } from 'history';
+// import { createHashHistory } from 'history';
 
 import { Constants } from '../Utils/Constants';
 
@@ -62,8 +62,8 @@ class Profile extends Component {
                 if (buttonIndex == 0) {
                     localStorage.removeItem("userInfo");
 
-                    const history = createHashHistory();
-                    history.push('/home');
+                    //const history = createHashHistory();
+                    this.props.history.push('/home');
                 }
             });
     }
@@ -104,8 +104,24 @@ class Profile extends Component {
         }
         else {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            this.setState({ userInfo: userInfo });
+            // this.setState({ userInfo: userInfo });
+            this.loadUserInfo(userInfo.openid);
         }
+    }
+
+    loadUserInfo(openid) {
+        axios.get(`${Constants.APIBaseUrl}/user/${openid}`, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => {
+            if (!res.data) {
+                return;
+            }
+
+            this.setState({userInfo: res.data});
+
+        }).catch(function (error) {
+            Toast.info('获取用户信息失败,' + error, 2);
+        });
     }
 
     wechatLogin(code)
@@ -151,43 +167,65 @@ class Profile extends Component {
                 return workItem.openId == userInfo.openid;
             });
         }
-        const history = createHashHistory();
+        // const history = createHashHistory();
 
         return (
             
-                this.state.toEditor ?
-                    <Redirect to={{
-                        pathname: '/profile/edit',
-                    }} />
-                    :
+                // this.state.toEditor ?
+                //     <Redirect to={{
+                //         pathname: '/profile/edit',
+                //         state: this.state.userInfo
+                //     }} />
+                //     :
                     <React.Fragment>
                         <div className="profileHeader">
                             <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
-                                <img src={this.state.userInfo.headimgurl} alt="" className="profileHeadPic" />
+                                <img src={this.state.userInfo.headpic.startsWith('http')?  this.state.userInfo.headpic : `${Constants.ResourceUrl}${this.state.userInfo.headpic}`} alt="" className="profileHeadPic" />
                             </div>
                             <div className="profileHeaderContentContainer">
-                                <div style={{ width: '50%', float: 'left' }}>
+                                <div style={{ width: '90%', textAlign:'left' }}>
                                     <div style={{ fontSize: '18px' }}>
-                                        {this.state.userInfo.nickname}
+                                        {this.state.userInfo.nickName}
                                     </div>
-                                    <div style={{ marginTop: '10px' }}>
-                                        专家
-                            </div>
                                 </div>
-                                <div style={{ width: '50%', float: 'left' }}>
-                                    <Button style={{ width: '90%', height: '90%', margin: 'auto' }} onClick={() => {
-                                        this.setState({ toEditor: true });
-                                        //history.push('/profile/edit');
-                                    }}>编辑</Button>
+                                <div style={{marginTop:'5px'}}>
+                                    <Badge text={this.state.userInfo.city} style={{width:'60px'}}></Badge>
+                                </div>
+                                <div style={{marginTop:'5px', textAlign:'left'}}>
+                                    <span style={{fontSize:'12px'}}>
+                                        {
+                                            this.state.userInfo.note? this.state.userInfo.note : '这个人还没有写简介哦~'
+                                        }
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div className="profileName">
-                            <span>粉丝数 99</span>
+                            <div className="profileItem">
+                                <div className="profileItemHeader">
+                                    <div className="profileItemBig">{99}</div>
+                                    <div className="profileItemBig">{99}</div>
+                                    <div className="profileItemBig">{99}</div>
+                                </div>
+                                <div className="profileItemHeader">
+                                    <div className="profileItemSmall">粉丝</div>
+                                    <div className="profileItemSmall">关注</div>
+                                    <div className="profileItemSmall">获赞</div>
+                                </div>
+                            </div>
+                            <div style={{ width: '25%', float: 'left' }}>
+                                <Button type='primary' inline size='small' style={{ margin: '4px' }} onClick={() => {
+                                    //this.setState({ toEditor: true });
+                                    //必须用同一个history，如果新建的话，state会传不过去
+                                    this.props.history.push({
+                                        pathname: '/profile/edit',
+                                        state: { ...this.state.userInfo }
+                                      });
+                                }}>编辑</Button>
+                            </div>
                         </div>
                         <div style={{ height: '8px', backgroundColor: 'transparent' }}></div>
                         <Tabs tabs={tabs}
-
                             initialPage={0}
                             onChange={(tab, index) => { console.log('onChange', index, tab); }}
                             onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}

@@ -11,7 +11,7 @@ import { TabBar } from 'antd-mobile';
 
 import { createHashHistory } from 'history';
 
-import { ProfileEditorForm }  from './Profile/ProfileEditor';
+import ProfileEditorForm  from './Profile/ProfileEditor';
 
 import DoctorProfile  from './Doctors/DoctorProfile';
 
