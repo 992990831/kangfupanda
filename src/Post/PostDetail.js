@@ -9,7 +9,7 @@ import { Carousel, Drawer, Toast, List, Button } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
 
-//import wx from 'weixin-js-sdk';
+import wx from 'weixin-js-sdk';
 import axios from 'axios';
 
 import { getJSSDK } from '../Utils/wxshare';
@@ -545,10 +545,15 @@ class PostDetail extends Component {
                     <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}</span>
                     
                     <div className='wechatButton' onClick={()=>{
-                        Toast.info(<div>
-                            <img src={[require("../assets/images/arrow_up_right.png")]} alt="" style={{ width: '100px', height: '100px', margin: '0px 0px 5px 10px', display:'flex' }} />
-                            <span>请点击右上角的菜单分享</span>
-                        </div>, 4, ()=>{}, true);
+                        // Toast.info(<div>
+                        //     <img src={[require("../assets/images/arrow_up_right.png")]} alt="" style={{ width: '100px', height: '100px', margin: '0px 0px 5px 10px', display:'flex' }} />
+                        //     <span>请点击右上角的菜单分享</span>
+                        // </div>, 4, ()=>{}, true);
+                        let search= `postDetail/${this.state.item.id}?title=${this.state.item.name.length>=10? this.state.item.name.substring(0,10) : this.state.item.name}`;
+                        const url = `/pages/share/share?poster=${this.state.item.pics[0]}&title=${this.state.item.name}&search=${search}`;//对应小程序项目里建立的wePay.js的路径
+                        wx.miniProgram.navigateTo({
+                            url: url
+                        }); 
                     }}>
                         <img src={[require("../assets/images/forward.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
                         <span style={{ marginLeft: '8px', fontSize: '12px', paddingTop: '5px' }}>转发</span>

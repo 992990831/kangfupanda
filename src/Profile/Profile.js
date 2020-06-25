@@ -77,29 +77,28 @@ class Profile extends Component {
         //如果有code，说明是从微信登录页面redirect回来的，此时就算没有localStorage，也不用再提示
         if (!userInfoStr) {
 
-            if(!code)
-            {
+            if (!code) {
                 alert('登录', '是否使用登录微信?', [
-                    { text: '取消', onPress: () => {
-                        this.props.history.push({
-                            pathname: `../home`,
-                        })
-                    } },
                     {
-                      text: '同意',
-                      onPress: () =>
-                        {
+                        text: '取消', onPress: () => {
+                            this.props.history.push({
+                                pathname: `../home`,
+                            })
+                        }
+                    },
+                    {
+                        text: '同意',
+                        onPress: () => {
                             //this.wechatLogin();
                             window.location.href = generateGetCodeUrl(document.location.href);
                         },
                     },
-                  ])
+                ])
             }
-            else
-            {
+            else {
                 this.wechatLogin(code);
             }
-            
+
 
         }
         else {
@@ -117,15 +116,14 @@ class Profile extends Component {
                 return;
             }
 
-            this.setState({userInfo: res.data});
+            this.setState({ userInfo: res.data });
 
         }).catch(function (error) {
             Toast.info('获取用户信息失败,' + error, 2);
         });
     }
 
-    wechatLogin(code)
-    {
+    wechatLogin(code) {
         axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
             headers: { 'Content-Type': 'application/json' }
         })
@@ -170,98 +168,97 @@ class Profile extends Component {
         // const history = createHashHistory();
 
         return (
-            
-                // this.state.toEditor ?
-                //     <Redirect to={{
-                //         pathname: '/profile/edit',
-                //         state: this.state.userInfo
-                //     }} />
-                //     :
-                    <React.Fragment>
-                        <div className="profileHeader">
-                            <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
-                                <img src={this.state.userInfo.headpic.startsWith('http')?  this.state.userInfo.headpic : `${Constants.ResourceUrl}${this.state.userInfo.headpic}`} alt="" className="profileHeadPic" />
+            // this.state.toEditor ?
+            //     <Redirect to={{
+            //         pathname: '/profile/edit',
+            //         state: this.state.userInfo
+            //     }} />
+            //     :
+            <React.Fragment>
+                <div className="profileHeader">
+                    <div className="profileHeaderPicContainer" onClick={this.showActionSheet.bind(this)} >
+                        <img src={this.state.userInfo.headpic && this.state.userInfo.headpic.startsWith('http') ? this.state.userInfo.headpic : `${Constants.ResourceUrl}${this.state.userInfo.headpic}`} alt="" className="profileHeadPic" />
+                    </div>
+                    <div className="profileHeaderContentContainer">
+                        <div style={{ width: '90%', textAlign: 'left' }}>
+                            <div style={{ fontSize: '18px' }}>
+                                {this.state.userInfo.nickName}
                             </div>
-                            <div className="profileHeaderContentContainer">
-                                <div style={{ width: '90%', textAlign:'left' }}>
-                                    <div style={{ fontSize: '18px' }}>
-                                        {this.state.userInfo.nickName}
+                        </div>
+                        <div style={{ marginTop: '5px' }}>
+                            <Badge text={this.state.userInfo.city} style={{ width: '60px' }}></Badge>
+                        </div>
+                        <div style={{ marginTop: '5px', textAlign: 'left' }}>
+                            <span style={{ fontSize: '12px' }}>
+                                {
+                                    this.state.userInfo.note ? this.state.userInfo.note : '这个人还没有写简介哦~'
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="profileName">
+                    <div className="profileItem">
+                        <div className="profileItemHeader">
+                            <div className="profileItemBig">{99}</div>
+                            <div className="profileItemBig">{99}</div>
+                            <div className="profileItemBig">{99}</div>
+                        </div>
+                        <div className="profileItemHeader">
+                            <div className="profileItemSmall">粉丝</div>
+                            <div className="profileItemSmall">关注</div>
+                            <div className="profileItemSmall">获赞</div>
+                        </div>
+                    </div>
+                    <div style={{ width: '25%', float: 'left' }}>
+                        <Button type='primary' inline size='small' style={{ margin: '4px' }} onClick={() => {
+                            //this.setState({ toEditor: true });
+                            //必须用同一个history，如果新建的话，state会传不过去
+                            this.props.history.push({
+                                pathname: '/profile/edit',
+                                state: { ...this.state.userInfo }
+                            });
+                        }}>编辑</Button>
+                    </div>
+                </div>
+                <div style={{ height: '8px', backgroundColor: 'transparent' }}></div>
+                <Tabs tabs={tabs}
+                    initialPage={0}
+                    onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                    onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                >
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
+                        {
+                            workItems.map(workItem => {
+                                return (
+                                    <div style={{
+                                        width: '48%', float: 'left',
+                                        margin: '3px',
+                                        padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                    }}>
+                                        <ProfileItem workItem={workItem} />
                                     </div>
-                                </div>
-                                <div style={{marginTop:'5px'}}>
-                                    <Badge text={this.state.userInfo.city} style={{width:'60px'}}></Badge>
-                                </div>
-                                <div style={{marginTop:'5px', textAlign:'left'}}>
-                                    <span style={{fontSize:'12px'}}>
-                                        {
-                                            this.state.userInfo.note? this.state.userInfo.note : '这个人还没有写简介哦~'
-                                        }
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="profileName">
-                            <div className="profileItem">
-                                <div className="profileItemHeader">
-                                    <div className="profileItemBig">{99}</div>
-                                    <div className="profileItemBig">{99}</div>
-                                    <div className="profileItemBig">{99}</div>
-                                </div>
-                                <div className="profileItemHeader">
-                                    <div className="profileItemSmall">粉丝</div>
-                                    <div className="profileItemSmall">关注</div>
-                                    <div className="profileItemSmall">获赞</div>
-                                </div>
-                            </div>
-                            <div style={{ width: '25%', float: 'left' }}>
-                                <Button type='primary' inline size='small' style={{ margin: '4px' }} onClick={() => {
-                                    //this.setState({ toEditor: true });
-                                    //必须用同一个history，如果新建的话，state会传不过去
-                                    this.props.history.push({
-                                        pathname: '/profile/edit',
-                                        state: { ...this.state.userInfo }
-                                      });
-                                }}>编辑</Button>
-                            </div>
-                        </div>
-                        <div style={{ height: '8px', backgroundColor: 'transparent' }}></div>
-                        <Tabs tabs={tabs}
-                            initialPage={0}
-                            onChange={(tab, index) => { console.log('onChange', index, tab); }}
-                            onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
-                        >
-                            <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
-                                {
-                                    workItems.map(workItem => {
-                                        return (
-                                            <div style={{
-                                                width: '48%', float: 'left',
-                                                margin: '3px',
-                                                padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
-                                            }}>
-                                                <ProfileItem workItem={workItem} />
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                            <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
-                                {
-                                    workItems.map(workItem => {
-                                        return (
-                                            <div style={{
-                                                width: '98%', float: 'left',
-                                                margin: '3px', backgroundColor: 'white', textAlign: 'left',
-                                                padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
-                                            }}>
-                                                <ProfileComment workItem={workItem} />
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </Tabs>
-                    </React.Fragment>
+                                )
+                            })
+                        }
+                    </div>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
+                        {
+                            workItems.map(workItem => {
+                                return (
+                                    <div style={{
+                                        width: '98%', float: 'left',
+                                        margin: '3px', backgroundColor: 'white', textAlign: 'left',
+                                        padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                    }}>
+                                        <ProfileComment workItem={workItem} />
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                </Tabs>
+            </React.Fragment>
         )
     }
 }
