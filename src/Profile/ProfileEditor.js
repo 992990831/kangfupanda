@@ -16,6 +16,7 @@ const SaveProfile = (values, callback) => {
 
     let body = {
         openId: userInfo.openid,
+        nickName: values.nickName,
         city: values.city,
         expertise: (values.expertise && values.expertise.length>0)? values.expertise[0] : '',
         note: values.note
@@ -45,6 +46,20 @@ const ProfileEditor = (props) => {
         <p style={{ fontSize: "24px" }}>个人信息编辑</p>
         <div style={{ "textAlign": "left" }}>
             <List style={{ backgroundColor: 'white' }}>
+                <InputItem
+                    {...getFieldProps('nickName', {
+                        initialValue: userInfo.nickName,
+                        rules: [
+                            { required: true, message: '请填写昵称' }
+                        ],
+                    })}
+                    error={!!getFieldError('nickName')}
+                    onErrorClick={() => {
+                        Toast.info(getFieldError('nickName'), 2);
+                    }}
+                    placeholder="昵称"
+                    style={{ textAlign: 'right' }}
+                >昵称</InputItem>
                 <InputItem
                     {...getFieldProps('city', {
                         initialValue: userInfo.city,

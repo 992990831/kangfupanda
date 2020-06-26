@@ -27,8 +27,9 @@ class DoctorList extends Component {
         this.GetFolloweePosts();
     }
 
+    //发现页 -> 专家列表
     GetList() {
-        axios.get(`${Constants.APIBaseUrl}/user/doctor/list`, {
+        axios.get(`${Constants.APIBaseUrl}/found/list/app`, {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
             this.setState({
