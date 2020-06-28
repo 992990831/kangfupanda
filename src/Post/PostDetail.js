@@ -109,7 +109,9 @@ class PostDetail extends Component {
             return;
         }
 
-        axios.get(`${Constants.APIBaseUrl}/comments/list?postId=${currentItem[0].postId}&postType=${currentItem[0].itemType}`, {
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+       
+        axios.get(`${Constants.APIBaseUrl}/comments/list?postId=${currentItem[0].postId}&postType=${currentItem[0].itemType}&openId=${userInfo.openid}`, {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
@@ -508,6 +510,13 @@ class PostDetail extends Component {
                                                                                             {comment.createdAt.substring(0, 10)}
                                                                                         </div>
 
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        {
+                                                                                            comment.comment_audit_status == 0? 
+                                                                                            <span style={{color:'red', lineHeight: '40px', marginLeft:'10px'}}>(待审核)</span>: <></>
+                                                                                        }
+                                                                                        <span></span>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div
