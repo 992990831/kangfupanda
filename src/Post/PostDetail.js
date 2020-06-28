@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 //import { Player } from 'video-react';
 
 import Hammer from "react-hammerjs";
-import { Carousel, Drawer, Toast, List, Button } from 'antd-mobile';
+import { Carousel, Drawer, Toast, List, Button, Popover, Icon } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
 
@@ -16,6 +16,8 @@ import { getJSSDK } from '../Utils/wxshare';
 
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+
+const Item = Popover.Item;
 
 Toast.config({mask: true})
 
@@ -33,7 +35,8 @@ class PostDetail extends Component {
             isLiked: false,
             //likeCount: 0,
             isCommentVisible: false,
-            isAudioPlaying: false
+            isAudioPlaying: false,
+            selectedTags: []
         }
     }
 
@@ -124,16 +127,26 @@ class PostDetail extends Component {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         axios.get(`${Constants.APIBaseUrl}/like/${this.state.item.itemType}/${this.state.item.postId}/${userInfo.openid}`, {
             headers: { 'Content-Type': 'application/json' }
-        })
-            .then(res => {
-                this.setState({
-                    isLiked: res.data,
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
+        }).then(res => {
+            this.setState({
+                isLiked: res.data,
             });
+        }).catch(function (error) {
+            console.log(error);
+        });
     }
+
+    getSelectedTags = (graphicId) => {
+        axios.get(`${Constants.APIBaseUrl}/tagxgraphic/selected/?graphicId=${graphicId}`, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => {
+            this.setState({
+                selectedTags: res.data,
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    } 
 
     loadItem() {
         if (this.props.location.state && this.props.location.state.data) {
@@ -142,7 +155,7 @@ class PostDetail extends Component {
             }, () => {
                 this.prepareShare();
                 this.getLiked();
-                //this.getLikeCount();
+                this.getSelectedTags(this.state.item.postId);
             })
         }
         else {
@@ -156,6 +169,7 @@ class PostDetail extends Component {
                 }, () => {
                     this.prepareShare();
                     this.getLiked();
+                    this.getSelectedTags(this.state.item.postId);
                     //this.getLikeCount();
                 })
             }
@@ -457,6 +471,15 @@ class PostDetail extends Component {
                                                             <div className="post-title">
                                                                 {item.name}
                                                             </div>
+                                                            <div style={{display:'flex', marginLeft:'10px'}}>
+                                                                {
+                                                                    this.state.selectedTags.map(tag => {
+                                                                        return(<div className='tag-unselected'>
+                                                                            {tag.tagtext}
+                                                                        </div>)
+                                                                    })
+                                                                }
+                                                            </div>
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
@@ -515,24 +538,57 @@ class PostDetail extends Component {
                         <div></div>
                 }
                 <div className="post-message">
-                    <img src={[require("../assets/images/ellipsis.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} 
+                    {/* <img src={[require("../assets/images/ellipsis.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} 
                     onClick={()=>{
                         //Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
                         this.props.history.push({
                             pathname: `../complain`,
                             state: { ...this.state.item }
                         });
-                    }} />
+                    }} /> */}
+                    <Popover mask
+                        overlayStyle={{ position:'absolute', left: '20px' }}
+                        visible={this.state.visible}
+                        overlay={[
+                        (<Item key="1" value="scan" icon={<img width='20' src={[require("../assets/images/complain.png")]} />} data-seed="logId">投诉</Item>),
+                        // (<Item key="2" value="button ct" icon='dislike'>
+                        //     <span style={{ marginRight: 5 }}>Help</span>
+                        // </Item>),
+                        ]}
+                        align={{
+                        overflow: { adjustY: 0, adjustX: 0 },
+                        offset: [-10, 0],
+                        }}
+                        //onVisibleChange={this.handleVisibleChange}
+                        onSelect={()=>{
+                            this.props.history.push({
+                                pathname: `../complain`,
+                                state: { ...this.state.item }
+                            });
+                        }}
+                        placement='right'
+                    >
+                        <div style={{
+                        height: '100%',
+                        padding: '0 15px',
+                        marginRight: '-15px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        }}
+                        >
+                        <Icon type="ellipsis" />
+                        </div>
+                    </Popover>
                     
-                    <img src={[require("../assets/images/message.png")]}  alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
-                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.commentsCount}</span>
+                    
                     <div className="comment-input" onClick={
                         this.onOpenCommentChange.bind(this)
                     }>
                         <img src={[require("../assets/images/pen-white.png")]} alt="" className="search-icon" />
-                        <span>留下您的评论</span>
+                        <span>赶快评论吧</span>
                     </div>
-
+                    <img src={[require("../assets/images/message.png")]}  alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
+                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.commentsCount}</span>
                     {
                         this.state.isLiked ?
                             <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}

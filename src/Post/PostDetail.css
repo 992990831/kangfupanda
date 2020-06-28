@@ -166,3 +166,23 @@
     height: 100%;
     z-index: 999;
   }
+
+  .tag-unselected{      
+    border-radius: 8px;
+    border: solid rgb(228,228,228) 1px;
+    background: rgb(228,228,228);
+    padding: 3px 10px 3px 10px;
+    margin: 2px 5px;
+    color: #108ee9;
+    font-size: 12px;
+  }
+
+  .tag-selected{      
+    border-radius: 8px;
+    border: solid rgb(228,228,228) 1px;
+    background: rgb(228,228,228);
+    padding: 3px 10px 3px 10px;
+    margin: 2px 5px;
+    color: #108ee9;
+    font-size: 12px;
+  }
