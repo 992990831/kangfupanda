@@ -370,7 +370,19 @@ class PostDetail extends Component {
                                                     {
                                                         item && !this.state.isCommentVisible ?
                                                             <Lazyload height={25} width={25}>
-                                                                <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http') ? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" />
+                                                                <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http') ? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" 
+                                                                onClick={() => {
+                                                                   if(item.openId)
+                                                                   {
+                                                                        this.props.history.push({
+                                                                        pathname: `../profile/doctor/${item.openId}`,
+                                                                        state: { followed: item.followed }
+                                                                      });
+                                                                   }
+                                                                   
+                                                                 }}
+
+                                                                />
                                                             </Lazyload>
                                                             :
                                                             <div />
@@ -454,7 +466,7 @@ class PostDetail extends Component {
                                                         </Carousel>
                                                         <div style={{ backgroundColor: 'white' }}>
                                                             {
-                                                                this.state.item.audioes ?
+                                                                this.state.item.audioes && this.state.item.audioes.length>0 ?
                                                                     // this.state.item.audioes.map(audio => (
                                                                     //     <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
                                                                     // ))
