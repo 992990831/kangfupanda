@@ -17,6 +17,8 @@ import DoctorProfile  from './Doctors/DoctorProfile';
 
 import ComplainForm from './Complain/ComplainForm';
 
+import axios from 'axios';
+
 class App extends Component {
   // let btnCamera = null;
 
@@ -33,6 +35,28 @@ class App extends Component {
 
   //let selected = 'home';
 
+  init() {
+    axios.interceptors.request.use(config => {
+      debugger;
+      let userInfoStr = localStorage.getItem("userInfo");
+      if (userInfoStr) {
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if (userInfo.openid) {
+          config.headers.openid=userInfo.openid;
+          config.headers.nickname=userInfo.nickname;
+        }
+      }
+      
+      return config
+    }, err => {
+      console.log(err)
+    })
+
+  }
+
+  componentDidMount(){
+    this.init();
+  }
 
   render() {
     const history = createHashHistory();
