@@ -7,7 +7,7 @@ import PostDetail from './Post/PostDetail';
 import Profile from './Profile/Profile';
 import DoctorList from './Doctors/DoctorList';
 import DoctorDetail from './Doctors/DoctorDetail';
-import { TabBar } from 'antd-mobile';
+import { TabBar, Toast } from 'antd-mobile';
 
 import { createHashHistory } from 'history';
 
@@ -43,12 +43,13 @@ class App extends Component {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo.openid) {
           config.headers.openid=userInfo.openid;
-          config.headers.nickname=userInfo.nickname;
+          config.headers.nickname= escape(userInfo.nickname);
         }
       }
       
       return config
     }, err => {
+      Toast.info(err, 3);
       console.log(err)
     })
 
