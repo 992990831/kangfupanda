@@ -126,6 +126,7 @@ class VerticalCarousel extends React.Component {
         </NavigationButtons>
       );
     }
+
     return (
       <React.Fragment>
         <Wrapper>
@@ -133,6 +134,9 @@ class VerticalCarousel extends React.Component {
             <Slide
               key={slide.key}
               content={slide.content}
+              headpic={slide.headpic}
+              name={slide.name}
+              detailimage={slide.detailimage}
               moveSlide={this.moveSlide}
               offsetRadius={this.clampOffsetRadius(offsetRadius)}
               index={presentableIndex}

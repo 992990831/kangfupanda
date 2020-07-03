@@ -10,39 +10,49 @@ import ProfileItem from '../Profile/ProfileItem';
 import VerticalCarousel from '../Tool/VerticalCarousel';
 
 let slides = [
-    {
-      key: 1,
-      content: "1"
-    },
-    {
-      key: 2,
-      content: "2"
-    },
-    {
-      key: 3,
-      content: "2"
-    },
-    {
-      key: 4,
-      content: "3"
-    },
-    {
-      key: 5,
-      content: "4"
-    },
-    {
-      key: 6,
-      content: "5"
-    },
-    {
-      key: 7,
-      content: "6"
-    },
-    {
-      key: 8,
-      content: "7"
-    }
-  ];
+    {key: 1, content:'1', headpic:'20200626110834841doctor2.jpg' },
+    {key: 2, content:'1', headpic:'20200626110834841doctor2.jpg' },
+    {key: 3, content:'1', headpic:'20200626110834841doctor2.jpg' },
+    {key: 4, content:'1', headpic:'20200626110834841doctor2.jpg' },
+    {key: 5, content:'1', headpic:'20200626110834841doctor2.jpg' },
+    {key: 6, content:'1', headpic:'20200626110834841doctor2.jpg' },
+];
+
+// let slides = [
+//     {
+//       key: 1,
+//       content: "1",
+//       headpic:'20200626110834841doctor2.jpg'
+//     },
+//     {
+//       key: 2,
+//       content: "2"
+//     },
+//     {
+//       key: 3,
+//       content: "2"
+//     },
+//     {
+//       key: 4,
+//       content: "3"
+//     },
+//     {
+//       key: 5,
+//       content: "4"
+//     },
+//     {
+//       key: 6,
+//       content: "5"
+//     },
+//     {
+//       key: 7,
+//       content: "6"
+//     },
+//     {
+//       key: 8,
+//       content: "7"
+//     }
+//   ];
 
 const tabs = [
     { title: <Badge text={'1'}>推荐</Badge> },
@@ -120,6 +130,12 @@ class DoctorList extends Component {
 
     render() {
         //const { list, type } = this.props;
+        let doctors = [];
+        this.state.doctors.forEach((doc, index) => {
+            doctors.push({ key: index, content: doc.note, headpic:doc.headpic, name: doc.name, detailimage: doc.detailimage });
+        });
+        let height = window.innerHeight-100+'px';
+        let innerHeight=window.innerHeight-100 + 100 +'px';
         return (
             <React.Fragment>
                 <div className="header">
@@ -135,8 +151,29 @@ class DoctorList extends Component {
                     onChange={(tab, index) => { console.log('onChange', index, tab); }}
                     onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                 >
-                    <div className='doctorListContainer'>
-                        <div className="doctorListLeft">
+                    {/* <div className='doctorListContainer'> */}
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: height, marginBottom: '0px' }}>
+                        <div
+                            style={{
+                            position: "fixed",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            width: "100vw",
+                            height: innerHeight,
+                            margin: "0 auto",
+                            top: '-70px'
+                            // background: "#7FfFbF"
+                            }}
+                        >
+                            <VerticalCarousel
+                            slides={doctors}
+                            offsetRadius={2}
+                            showNavigation={false}
+                            // animationConfig={this.state.config}
+                            />
+                        </div>
+                        {/* <div className="doctorListLeft">
                             {
 
                                 this.state.doctors.map((item, index) => {
@@ -159,7 +196,7 @@ class DoctorList extends Component {
                                     }
                                 })
                             }
-                        </div>
+                        </div> */}
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
                         {
@@ -176,26 +213,26 @@ class DoctorList extends Component {
                             })
                         }
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '400px', marginBottom: '0px' }}>
-                        <div
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '550px', marginBottom: '0px' }}>
+                        {/* <div
                             style={{
                             position: "fixed",
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
                             width: "100vw",
-                            height: "400px",
+                            height: "450px",
                             margin: "0 auto",
-                            background: "#7FfFbF"
+                            // background: "#7FfFbF"
                             }}
                         >
                             <VerticalCarousel
-                            slides={slides}
+                            slides={doctors}
                             offsetRadius={2}
                             showNavigation={false}
                             // animationConfig={this.state.config}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </Tabs>
 

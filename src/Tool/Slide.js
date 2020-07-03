@@ -3,6 +3,13 @@ import styled from "@emotion/styled";
 import { Spring, animated } from "react-spring/renderprops";
 import { withGesture } from "react-with-gesture";
 
+import { Constants } from '../Utils/Constants';
+
+import { createHashHistory } from 'history';
+
+//参考
+//https://codesandbox.io/s/react-vertical-carousel-hy4ci?file=/src/Slide.js:0-2289
+
 const SlideContainer = styled.div`
   position: absolute;
   height: 70%;
@@ -20,7 +27,7 @@ const SlideCard = styled.div`
   width: 100vw;
   height: 100%;
   background: white;
-  font-size: 35px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +36,9 @@ const SlideCard = styled.div`
 
 function Slide({
   content,
+  headpic,
+  name,
+  detailimage,
   offsetRadius,
   index,
   animationConfig,
@@ -90,8 +100,33 @@ function Slide({
             zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2)
           }}
         >
-          <SlideCard onClick={() => moveSlide(offsetFromMiddle)}>
-            {content}
+          <SlideCard onClick={() => moveSlide(offsetFromMiddle)}
+            style={{height:'100%', 
+            background: `url(${Constants.ResourceUrl}/${detailimage}) no-repeat center`,
+            backgroundSize: `auto 100%`,
+            }}
+           >
+           {/* <div style={{height:'100%'}}>
+                <img src={`${Constants.ResourceUrl}/${headpic}`} alt=""
+                    style={{height:'100px', margin:'auto', position:'inherit'}}
+                /> 
+                <div className="doctor-con">
+                    <p className="doctor">
+                    {name}
+                    </p>
+                </div>
+                <div className="bottom" style={{width:'80%', whiteSpace:'pre-wrap', textAlign:'left', margin:'auto'}}>
+                    <span className="note">
+                    {content}
+                    </span>
+                </div>
+           </div> */}
+           {/* <div style={{height:'95%'}}>
+                <img src={`${Constants.ResourceUrl}/${detailimage}`} alt=""
+                    style={{height:'100px'}}
+                />
+           </div> */}
+            
           </SlideCard>
         </SlideContainer>
       )}
