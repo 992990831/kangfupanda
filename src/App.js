@@ -37,7 +37,6 @@ class App extends Component {
 
   init() {
     axios.interceptors.request.use(config => {
-      debugger;
       let userInfoStr = localStorage.getItem("userInfo");
       if (userInfoStr) {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));

@@ -3,9 +3,46 @@ import './DoctorList.css'
 import Doctor from './Doctor'
 import axios from 'axios';
 import { Constants } from '../Utils/Constants';
-import { Tabs, Badge, Modal } from 'antd-mobile';
+import { Tabs, Badge, Modal, Carousel,WingBlank } from 'antd-mobile';
 
 import ProfileItem from '../Profile/ProfileItem';
+
+import VerticalCarousel from '../Tool/VerticalCarousel';
+
+let slides = [
+    {
+      key: 1,
+      content: "1"
+    },
+    {
+      key: 2,
+      content: "2"
+    },
+    {
+      key: 3,
+      content: "2"
+    },
+    {
+      key: 4,
+      content: "3"
+    },
+    {
+      key: 5,
+      content: "4"
+    },
+    {
+      key: 6,
+      content: "5"
+    },
+    {
+      key: 7,
+      content: "6"
+    },
+    {
+      key: 8,
+      content: "7"
+    }
+  ];
 
 const tabs = [
     { title: <Badge text={'1'}>推荐</Badge> },
@@ -18,7 +55,7 @@ class DoctorList extends Component {
         super(props)
         this.state = {
             doctors: [],
-            followeePosts: []
+            followeePosts: [],
         }
     }
 
@@ -126,21 +163,39 @@ class DoctorList extends Component {
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
                         {
-                            this.state.followeePosts.map(post => {
+                            this.state.followeePosts.map((post, index) => {
                                 return (
                                     <div style={{
                                         width: '48%', float: 'left',
                                         margin: '3px',
                                         padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
                                     }}>
-                                        <ProfileItem workItem={post} />
+                                        <ProfileItem workItem={post} key={index} />
                                     </div>
                                 )
                             })
                         }
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
-
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '400px', marginBottom: '0px' }}>
+                        <div
+                            style={{
+                            position: "fixed",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            width: "100vw",
+                            height: "400px",
+                            margin: "0 auto",
+                            background: "#7FfFbF"
+                            }}
+                        >
+                            <VerticalCarousel
+                            slides={slides}
+                            offsetRadius={2}
+                            showNavigation={false}
+                            // animationConfig={this.state.config}
+                            />
+                        </div>
                     </div>
                 </Tabs>
 

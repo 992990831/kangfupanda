@@ -4,7 +4,7 @@ import './PostDetail.css'
 import { withRouter } from 'react-router-dom'
 //import { Player } from 'video-react';
 
-import Hammer from "react-hammerjs";
+//import Hammer from "react-hammerjs";
 import { Carousel, Drawer, Toast, List, Button, Popover, Icon } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
