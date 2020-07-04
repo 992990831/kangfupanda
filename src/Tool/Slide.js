@@ -101,7 +101,7 @@ function Slide({
           }}
         >
           <SlideCard onClick={() => moveSlide(offsetFromMiddle)}
-            style={{height:'100%', 
+            style={{height:'100%', minWidth:'500px',
             background: `url(${Constants.ResourceUrl}/${detailimage}) no-repeat center`,
             backgroundSize: `auto 100%`,
             }}
