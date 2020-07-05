@@ -42,6 +42,25 @@ class Profile extends Component {
         };
     }
 
+    init() {
+        axios.interceptors.request.use(config => {
+          let userInfoStr = localStorage.getItem("userInfo");
+          if (userInfoStr) {
+            let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            if (userInfo.openid) {
+              config.headers.openid=userInfo.openid;
+              config.headers.nickname= escape(userInfo.nickname);
+            }
+          }
+          
+          return config
+        }, err => {
+          Toast.info(err, 3);
+          console.log(err)
+        })
+    
+    }
+
     registerUser(user) {
         axios.post(`${Constants.APIBaseUrl}/user/register`, user).then().catch(function (error) {
             alert('register user fail,' + error);
@@ -147,6 +166,7 @@ class Profile extends Component {
                 };
 
                 this.registerUser(toUser);
+                this.init();
             })
             .catch(function (error) {
                 alert('获取用户token失败,' + error);
@@ -201,7 +221,7 @@ class Profile extends Component {
                     <div className="profileItem">
                         <div className="profileItemHeader">
                             <div className="profileItemBig">{this.state.userInfo.fansCount}</div>
-                            <div className="profileItemBig">{this.state.userInfo.followerCount}</div>
+                            <div className="profileItemBig">{this.state.userInfo.followeeCount}</div>
                             <div className="profileItemBig">{this.state.userInfo.likeCount}</div>
                         </div>
                         <div className="profileItemHeader">

@@ -18,6 +18,21 @@ import DoctorProfile  from './Doctors/DoctorProfile';
 import ComplainForm from './Complain/ComplainForm';
 
 import axios from 'axios';
+import { Constants } from './Utils/Constants';
+
+function getQueryString(url, name) {
+  url = url.split('?')[1];
+
+  if(!url)
+  return null;
+
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+  var r = url.match(reg);
+  if (r != null) {
+      return decodeURI(r[2]);
+  }
+  return null;
+}
 
 class App extends Component {
   // let btnCamera = null;
@@ -36,6 +51,26 @@ class App extends Component {
   //let selected = 'home';
 
   init() {
+    //对应模拟登录的情况
+    let openId = getQueryString(window.location.href, 'openId');
+    if(openId)
+    {
+      axios.get(`${Constants.APIBaseUrl}/user/${openId}`, {
+        headers: { 'Content-Type': 'application/json' }
+      }).then(res => {
+          let userInfo = res.data;
+          let template = `{"nickname":"${userInfo.nickName}", "openid":"${userInfo.openId}", "city":"${userInfo.city}","headimgurl":"${userInfo.headpic}"}`;
+
+          localStorage.setItem("userInfo",template);
+          //window.location.reload();
+          createHashHistory().push(window.location.host);
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+      
+    }
+
     axios.interceptors.request.use(config => {
       let userInfoStr = localStorage.getItem("userInfo");
       if (userInfoStr) {

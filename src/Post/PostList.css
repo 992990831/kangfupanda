@@ -14,3 +14,8 @@
 .list-container .single{
     margin-right: 5px;
 }
+
+.carousel-container{
+    padding-top: 55px;
+    padding-bottom: 60px;
+}

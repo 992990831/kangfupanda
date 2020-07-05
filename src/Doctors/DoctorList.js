@@ -8,15 +8,16 @@ import { Tabs, Badge, Modal, Carousel,WingBlank } from 'antd-mobile';
 import ProfileItem from '../Profile/ProfileItem';
 
 import VerticalCarousel from '../Tool/VerticalCarousel';
+import CarouselExt from '../Tool/CarouselExt';
 
-let slides = [
-    {key: 1, content:'1', headpic:'20200626110834841doctor2.jpg' },
-    {key: 2, content:'1', headpic:'20200626110834841doctor2.jpg' },
-    {key: 3, content:'1', headpic:'20200626110834841doctor2.jpg' },
-    {key: 4, content:'1', headpic:'20200626110834841doctor2.jpg' },
-    {key: 5, content:'1', headpic:'20200626110834841doctor2.jpg' },
-    {key: 6, content:'1', headpic:'20200626110834841doctor2.jpg' },
-];
+// let slides = [
+//     {key: 1, content:'1', headpic:'20200626110834841doctor2.jpg' },
+//     {key: 2, content:'1', headpic:'20200626110834841doctor2.jpg' },
+//     {key: 3, content:'1', headpic:'20200626110834841doctor2.jpg' },
+//     {key: 4, content:'1', headpic:'20200626110834841doctor2.jpg' },
+//     {key: 5, content:'1', headpic:'20200626110834841doctor2.jpg' },
+//     {key: 6, content:'1', headpic:'20200626110834841doctor2.jpg' },
+// ];
 
 // let slides = [
 //     {
@@ -129,6 +130,15 @@ class DoctorList extends Component {
     }
 
     render() {
+        let config = {
+            vertical: true,
+            dots: false,
+            autoplay: false,
+            dragging: false,
+            swiping: true,
+            infinite: true,
+            style: { marginTop: '0px', backgroundColor: 'white' }
+        }
         //const { list, type } = this.props;
         let doctors = [];
         this.state.doctors.forEach((doc, index) => {
@@ -213,7 +223,7 @@ class DoctorList extends Component {
                             })
                         }
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '550px', marginBottom: '0px' }}>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '0px' }}>
                         {/* <div
                             style={{
                             position: "fixed",
@@ -233,6 +243,33 @@ class DoctorList extends Component {
                             // animationConfig={this.state.config}
                             />
                         </div> */}
+                        {/* <Carousel
+                            vertical
+                            dots={false}
+                            autoplay={false}
+                            arrows={true}
+                            dragging={false}
+                            swiping={true}
+                            infinite
+                            beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
+                            afterChange={index => console.log('slide to', index)}
+                            style={{ marginTop: '0px', backgroundColor: 'white' }}
+                        >
+                            {
+                                doctors.map((doctor, index) => (
+                                    <div key={index} style={{ height: '400px' }}>
+                                        
+                                        <img
+                                            style={{ width: '100px', height: 'auto' }}
+                                            src={`${Constants.ResourceUrl}/${doctor.headpic}`}
+                                            alt="111"
+                                        />
+                                    </div>
+                                ))
+                            }
+
+                        </Carousel> */}
+                        <CarouselExt posts={doctors} config={config}></CarouselExt>
                     </div>
                 </Tabs>
 

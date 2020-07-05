@@ -392,8 +392,8 @@ class PostDetail extends Component {
                                             </div>
                                         </div>
 
-                                        {
-                                            this.state.isCommentVisible ?
+                                        {/* {
+                                            this.state.isCommetnVisible ?
                                                 <Drawer
                                                     className="comment-drawer"
                                                     style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
@@ -410,7 +410,7 @@ class PostDetail extends Component {
                                             </Drawer>
                                                 :
                                                 <div></div>
-                                        }
+                                        } */}
                                         <div>
                                             {
                                                 item.itemType == 'video' ?

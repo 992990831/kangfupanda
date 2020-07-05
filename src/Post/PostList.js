@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './PostList.css'
 import Post from './Post'
+import CarouselExt from '../Tool/CarouselExt';
+
+
 
 class PostList extends Component {
   constructor(props){
@@ -36,7 +39,15 @@ class PostList extends Component {
   }
 
   render() {
-    
+    let config = {
+      vertical: true,
+      dots: true,
+      autoplay: false,
+      dragging: true,
+      swiping: true,
+      infinite: true,
+      style: { marginTop: '0px', backgroundColor: 'white' }
+    }
     return (
       <div className="list-container">
           <div className="single">
@@ -45,10 +56,15 @@ class PostList extends Component {
                 return (
                   <Post item={item} key={index} onFollowed={this.onFollowed.bind(this)}/>
                 )
-              })
+              })             
             }
           </div>
       </div>
+      // <div className='carousel-container'>
+      //   {
+      //      <CarouselExt posts={this.state.list} config={config}></CarouselExt>
+      //   }
+      // </div>
     );
   }
 }
