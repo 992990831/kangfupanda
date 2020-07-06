@@ -9,7 +9,7 @@
 .post-container .post-pic{
     width: 100%;
     position:relative;
-    padding-top: 3px;
+    /* padding-top: 3px; */
 }
 
 .post-container .post-pic .headPic{
@@ -29,6 +29,14 @@
     filter: alpha(Opacity=80);
     -moz-opacity: 0.8;
     opacity: 0.8;
+}
+
+.post-container .title{
+    color:white;
+    position:absolute;
+    font: 22px bold ;
+    margin-left: 10px;
+    margin-top: 7px;
 }
 
 .post-container .post-top{
@@ -65,7 +73,7 @@
 .post-container .post-bottom{
     width: 100%;
     box-sizing: border-box;
-    padding: 10px 8px 10px 8px;
+    padding: 0px 5px 5px 8px;
 }
 
 .post-container .post-bottom .title-con{
@@ -93,8 +101,8 @@
 }
 
 .post-container .post-bottom .bottom .avatar{
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     margin-right: 5px;
 }
 
@@ -105,8 +113,8 @@
 }
 
 .post-container .post-bottom .bottom .name{
-    color: rgba(0,0,0,0.8);
-    font-size: 16px;
+    color: rgba(128,128,128,0.9);
+    font-size: 13px;
 }
 
 .post-container .post-bottom .bottom .star{

@@ -83,11 +83,11 @@ class Post extends Component {
     const { isStar, item } = this.state;
     return (
       <div className="post-container">
-        <div className="post-top">
+        {/* <div className="post-top">
           <div className="top">
             <span>{item.name}</span>
           </div>
-        </div>
+        </div> */}
         
         <div className="post-pic">
           {
@@ -102,6 +102,7 @@ class Post extends Component {
                     })
                   }}
                 />
+                <span className='title'>{item.name}</span>
                 <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
@@ -142,7 +143,7 @@ class Post extends Component {
                 :
                 (
                   item.followed?
-                  <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
+                  <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px', color:'rgba(128,128,128,1)', fontSize:'13px' }}>已关注</div>
                   :
                   <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px', border:'1px solid rgb(128, 190, 58)', borderRadius:'10px', color:'rgb(128, 190, 58)' }} onClick={this.follow.bind(this)}>+关注</Button>
                 )              
