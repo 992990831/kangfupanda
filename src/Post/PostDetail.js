@@ -594,8 +594,7 @@ class PostDetail extends Component {
                     >
                         <div style={{
                         height: '100%',
-                        padding: '0 15px',
-                        marginRight: '-15px',
+                        padding: '0 5px',
                         display: 'flex',
                         alignItems: 'center',
                         }}
@@ -608,11 +607,11 @@ class PostDetail extends Component {
                     <div className="comment-input" onClick={
                         this.onOpenCommentChange.bind(this)
                     }>
-                        <img src={[require("../assets/images/pen-white.png")]} alt="" className="search-icon" />
+                        <img src={[require("../assets/images/pen-white.png")]} alt="" className="comment-icon" />
                         <span>赶快评论吧</span>
                     </div>
                     <img src={[require("../assets/images/message.png")]}  alt="" style={{ width: '20px', height: '20px', marginLeft: 'auto' }} />
-                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.commentsCount}</span>
+                    <span style={{ marginLeft: '3px', fontSize: '14px', paddingTop: '2px' }}>{this.state.commentsCount}</span>
                     {
                         this.state.isLiked ?
                             <img src={[require("../assets/images/heart-green.png")]} alt="" style={{ width: '20px', height: '20px', marginLeft: '10px' }}
@@ -622,7 +621,7 @@ class PostDetail extends Component {
                                 onClick={this.like.bind(this)} />
                     }
 
-                    <span style={{ marginLeft: '3px', fontSize: '12px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}</span>
+                    <span style={{ marginLeft: '3px', fontSize: '14px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}</span>
                     
                     <div className='wechatButton' onClick={()=>{
                         // Toast.info(<div>
@@ -636,7 +635,7 @@ class PostDetail extends Component {
                         }); 
                     }}>
                         <img src={[require("../assets/images/forward.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
-                        <span style={{ marginLeft: '8px', fontSize: '12px', paddingTop: '5px' }}>转发</span>
+                        <span style={{ marginLeft: '3px', fontSize: '15px', paddingTop: '3px' }}>转发</span>
                     </div>
                     
                 </div>

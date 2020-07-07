@@ -41,7 +41,7 @@
     margin-left: -80px; */
     width:100%;
     height: 30px;
-    padding: 10px 0px 0px 0px;
+    padding: 10px 0px 10px 0px;
     z-index: 999;
 }
 
@@ -51,15 +51,14 @@
     margin-left: 10px;
     margin-right: 10px;
     width: 85px;
-    margin-top: -3px;
     height: 25px;
     display: flex;
 }
 
 .comment-input{
     border-radius: 5px;
-    height: 20px;
-    width: 100px;
+    height: 23px;
+    width: 130px;
     margin-left: 5px;
     background-color: rgba(28,28,28,0.9);
     line-height: 25px;
@@ -67,7 +66,12 @@
     justify-content: center;
     align-items: center;
     top: 5px;
-    font-size: 10px;
+    font-size: 16px;
+}
+
+.comment-icon{
+    height: 25px;
+    width: 25px;
 }
 
 .audio-stop{
@@ -86,12 +90,6 @@
     left: 20px;
     border: solid 1px rgb(168,168,168);
     padding: 3px;
-}
-
-.comment-icon{
-    height: 15px;
-    width: 15px;
-    margin-right: 2px;
 }
 
 .post-detail .post-description{
