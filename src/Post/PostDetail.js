@@ -324,7 +324,10 @@ class PostDetail extends Component {
 
         axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(() => {
             Toast.info('评论已提交', 2);
+            // debugger;
+            // this.setState({isCommentVisible: false});
             this.refs.refComment.value = '';
+            this.setState({isCommentVisible: false});
             this.GetCommentList();
         }).catch(function (error) {
             alert('添加评论失败');
@@ -368,7 +371,7 @@ class PostDetail extends Component {
                                             <div className="post-profile">
                                                 <div className="profileAvator">
                                                     {
-                                                        item && !this.state.isCommentVisible ?
+                                                        item && item.authorHeadPic?
                                                             <Lazyload height={25} width={25}>
                                                                 <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http') ? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" 
                                                                 onClick={() => {
@@ -392,8 +395,8 @@ class PostDetail extends Component {
                                             </div>
                                         </div>
 
-                                        {/* {
-                                            this.state.isCommetnVisible ?
+                                        {
+                                            this.state.isCommentVisible ?
                                                 <Drawer
                                                     className="comment-drawer"
                                                     style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
@@ -410,7 +413,7 @@ class PostDetail extends Component {
                                             </Drawer>
                                                 :
                                                 <div></div>
-                                        } */}
+                                        }
                                         <div>
                                             {
                                                 item.itemType == 'video' ?
