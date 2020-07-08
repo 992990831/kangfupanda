@@ -167,6 +167,18 @@ class Profile extends Component {
 
                 this.registerUser(toUser);
                 this.init();
+
+                //有些用户在收到转发链接后需要登录，登录后需要跳转到对应的作品页面
+                let search = localStorage.getItem("redirectSearch");
+                if(search)
+                {
+                    window.setTimeout(() => {
+                        this.props.history.push({
+                            pathname: search,
+                          })
+                    }, 300);
+                }
+
             })
             .catch(function (error) {
                 alert('获取用户token失败,' + error);

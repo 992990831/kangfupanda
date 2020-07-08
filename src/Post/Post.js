@@ -106,8 +106,10 @@ class Post extends Component {
                 <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
+                    let path=`postDetail/${item.id}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
+                    localStorage.setItem("redirectSearch", path);
                     this.props.history.push({
-                      pathname: `postDetail/${item.id}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`,
+                      pathname: path,
                       state: { data: this.state.item }
                     })
                   }
