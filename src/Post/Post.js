@@ -107,7 +107,7 @@ class Post extends Component {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
                     let path=`postDetail/${item.id}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
-                    localStorage.setItem("redirectSearch", path);
+                    //localStorage.setItem("redirectSearch", path);
                     this.props.history.push({
                       pathname: path,
                       state: { data: this.state.item }

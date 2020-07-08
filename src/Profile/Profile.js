@@ -173,6 +173,7 @@ class Profile extends Component {
                 if(search)
                 {
                     window.setTimeout(() => {
+                        localStorage.removeItem("redirectSearch");
                         this.props.history.push({
                             pathname: search,
                           })
