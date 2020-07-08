@@ -90,8 +90,43 @@ class App extends Component {
   }
 
   componentDidMount(){
+    //this.setSelectedIcon();
     this.init();
   }
+
+  componentDidUpdate(){
+    //this.setSelectedIcon();
+  }
+
+  componentWillReceiveProps(){
+    //this.setSelectedIcon();
+  }
+
+  // setSelectedIcon()
+  // {
+  //   //substring(2)是为了去掉#/
+  //   let firstPathIndex = window.location.hash.substring(2).indexOf('/'); //截取第一段，比如 postDetail/1
+  //   let path = window.location.hash.substring(2);
+  //   if(firstPathIndex != -1)
+  //   {
+  //     path = path.substring(0, firstPathIndex);
+  //   }
+
+  //   if(path == this.state.selectedTab || (path=='postDetail' && this.state.selectedTab=='home'))
+  //   {
+  //     return;
+  //   }
+
+  //   switch(path)
+  //   {
+  //     case 'home': this.setState({selectedTab:'home'}); break;
+  //     case 'postDetail': this.setState({selectedTab:'home'}); break;
+  //     case 'found': this.setState({selectedTab:'found'}); break;
+  //     case 'profile': this.setState({selectedTab:'profile'}); break;
+  //     default: this.setState({selectedTab:'home'}); break;
+  //   }
+
+  // }
 
   render() {
     const history = createHashHistory();
@@ -208,14 +243,76 @@ class App extends Component {
           </div>
           <div className="redBook-main">
             <Switch>
-              <Route path="/home" component={Home} />
+              <Route path="/home" 
+              exact render={()=>{
+                if(this.state.selectedTab != 'home')
+                {
+                  this.setState({selectedTab:'home'});
+                }
+                
+                return <Home></Home>
+              }}
+              />
+
               <Route path="/complain" component={ComplainForm} />
-              <Route path="/PostDetail/:id" component={PostDetail} />
-              <Route path="/profile/doctor/:openid" component={DoctorProfile} />
-              <Route path="/found" exact component={DoctorList} />
-              <Route path="/found/detail"  component={DoctorDetail} />
-              <Route path="/profile" exact  component={Profile} />
+
+              <Route path="/PostDetail/:id"
+              exact 
+              render={()=>{
+                if(this.state.selectedTab != 'home')
+                {
+                  this.setState({selectedTab:'home'});
+                }
+                
+                return <PostDetail></PostDetail>
+              }}
+              />
+
+              <Route path="/profile/doctor/:openid"
+              render={()=>{
+                if(this.state.selectedTab != 'profile')
+                {
+                  this.setState({selectedTab:'profile'});
+                }
+                
+                return <DoctorProfile></DoctorProfile>
+              }}
+              />
+
+              <Route path="/found" exact
+                render={()=>{
+                  if(this.state.selectedTab != 'found')
+                  {
+                    this.setState({selectedTab:'found'});
+                  }
+                  
+                  return <DoctorList></DoctorList>
+                }}
+              />
+
+              <Route path="/found/detail"
+                render={()=>{
+                  if(this.state.selectedTab != 'found')
+                  {
+                    this.setState({selectedTab:'found'});
+                  }
+                  
+                  return <DoctorDetail></DoctorDetail>
+                }}
+              />
+
+              <Route path="/profile" exact 
+              render={()=>{
+                if(this.state.selectedTab != 'profile')
+                  {
+                    this.setState({selectedTab:'profile'});
+                  }
+                
+                return <Profile></Profile>
+              }} />
+
               <Route path="/profile/edit" component={ProfileEditorForm} />
+
               <Route path="/" render={() => {
                 return false ?
                   <div>home</div> : <Redirect to={{
