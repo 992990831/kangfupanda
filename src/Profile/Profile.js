@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch, NavLink, Redirect, withRouter } from 'react-router-dom';
 import './Profile.css';
 import ProfileHeader from './ProfileHeader';
 import { ActionSheet, Button, Tabs, Badge, Modal, Toast } from 'antd-mobile';
@@ -81,6 +81,7 @@ class Profile extends Component {
                 if (buttonIndex == 0) {
                     localStorage.removeItem("userInfo");
 
+                    debugger;
                     //const history = createHashHistory();
                     this.props.history.push('/home');
                 }
@@ -296,4 +297,4 @@ class Profile extends Component {
     }
 }
 
-export default Profile;
+export default withRouter(Profile);

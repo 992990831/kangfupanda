@@ -243,6 +243,21 @@ class App extends Component {
           </div>
           <div className="redBook-main">
             <Switch>
+              {/* <Route path="/home" component={Home} />
+              <Route path="/complain" component={ComplainForm} />
+              <Route path="/PostDetail/:id" component={PostDetail} />
+              <Route path="/profile/doctor/:openid" component={DoctorProfile} />
+              <Route path="/found" exact component={DoctorList} />
+              <Route path="/found/detail"  component={DoctorDetail} />
+              <Route path="/profile" exact  component={Profile} />
+              <Route path="/profile/edit" component={ProfileEditorForm} />
+              <Route path="/" render={() => {
+                return false ?
+                  <div>home</div> : <Redirect to={{
+                    pathname: '/home',
+                  }} />
+              }}></Route> */}
+
               <Route path="/home" 
               exact render={()=>{
                 if(this.state.selectedTab != 'home')

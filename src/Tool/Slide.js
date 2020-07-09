@@ -7,6 +7,8 @@ import { Constants } from '../Utils/Constants';
 
 import { createHashHistory } from 'history';
 
+import wx from 'weixin-js-sdk';
+
 //参考
 //https://codesandbox.io/s/react-vertical-carousel-hy4ci?file=/src/Slide.js:0-2289
 
@@ -100,7 +102,16 @@ function Slide({
             zIndex: Math.abs(Math.abs(offsetFromMiddle) - 2)
           }}
         >
-          <SlideCard onClick={() => moveSlide(offsetFromMiddle)}
+          <SlideCard 
+            onClick={() => {
+              var imgUrl = `${Constants.ResourceUrl}/${detailimage}`;
+              wx.previewImage({
+                current: imgUrl, // 当前显示图片的http链接
+                urls: [imgUrl] // 需要预览的图片http链接列表
+              });
+
+              moveSlide(offsetFromMiddle);
+            }}
             style={{height:'100%', minWidth:'500px',
             background: `url(${Constants.ResourceUrl}/${detailimage}) no-repeat center`,
             backgroundSize: `auto 100%`,

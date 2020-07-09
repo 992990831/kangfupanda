@@ -42,13 +42,6 @@ export default class CarouselExt extends Component {
     }
 
     render() {
-        // const props = {
-        //   dots: true,
-        //   infinite: true,
-        //   speed: 500,
-        //   slidesToShow: 1,
-        //   slidesToScroll: 1
-        // };
         let height = (window.innerHeight - 100) + 'px';
         return (
             <div>

@@ -10,50 +10,7 @@ import ProfileItem from '../Profile/ProfileItem';
 import VerticalCarousel from '../Tool/VerticalCarousel';
 import CarouselExt from '../Tool/CarouselExt';
 
-// let slides = [
-//     {key: 1, content:'1', headpic:'20200626110834841doctor2.jpg' },
-//     {key: 2, content:'1', headpic:'20200626110834841doctor2.jpg' },
-//     {key: 3, content:'1', headpic:'20200626110834841doctor2.jpg' },
-//     {key: 4, content:'1', headpic:'20200626110834841doctor2.jpg' },
-//     {key: 5, content:'1', headpic:'20200626110834841doctor2.jpg' },
-//     {key: 6, content:'1', headpic:'20200626110834841doctor2.jpg' },
-// ];
-
-// let slides = [
-//     {
-//       key: 1,
-//       content: "1",
-//       headpic:'20200626110834841doctor2.jpg'
-//     },
-//     {
-//       key: 2,
-//       content: "2"
-//     },
-//     {
-//       key: 3,
-//       content: "2"
-//     },
-//     {
-//       key: 4,
-//       content: "3"
-//     },
-//     {
-//       key: 5,
-//       content: "4"
-//     },
-//     {
-//       key: 6,
-//       content: "5"
-//     },
-//     {
-//       key: 7,
-//       content: "6"
-//     },
-//     {
-//       key: 8,
-//       content: "7"
-//     }
-//   ];
+import { getJSSDK } from '../Utils/wxshare';
 
 const tabs = [
     { title: <Badge text={'1'}>推荐</Badge> },
@@ -71,6 +28,7 @@ class DoctorList extends Component {
     }
 
     componentDidMount() {
+        this.prepareWeixinShare();
         this.GetList();
         this.GetFolloweePosts();
     }
@@ -129,6 +87,19 @@ class DoctorList extends Component {
         }
     }
 
+    prepareWeixinShare() {
+        let obj = {
+            title: '一健点评',// 分享标题
+            des: "一健点评专家分享",// 分享描述
+            linkurl: window.location.href,// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            img: 'http://app.kangfupanda.com/resources/logo2.jpg' // 分享图标
+        }
+        let url = window.location.href.split('#')[0];
+
+        getJSSDK(url, obj)
+
+    }
+
     render() {
         let config = {
             vertical: true,
@@ -183,30 +154,6 @@ class DoctorList extends Component {
                             // animationConfig={this.state.config}
                             />
                         </div>
-                        {/* <div className="doctorListLeft">
-                            {
-
-                                this.state.doctors.map((item, index) => {
-                                    if (index % 2 == 0) {
-
-                                        return (
-                                            <Doctor item={item} key={index} />
-                                        )
-                                    }
-                                })
-                            }
-                        </div>
-                        <div className="doctorListRight">
-                            {
-                                this.state.doctors.map((item, index) => {
-                                    if (index % 2 == 1) {
-                                        return (
-                                            <Doctor item={item} key={index} />
-                                        )
-                                    }
-                                })
-                            }
-                        </div> */}
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
                         {
@@ -224,51 +171,6 @@ class DoctorList extends Component {
                         }
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '0px' }}>
-                        {/* <div
-                            style={{
-                            position: "fixed",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            width: "100vw",
-                            height: "450px",
-                            margin: "0 auto",
-                            // background: "#7FfFbF"
-                            }}
-                        >
-                            <VerticalCarousel
-                            slides={doctors}
-                            offsetRadius={2}
-                            showNavigation={false}
-                            // animationConfig={this.state.config}
-                            />
-                        </div> */}
-                        {/* <Carousel
-                            vertical
-                            dots={false}
-                            autoplay={false}
-                            arrows={true}
-                            dragging={false}
-                            swiping={true}
-                            infinite
-                            beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-                            afterChange={index => console.log('slide to', index)}
-                            style={{ marginTop: '0px', backgroundColor: 'white' }}
-                        >
-                            {
-                                doctors.map((doctor, index) => (
-                                    <div key={index} style={{ height: '400px' }}>
-                                        
-                                        <img
-                                            style={{ width: '100px', height: 'auto' }}
-                                            src={`${Constants.ResourceUrl}/${doctor.headpic}`}
-                                            alt="111"
-                                        />
-                                    </div>
-                                ))
-                            }
-
-                        </Carousel> */}
                         <CarouselExt posts={doctors} config={config}></CarouselExt>
                     </div>
                 </Tabs>
