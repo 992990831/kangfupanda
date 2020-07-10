@@ -20,10 +20,10 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.GetList();
+    this.GetList(10);
   }
 
-  GetList() {
+  GetList(count) {
     let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(); 
 
     let followerOpenId = '';
@@ -33,12 +33,12 @@ class Home extends Component {
       followerOpenId = JSON.parse(userInfoStr).openid
     }
 
-    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}`, {
+    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=10`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {
         this.setState({
-          videos: res.data,
+          videos: [...this.state.videos, ...res.data],
         });
 
         localStorage.setItem("videos", JSON.stringify(res.data));
@@ -50,6 +50,11 @@ class Home extends Component {
 
   openCamera() {
     this.refs.btnCamera.click();
+  }
+
+  loadMore(count)
+  {
+    this.GetList(5);
   }
 
   render() {
@@ -72,7 +77,7 @@ class Home extends Component {
         </input>
 
         <div className="Found-container">
-          <PostList list={listData} />
+          <PostList list={listData} loadMore={this.loadMore.bind(this)} />
         </div>
       </div>
     );

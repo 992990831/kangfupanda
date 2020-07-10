@@ -91,7 +91,8 @@ class Post extends Component {
         
         <div className="post-pic">
           {
-            <Lazyload height={200} width={172}>
+            //这里不能用Lazyload，会和外面的ListView冲突
+            // <Lazyload height={200} width={172}>
               <div>
                 <span className="video-title">{item.title}</span>
                 <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType == 'video' ? {} : { display: 'none' }}
@@ -120,7 +121,7 @@ class Post extends Component {
                   
                 }} />
               </div>
-            </Lazyload>
+            // </Lazyload>
           }
         </div>
         <div className="post-bottom">
