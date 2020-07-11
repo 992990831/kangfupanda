@@ -78,6 +78,11 @@ class PostList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if(!nextProps.list || nextProps.list.length==0)
+    {
+      return;
+    }
+
     this.setState({
         list: nextProps.list
       }, 
