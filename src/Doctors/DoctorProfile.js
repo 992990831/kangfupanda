@@ -13,6 +13,8 @@ import { Constants } from '../Utils/Constants';
 import ProfileItem from '../Profile/ProfileItem';
 import ProfileComment from '../Profile/ProfileComment';
 
+import { withRouter } from 'react-router-dom'
+
 const alert = Modal.alert;
 
 const tabs = [
@@ -184,4 +186,4 @@ class DoctorProfile extends Component {
     }
 }
 
-export default DoctorProfile;
+export default withRouter(DoctorProfile);

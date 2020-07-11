@@ -33,7 +33,7 @@ class Home extends Component {
       followerOpenId = JSON.parse(userInfoStr).openid
     }
 
-    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=10`, {
+    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=${count}`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {

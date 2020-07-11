@@ -129,9 +129,10 @@ class Post extends Component {
           <div className="avatar">
               {
                 item ?
-                  <Lazyload height={25} width={25}>
+                //这里不能用Lazyload，会和外面的ListView冲突
+                  // <Lazyload height={25} width={25}>
                     <img src={item.authorHeadPic && item.authorHeadPic.startsWith('http')? item.authorHeadPic : `${Constants.ResourceUrl}${item.authorHeadPic}`} alt="" onClick={this.navigateDoctorProfile.bind(this)} />
-                  </Lazyload>
+                  //</Lazyload>
                   :
                   <div />
               }
