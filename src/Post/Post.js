@@ -157,38 +157,6 @@ class Post extends Component {
               <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
               <span>{item.likeCount}</span>
             </div>
-            {/*<div className="avatar">
-              {
-                item ?
-                  <Lazyload height={25} width={25}>
-                    <img src={item.authorHeadPic} alt="" />
-                  </Lazyload>
-                  :
-                  <div />
-              }
-            </div>
-             <div className="name">
-              {item.author}
-            </div>
-            <div style={{ width: '35%', float: 'left', position: 'absolute', right: '50px' }}>
-              {
-                (userInfoStr && item.openId == userInfo.openid)? //如果是本人发的贴，不用关注
-                <></>
-                :
-                (
-                  item.followed?
-                  <div style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }}>已关注</div>
-                  :
-                  <Button style={{ width: '90%', height: '90%', margin: 'auto', lineHeight: '30px' }} onClick={this.follow.bind(this)}>+关注</Button>
-                )
-                
-                
-              }
-            </div>
-            <div className="star" onClick={(e) => { }}>
-              <img src={isStar ? [require("../assets/images/heart.png")] : [require("../assets/images/heart-white.png")]} alt="" />
-              <span>{item.likeCount}</span>
-            </div> */}
           </div>
         </div>
       </div>

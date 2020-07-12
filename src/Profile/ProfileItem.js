@@ -19,12 +19,12 @@ function ProfileItem(props) {
         <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
             <span>{props.workItem.name}</span>
         </div>
-        <Lazyload>
+        {/* <Lazyload> */}
             <img style={{height:'80px'}} src={`${Constants.ResourceUrl}/${props.workItem.poster}`} 
             onClick={()=> {
                 gotoPostDetail(props.workItem.postId)}}
             />
-        </Lazyload>
+        {/* </Lazyload> */}
         <div className="profileItem">
             <div className="profileItemHeader">
                 <div className="profileItemContent">评论</div>

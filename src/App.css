@@ -1,3 +1,6 @@
+/*为了修复Antd Carousel在划动是的bug*/
+* { touch-action: pan-y; } 
+
 .App {
   text-align: center;
 }

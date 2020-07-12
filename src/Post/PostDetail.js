@@ -29,7 +29,7 @@ class PostDetail extends Component {
         super(props)
         this.state = {
             // videos: JSON.parse(localStorage.getItem("videos")),
-            item: {},
+            item: {pics:[]},
             comments: [],
             comment: '', //用户输入的评论
             commentsCount: 0,
@@ -37,7 +37,9 @@ class PostDetail extends Component {
             //likeCount: 0,
             isCommentVisible: false,
             isAudioPlaying: false,
-            selectedTags: []
+            selectedTags: [],
+            //初始化一定要给几个图片，否则Carousel控件会失效
+            pics: ['', ''],
         }
     }
 
@@ -54,7 +56,7 @@ class PostDetail extends Component {
 
     }
 
-    componentWillMount() {
+    componentDidMount() {
         let isLogin = this.checkLogin();
 
         if (!isLogin)
@@ -85,6 +87,8 @@ class PostDetail extends Component {
         // else {
         //     this.GetList();
         // }
+
+        this.setState({pics: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI']});
     }
 
     checkLogin() {
@@ -130,15 +134,22 @@ class PostDetail extends Component {
     {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
-        })
-            .then(res => {
-                this.setState({
-                    item: res.data,
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
+        }).then(res => {
+            this.setState({
+                item: res.data,
+                pics: [...res.data.pics]
+            }, () => {
+                
             });
+
+            if (this.refs.player) {
+                window.setTimeout(() => {
+                    this.refs.player.play();
+                }, 500)
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
 
     }
 
@@ -263,13 +274,13 @@ class PostDetail extends Component {
         });
     }
 
-    componentDidMount() {
-        if (this.refs.player) {
-            window.setTimeout(() => {
-                this.refs.player.play();
-            }, 500)
-        }
-    }
+    // componentDidMount() {
+    //     if (this.refs.player) {
+    //         window.setTimeout(() => {
+    //             this.refs.player.play();
+    //         }, 500)
+    //     }
+    // }
 
     handleBack = () => {
         this.props.history.push({
@@ -506,39 +517,56 @@ class PostDetail extends Component {
                                                         </div>
                                                     </> :
                                                     <>
-                                                        <Carousel
-                                                            autoplay={false}
-                                                            infinite
-                                                            beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-                                                            afterChange={index => console.log('slide to', index)}
-                                                            style={{ marginTop: '50px', backgroundColor: 'white' }}
-                                                        >
-                                                            {
-                                                                this.state.item && this.state.item.pics ?
-                                                                    this.state.item.pics.map(val => (
-                                                                        <div key={val.id} style={{
-                                                                            background: `url(${Constants.ResourceUrl}/${val}) no-repeat`,
-                                                                            backgroundPosition: 'center',
-                                                                            backgroundSize: `${carouselWidth} auto`,
-                                                                            paddingBottom: '100%'
-                                                                        }}>
-                                                                            {/* <Lazyload> */}
-                                                                                <img
-                                                                                    key={val.id}
-                                                                                    style={{ width: '100%', height: '100%', color: 'transparent', verticalAlign: 'top' }}
-                                                                                    src={`url(${Constants.ResourceUrl}/${val})`}
-                                                                                    alt=""
-                                                                                />
-                                                                            {/* </Lazyload> */}
-                                                                        </div>
-                                                                    )) :
-                                                                    <></>
-                                                            }
+                                                        {
+                                                            this.state.item && this.state.item.pics ?
+                                                                <Carousel
+                                                                    autoplay={true}
+                                                                    autoplayInterval={4000}
+                                                                    infinite
+                                                                    beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
+                                                                    afterChange={index => console.log('slide to', index)}
+                                                                    style={{ marginTop: '50px', backgroundColor: 'white' }}
+                                                                >
+                                                                    {
+                                                                        this.state.pics.map(val => (
+                                                                            <div key={val} style={{
+                                                                                background: `url(${Constants.ResourceUrl}/${val}) no-repeat`,
+                                                                                backgroundPosition: 'center',
+                                                                                backgroundSize: `${carouselWidth} auto`,
+                                                                                paddingBottom: '100%'
+                                                                            }}>
 
-                                                        </Carousel>
+                                                                            </div>
+                                                                        ))
+                                                                    }
+
+                                                                    {/* {this.state.pics.map(val => (
+                                                                                <a
+                                                                                key={val}
+                                                                                href="http://www.alipay.com"
+                                                                                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+                                                                                >
+                                                                                <img
+                                                                                    src={`${Constants.ResourceUrl}/${val}`}
+                                                                                    alt=""
+                                                                                    style={{ width: '100%', verticalAlign: 'top' }}
+                                                                                    onLoad={() => {
+                                                                                    // fire window resize event to change height
+                                                                                    window.dispatchEvent(new Event('resize'));
+                                                                                    this.setState({ imgHeight: 'auto' });
+                                                                                    }}
+                                                                                />
+                                                                                </a>
+                                                                            ))} */}
+
+                                                                </Carousel>
+                                                                :
+                                                                <></>
+                                                        }
+
                                                         <div style={{ backgroundColor: 'white' }}>
                                                             {
-                                                                this.state.item.audioes && this.state.item.audioes.length>0 ?
+                                                               this.state.item && this.state.item.audioes && this.state.item.audioes.length>0 ?
                                                                     // this.state.item.audioes.map(audio => (
                                                                     //     <audio src={`${Constants.ResourceUrl}/${audio}`} controls="controls"></audio>
                                                                     // ))
@@ -573,8 +601,8 @@ class PostDetail extends Component {
                                                                 <List>
                                                                     {this.state.comments.map((comment, index) => {
                                                                         return (
-                                                                            <div>
-                                                                                <div key={index} style={{ padding: '0 15px', display: 'flex' }}>
+                                                                            <div key={index}>
+                                                                                <div style={{ padding: '0 15px', display: 'flex' }}>
                                                                                     <div className="comment-avator">
                                                                                         <img src={comment.comment_user_pic} alt="" />
                                                                                     </div>
