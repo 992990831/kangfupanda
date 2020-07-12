@@ -70,11 +70,11 @@ class PostList extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.useBodyScroll) {
-      document.body.style.overflow = 'auto';
-    } else {
-      document.body.style.overflow = 'hidden';
-    }
+    // if (this.state.useBodyScroll) {
+    //   document.body.style.overflow = 'auto';
+    // } else {
+    //   document.body.style.overflow = 'hidden';
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
