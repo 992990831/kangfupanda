@@ -414,7 +414,7 @@ class PostDetail extends Component {
                             placeholder="请评论"
                             ref='refComment'
                             style={{width:'280px'}}
-                            rows={8}
+                            rows={12}
                             onChange={this.onCommentChange.bind(this)}
                         />
                         {/* <TextareaItem style={{width:'280px'}} placeholder='请评论' ref='refComment'></TextareaItem> */}
@@ -597,7 +597,7 @@ class PostDetail extends Component {
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
-                                                            <div style={{ marginBottom: '80px' }}>
+                                                            <div style={{ marginBottom: '110px' }}>
                                                                 <List>
                                                                     {this.state.comments.map((comment, index) => {
                                                                         return (
