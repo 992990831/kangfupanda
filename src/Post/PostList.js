@@ -70,6 +70,7 @@ class PostList extends Component {
   }
 
   componentDidUpdate() {
+    //这里会影响Post Detail的内容滚动
     // if (this.state.useBodyScroll) {
     //   document.body.style.overflow = 'auto';
     // } else {
