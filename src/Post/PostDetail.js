@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 //import { Player } from 'video-react';
 
 //import Hammer from "react-hammerjs";
-import { Carousel, Drawer, Toast, List, Button, Popover, Icon } from 'antd-mobile';
+import { Carousel, Drawer, Toast, List, Button, Popover, Icon, TextareaItem } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
 
@@ -31,6 +31,7 @@ class PostDetail extends Component {
             // videos: JSON.parse(localStorage.getItem("videos")),
             item: {},
             comments: [],
+            comment: '', //用户输入的评论
             commentsCount: 0,
             isLiked: false,
             //likeCount: 0,
@@ -342,6 +343,10 @@ class PostDetail extends Component {
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
 
+    onCommentChange(text){
+        this.setState({comment: text});
+
+    }
     submit() {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -351,7 +356,7 @@ class PostDetail extends Component {
             })
         }
 
-        let comment = this.refs.refComment.value;
+        //let comment = this.refs.refComment.value;
 
         let body = {
             comment_post_id: this.state.item.postId,
@@ -359,14 +364,14 @@ class PostDetail extends Component {
             comment_user_id: userInfo.openid,
             comment_user_name: userInfo.nickname,
             comment_user_pic: userInfo.headimgurl,
-            comment_content: comment,
+            comment_content: this.state.comment,
         }
 
         axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(() => {
             Toast.info('评论已提交', 2);
             // debugger;
             // this.setState({isCommentVisible: false});
-            this.refs.refComment.value = '';
+            //this.refs.refComment.value = '';
             this.setState({isCommentVisible: false});
 
             let postId = 0;
@@ -394,7 +399,14 @@ class PostDetail extends Component {
             <React.Fragment>
                 <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
                     <div style={{ margin: 'auto', display: 'flex' }}>
-                        <input style={{width:'280px'}} placeholder='请评论' ref='refComment'></input>
+                        <TextareaItem
+                            placeholder="请评论"
+                            ref='refComment'
+                            style={{width:'280px'}}
+                            rows={8}
+                            onChange={this.onCommentChange.bind(this)}
+                        />
+                        {/* <TextareaItem style={{width:'280px'}} placeholder='请评论' ref='refComment'></TextareaItem> */}
                         <div>
                             <Button onClick={this.submit.bind(this)} type="ghost" inline size="small" style={{ marginLeft: '4px', marginRight: '4px' }}>提交</Button>
                         </div>
@@ -510,14 +522,14 @@ class PostDetail extends Component {
                                                                             backgroundSize: `${carouselWidth} auto`,
                                                                             paddingBottom: '100%'
                                                                         }}>
-                                                                            <Lazyload>
+                                                                            {/* <Lazyload> */}
                                                                                 <img
                                                                                     key={val.id}
                                                                                     style={{ width: '100%', height: '100%', color: 'transparent', verticalAlign: 'top' }}
                                                                                     src={`url(${Constants.ResourceUrl}/${val})`}
                                                                                     alt=""
                                                                                 />
-                                                                            </Lazyload>
+                                                                            {/* </Lazyload> */}
                                                                         </div>
                                                                     )) :
                                                                     <></>
