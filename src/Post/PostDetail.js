@@ -135,6 +135,7 @@ class PostDetail extends Component {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
+            
             this.setState({
                 item: res.data,
                 pics: [...res.data.pics]
@@ -142,11 +143,12 @@ class PostDetail extends Component {
                 
             });
 
-            if (this.refs.player) {
-                window.setTimeout(() => {
-                    this.refs.player.play();
-                }, 500)
-            }
+            // debugger;
+            // if (this.refs.player) {
+            //     window.setTimeout(() => {
+            //         this.refs.player.play();
+            //     }, 500)
+            // }
         }).catch(function (error) {
             console.log(error);
         });
