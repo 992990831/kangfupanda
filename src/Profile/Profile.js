@@ -64,7 +64,10 @@ class Profile extends Component {
     }
 
     registerUser(user) {
-        axios.post(`${Constants.APIBaseUrl}/user/register`, user).then().catch(function (error) {
+        axios.post(`${Constants.APIBaseUrl}/user/register`, user)
+        .then(res=>{
+            this.setState({ userInfo: user });
+        }).catch(function (error) {
             alert('register user fail,' + error);
         });
     }
