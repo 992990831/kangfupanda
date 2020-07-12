@@ -27,7 +27,9 @@ class DoctorProfile extends Component {
         super(props);
         this.state = {
             userInfo: {},
-            followed: false
+            followed: false,
+            //专家的作品
+            posts: [],
         };
     }
 
@@ -37,17 +39,17 @@ class DoctorProfile extends Component {
 
         axios.get(`${Constants.APIBaseUrl}/user/${openid}`, {
             headers: { 'Content-Type': 'application/json' }
-        })
-            .then(res => {
-                this.setState({
-                    userInfo: res.data,
-                    followed,
-                    openid
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
+        }).then(res => {
+            this.setState({
+                userInfo: res.data,
+                followed,
+                openid
             });
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        this.GetPostList(openid);
     }
 
     follow() {
@@ -78,16 +80,37 @@ class DoctorProfile extends Component {
     
       }
 
-    render() {
-        let workItems = [];
-        let videosStr = localStorage.getItem("videos");
-
-        if (this.state.followed && this.state.userInfo && videosStr) {
-            workItems = JSON.parse(videosStr);
-
-            workItems = workItems.filter(workItem => {
-                return workItem.openId == this.state.openid;
+      GetPostList(openid) {
+        axios.get(`${Constants.APIBaseUrl}/message/list/my?openId=${openid}`, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => {
+            this.setState({
+              posts: res.data,
             });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+
+    render() {
+        // let workItems = [];
+        // let videosStr = localStorage.getItem("videos");
+
+        // if (this.state.followed && this.state.userInfo && videosStr) {
+        //     workItems = JSON.parse(videosStr);
+
+        //     workItems = workItems.filter(workItem => {
+        //         return workItem.openId == this.state.openid;
+        //     });
+        // }
+
+        let userInfo = null;
+        
+        if(localStorage.getItem("userInfo"))
+        {
+            userInfo = JSON.parse(localStorage.getItem("userInfo"));
         }
 
         return (
@@ -146,8 +169,8 @@ class DoctorProfile extends Component {
                 >
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
                         {
-                            this.state.followed ?
-                                workItems.map(workItem => {
+                            this.state.followed || (userInfo && this.state.openid == userInfo.openid) ?
+                                this.state.posts.map(workItem => {
                                     return (
                                         <div style={{
                                             width: '48%', float: 'left',
@@ -165,7 +188,7 @@ class DoctorProfile extends Component {
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
                         {
                             this.state.followed ?
-                                workItems.map(workItem => {
+                                this.state.posts.map(workItem => {
                                     return (
                                         <div style={{
                                             width: '98%', float: 'left',

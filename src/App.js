@@ -260,6 +260,7 @@ class App extends Component {
 
               <Route path="/home" 
               exact render={()=>{
+                //为了从外部链接过来的时候，下面的工具条能正常显示
                 if(this.state.selectedTab != 'home')
                 {
                   this.setState({selectedTab:'home'});

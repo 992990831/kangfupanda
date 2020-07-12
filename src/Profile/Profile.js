@@ -39,6 +39,8 @@ class Profile extends Component {
             code: '',
             userInfo: {},
             toEditor: false,
+            //我的作品
+            posts: [],
         };
     }
 
@@ -81,7 +83,6 @@ class Profile extends Component {
                 if (buttonIndex == 0) {
                     localStorage.removeItem("userInfo");
 
-                    debugger;
                     //const history = createHashHistory();
                     this.props.history.push('/home');
                 }
@@ -94,6 +95,7 @@ class Profile extends Component {
         const uri = new URI(document.location.href);
         const query = uri.query(true);
         const { code } = query;
+
         //如果有code，说明是从微信登录页面redirect回来的，此时就算没有localStorage，也不用再提示
         if (!userInfoStr) {
 
@@ -125,6 +127,7 @@ class Profile extends Component {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
             // this.setState({ userInfo: userInfo });
             this.loadUserInfo(userInfo.openid);
+            this.GetMyPostList();
         }
     }
 
@@ -142,6 +145,28 @@ class Profile extends Component {
             Toast.info('获取用户信息失败,' + error, 2);
         });
     }
+
+    GetMyPostList() {
+        let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(); 
+        let userInfo = null;
+
+        if(userInfoStr)
+        {
+            userInfo = JSON.parse(userInfoStr);
+        }
+    
+        axios.get(`${Constants.APIBaseUrl}/message/list/my?openId=${userInfo.openid}`, {
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => {
+            this.setState({
+              posts: res.data,
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
 
     wechatLogin(code) {
         axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
@@ -188,17 +213,17 @@ class Profile extends Component {
     }
 
     render() {
-        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        let workItems = [];
-        let videosStr = localStorage.getItem("videos");
+        //let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        //let workItems = [];
+        //let videosStr = localStorage.getItem("videos");
 
-        if (userInfo && videosStr) {
-            workItems = JSON.parse(videosStr);
+        // if (userInfo && videosStr) {
+        //     workItems = JSON.parse(videosStr);
 
-            workItems = workItems.filter(workItem => {
-                return workItem.openId == userInfo.openid;
-            });
-        }
+        //     workItems = workItems.filter(workItem => {
+        //         return workItem.openId == userInfo.openid;
+        //     });
+        // }
         // const history = createHashHistory();
 
         return (
@@ -263,7 +288,7 @@ class Profile extends Component {
                 >
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
                         {
-                            workItems.map(workItem => {
+                            this.state.posts.map(workItem => {
                                 return (
                                     <div style={{
                                         width: '48%', float: 'left',
@@ -278,7 +303,7 @@ class Profile extends Component {
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
                         {
-                            workItems.map(workItem => {
+                            this.state.posts.map(workItem => {
                                 return (
                                     <div style={{
                                         width: '98%', float: 'left',

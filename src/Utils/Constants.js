@@ -8,7 +8,11 @@ export const Constants = {
     //ResourceUrl: process.env.NODE_ENV === "production"? "http://app.kangfupanda.com/Upload/" : "https://localhost:44362/Upload/",
     //ResourceUrl: process.env.NODE_ENV === "production"? "http://47.111.166.154:8004/Upload/" : "https://localhost:44362/Upload/",
     ResourceUrl: process.env.NODE_ENV === "production"? "https://api.kangfupanda.com/Upload/" : "https://localhost:44362/Upload/",
+    //快熊康复 AppId:'wxc10ff63ecf588c90',
+    //一健点评 AppId:'wx496e5a01291ad836',
     AppId:'wxc10ff63ecf588c90',
+    //快熊康复 AppSecret: '7289786fae8511cbe9e94a8aec93e125',
+    //一健点评'5a544217123aca4505f8a680de415a35',
     AppSecret: '7289786fae8511cbe9e94a8aec93e125',
     RedirectUrl: 'https://app.kangfupanda.com/#/profile',    
 }

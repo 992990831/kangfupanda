@@ -17,7 +17,7 @@ function ProfileItem(props) {
         <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
             <span>{props.workItem.name}</span>
         </div>
-        <img style={{height:'80px'}} src={`${Constants.ResourceUrl}${props.workItem.posterUri}`} 
+        <img style={{height:'80px'}} src={props.workItem && props.workItem.poster? `data:image/jpeg;base64,${props.workItem.poster}`:''} 
         onClick={()=> {gotoPostDetail(props.workItem.id)}}
         />
         
