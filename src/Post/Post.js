@@ -98,7 +98,7 @@ class Post extends Component {
                 <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType == 'video' ? {} : { display: 'none' }}
                   onClick={() => {
                     this.props.history.push({
-                      pathname: `postDetail/${item.id}`,
+                      pathname: `postDetail/${item.postId}`,
                       state: { data: this.state.item }
                     })
                   }}

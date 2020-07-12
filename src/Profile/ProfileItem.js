@@ -21,7 +21,8 @@ function ProfileItem(props) {
         </div>
         <Lazyload>
             <img style={{height:'80px'}} src={`${Constants.ResourceUrl}/${props.workItem.poster}`} 
-            onClick={()=> {gotoPostDetail(props.workItem.id)}}
+            onClick={()=> {
+                gotoPostDetail(props.workItem.postId)}}
             />
         </Lazyload>
         <div className="profileItem">

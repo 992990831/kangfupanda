@@ -272,7 +272,7 @@ class App extends Component {
 
               <Route path="/complain" component={ComplainForm} />
 
-              <Route path="/PostDetail/:id"
+              <Route path="/PostDetail/:postId"
               exact 
               render={()=>{
                 if(this.state.selectedTab != 'home')

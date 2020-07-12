@@ -155,7 +155,7 @@ class DoctorList extends Component {
                             />
                         </div>
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '255px' }}>
                         {
                             this.state.followeePosts.map((post, index) => {
                                 return (

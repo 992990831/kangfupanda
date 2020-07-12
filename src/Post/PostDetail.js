@@ -28,7 +28,7 @@ class PostDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            videos: JSON.parse(localStorage.getItem("videos")),
+            // videos: JSON.parse(localStorage.getItem("videos")),
             item: {},
             comments: [],
             commentsCount: 0,
@@ -59,13 +59,31 @@ class PostDetail extends Component {
         if (!isLogin)
             return;
 
-        if (this.state.videos) {
-            this.GetCommentList();
-            this.loadItem();
+        if(!this.props.match.params.postId)
+        {
+            return;
         }
-        else {
-            this.GetList();
+
+        let postId = 0;
+        
+        if(this.props.match.params.postId.indexOf('?') > -1)
+        {
+            postId = this.props.match.params.postId.substring(0, this.props.match.params.postId.indexOf('?'));
         }
+        else
+        {
+            postId = this.props.match.params.postId;
+        }
+
+        this.GetPost(postId);
+        this.GetCommentList(postId);
+        // if (this.state.videos) {
+        //     this.GetCommentList();
+        //     this.loadItem();
+        // }
+        // else {
+        //     this.GetList();
+        // }
     }
 
     checkLogin() {
@@ -90,36 +108,50 @@ class PostDetail extends Component {
         return true;
     };
 
-    GetList() {
-        axios.get(`${Constants.APIBaseUrl}/club/list`, {
+    // GetList() {
+    //     axios.get(`${Constants.APIBaseUrl}/club/list`, {
+    //         headers: { 'Content-Type': 'application/json' }
+    //     })
+    //         .then(res => {
+    //             this.setState({
+    //                 videos: res.data,
+    //             }, () => {
+    //                 localStorage.setItem("videos", JSON.stringify(res.data));
+    //                 this.loadItem();
+    //                 this.GetCommentList();
+    //             });
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //         });
+    // }
+    GetPost(postId)
+    {
+        axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
                 this.setState({
-                    videos: res.data,
-                }, () => {
-                    localStorage.setItem("videos", JSON.stringify(res.data));
-                    this.loadItem();
-                    this.GetCommentList();
+                    item: res.data,
                 });
             })
             .catch(function (error) {
                 console.log(error);
             });
+
     }
 
-    GetCommentList() {
-        var currentItem = this.state.videos.filter(data => {
-            return data.id === parseInt(this.props.match.params.id);
-        });
+    GetCommentList(postId) {
+        // var currentItem = this.state.videos.filter(data => {
+        //     return data.id === parseInt(this.props.match.params.postId);
+        // });
 
-        if (!currentItem || currentItem.length == 0) {
-            return;
-        }
-
+        // if (!currentItem || currentItem.length == 0) {
+        //     return;
+        // }
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-       
-        axios.get(`${Constants.APIBaseUrl}/comments/list?postId=${currentItem[0].postId}&postType=${currentItem[0].itemType}&openId=${userInfo.openid}`, {
+        let itemType= 'graphic';
+        axios.get(`${Constants.APIBaseUrl}/comments/list?postId=${postId}&postType=${itemType}&openId=${userInfo.openid}`, {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(res => {
@@ -158,33 +190,33 @@ class PostDetail extends Component {
         });
     } 
 
-    loadItem() {
-        if (this.props.location.state && this.props.location.state.data) {
-            this.setState({
-                item: this.props.location.state && this.props.location.state.data
-            }, () => {
-                this.prepareShare();
-                this.getLiked();
-                this.getSelectedTags(this.state.item.postId);
-            })
-        }
-        else {
-            var currentItem = this.state.videos.filter(data => {
-                return data.id === parseInt(this.props.match.params.id);
-            });
+    // loadItem() {
+    //     if (this.props.location.state && this.props.location.state.data) {
+    //         this.setState({
+    //             item: this.props.location.state && this.props.location.state.data
+    //         }, () => {
+    //             this.prepareShare();
+    //             this.getLiked();
+    //             this.getSelectedTags(this.state.item.postId);
+    //         })
+    //     }
+    //     else {
+    //         var currentItem = this.state.videos.filter(data => {
+    //             return data.id === parseInt(this.props.match.params.id);
+    //         });
 
-            if (currentItem && currentItem.length > 0) {
-                this.setState({
-                    item: currentItem[0]
-                }, () => {
-                    this.prepareShare();
-                    this.getLiked();
-                    this.getSelectedTags(this.state.item.postId);
-                    //this.getLikeCount();
-                })
-            }
-        }
-    }
+    //         if (currentItem && currentItem.length > 0) {
+    //             this.setState({
+    //                 item: currentItem[0]
+    //             }, () => {
+    //                 this.prepareShare();
+    //                 this.getLiked();
+    //                 this.getSelectedTags(this.state.item.postId);
+    //                 //this.getLikeCount();
+    //             })
+    //         }
+    //     }
+    // }
 
     like() {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -244,66 +276,66 @@ class PostDetail extends Component {
         })
     }
 
-    handleSwipe = (e) => {
-        if (e.direction !== 8 && e.direction !== 16) {
-            return;
-        }
+    // handleSwipe = (e) => {
+    //     if (e.direction !== 8 && e.direction !== 16) {
+    //         return;
+    //     }
 
-        if (this.refs.player) {
-            this.refs.player.pause();
-        }
+    //     if (this.refs.player) {
+    //         this.refs.player.pause();
+    //     }
 
-        if (e.deltaY < 0)  //上划
-        {
+    //     if (e.deltaY < 0)  //上划
+    //     {
 
-            const { item } = this.state;
-            var nextItem = this.state.videos.filter(data => {
-                return data.id === (item.id + 1);
-            });
+    //         const { item } = this.state;
+    //         var nextItem = this.state.videos.filter(data => {
+    //             return data.id === (item.id + 1);
+    //         });
 
-            if (nextItem && nextItem.length > 0) {
-                this.setState({
-                    item: nextItem[0]
-                }, () => {
-                    if (this.refs.player) {
-                        window.setTimeout(() => {
-                            this.refs.player.play();
-                        }, 500);
-                    }
-                })
+    //         if (nextItem && nextItem.length > 0) {
+    //             this.setState({
+    //                 item: nextItem[0]
+    //             }, () => {
+    //                 if (this.refs.player) {
+    //                     window.setTimeout(() => {
+    //                         this.refs.player.play();
+    //                     }, 500);
+    //                 }
+    //             })
 
-                this.props.history.push({
-                    pathname: `../postDetail/${nextItem[0].id}`,
-                    state: { data: nextItem[0] }
-                })
-            }
-        }
-        else  //下划
-        {
-            const { item } = this.state;
-            var nextItem = this.state.videos.filter(data => {
-                return data.id === (item.id - 1);
-            });
+    //             this.props.history.push({
+    //                 pathname: `../postDetail/${nextItem[0].id}`,
+    //                 state: { data: nextItem[0] }
+    //             })
+    //         }
+    //     }
+    //     else  //下划
+    //     {
+    //         const { item } = this.state;
+    //         var nextItem = this.state.videos.filter(data => {
+    //             return data.id === (item.id - 1);
+    //         });
 
-            if (nextItem && nextItem.length > 0) {
-                this.setState({
-                    item: nextItem[0]
-                }, () => {
-                    if (this.refs.player) {
-                        window.setTimeout(() => {
-                            this.refs.player.play();
-                        }, 500);
-                    }
-                })
+    //         if (nextItem && nextItem.length > 0) {
+    //             this.setState({
+    //                 item: nextItem[0]
+    //             }, () => {
+    //                 if (this.refs.player) {
+    //                     window.setTimeout(() => {
+    //                         this.refs.player.play();
+    //                     }, 500);
+    //                 }
+    //             })
 
-                this.props.history.push({
-                    pathname: `../postDetail/${nextItem[0].id}`,
-                    state: { data: nextItem[0] }
-                })
-            }
+    //             this.props.history.push({
+    //                 pathname: `../postDetail/${nextItem[0].id}`,
+    //                 state: { data: nextItem[0] }
+    //             })
+    //         }
 
-        }
-    }
+    //     }
+    // }
 
     onOpenCommentChange = (...args) => {
         window.scrollTo({ left: 0, top: window.innerHeight });
@@ -336,7 +368,18 @@ class PostDetail extends Component {
             // this.setState({isCommentVisible: false});
             this.refs.refComment.value = '';
             this.setState({isCommentVisible: false});
-            this.GetCommentList();
+
+            let postId = 0;
+        
+            if(this.props.match.params.postId.indexOf('?') > -1)
+            {
+                postId = this.props.match.params.postId.substring(0, this.props.match.params.postId.indexOf('?'));
+            }
+            else
+            {
+                postId = this.props.match.params.postId;
+            }
+            this.GetCommentList(postId);
         }).catch(function (error) {
             alert('添加评论失败');
         });
@@ -458,21 +501,27 @@ class PostDetail extends Component {
                                                             afterChange={index => console.log('slide to', index)}
                                                             style={{ marginTop: '50px', backgroundColor: 'white' }}
                                                         >
-                                                            {this.state.item.pics.map(val => (
-                                                                <div key={val.id} style={{
-                                                                    background: `url(${Constants.ResourceUrl}/${val}) no-repeat`,
-                                                                    backgroundPosition: 'center',
-                                                                    backgroundSize: `${carouselWidth} auto`,
-                                                                    paddingBottom: '100%'
-                                                                }}>
-                                                                    <img
-                                                                        key={val.id}
-                                                                        style={{ width: '100%', height: '100%', color: 'transparent', verticalAlign: 'top' }}
-                                                                        src={`url(${Constants.ResourceUrl}/${val})`}
-                                                                        alt=""
-                                                                    />
-                                                                </div>
-                                                            ))}
+                                                            {
+                                                                this.state.item && this.state.item.pics ?
+                                                                    this.state.item.pics.map(val => (
+                                                                        <div key={val.id} style={{
+                                                                            background: `url(${Constants.ResourceUrl}/${val}) no-repeat`,
+                                                                            backgroundPosition: 'center',
+                                                                            backgroundSize: `${carouselWidth} auto`,
+                                                                            paddingBottom: '100%'
+                                                                        }}>
+                                                                            <Lazyload>
+                                                                                <img
+                                                                                    key={val.id}
+                                                                                    style={{ width: '100%', height: '100%', color: 'transparent', verticalAlign: 'top' }}
+                                                                                    src={`url(${Constants.ResourceUrl}/${val})`}
+                                                                                    alt=""
+                                                                                />
+                                                                            </Lazyload>
+                                                                        </div>
+                                                                    )) :
+                                                                    <></>
+                                                            }
 
                                                         </Carousel>
                                                         <div style={{ backgroundColor: 'white' }}>
