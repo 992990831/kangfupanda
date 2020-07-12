@@ -6,6 +6,8 @@ import { Constants } from '../Utils/Constants';
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import { createHashHistory } from 'history';
 
+import Lazyload from 'react-lazyload';
+
 const history = createHashHistory();
 
 const gotoPostDetail = (postId) =>{
@@ -17,10 +19,11 @@ function ProfileItem(props) {
         <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
             <span>{props.workItem.name}</span>
         </div>
-        <img style={{height:'80px'}} src={props.workItem && props.workItem.poster? `data:image/jpeg;base64,${props.workItem.poster}`:''} 
-        onClick={()=> {gotoPostDetail(props.workItem.id)}}
-        />
-        
+        <Lazyload>
+            <img style={{height:'80px'}} src={`${Constants.ResourceUrl}/${props.workItem.poster}`} 
+            onClick={()=> {gotoPostDetail(props.workItem.id)}}
+            />
+        </Lazyload>
         <div className="profileItem">
             <div className="profileItemHeader">
                 <div className="profileItemContent">评论</div>

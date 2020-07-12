@@ -297,6 +297,7 @@ class App extends Component {
 
               <Route path="/found" exact
                 render={()=>{
+                  //为了从外部链接过来的时候，下面的工具条能正常显示
                   if(this.state.selectedTab != 'found')
                   {
                     this.setState({selectedTab:'found'});

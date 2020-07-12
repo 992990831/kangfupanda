@@ -438,7 +438,7 @@ class PostDetail extends Component {
                                                         <div style={{ margin: '70px 0px 0px 0px', width: '100%', height: '100%' }}>
                                                             <div style={{ position: 'absolute', top: '50%' }}>
                                                                 <video ref='player' style={{ zIndex: '1' }}
-                                                                    poster={`${Constants.ResourceUrl}/${item.posterUri}`} src={`${Constants.ResourceUrl}/${item.videoUri}`}
+                                                                    poster={`${Constants.ResourceUrl}/${item.poster}`} src={`${Constants.ResourceUrl}/${item.videoUri}`}
                                                                     x5-playsinline="true"
                                                                     //  x5-video-player-type="h5"
                                                                     playsinline="true"

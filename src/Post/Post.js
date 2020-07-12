@@ -104,7 +104,7 @@ class Post extends Component {
                   }}
                 />
                 <span className='title'>{item.name}</span>
-                <img src={`${Constants.ResourceUrl}/${item.posterUri}`} alt="" className="headPic" onClick={() => {
+                <img src={`${Constants.ResourceUrl}/${item.poster}`} alt="" className="headPic" onClick={() => {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
                     let path=`postDetail/${item.id}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
