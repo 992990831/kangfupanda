@@ -91,20 +91,30 @@ class Post extends Component {
         
         <div className="post-pic">
           {
-            //这里不能用Lazyload，会和外面的ListView冲突
+            //这里不能用Lazyload，会和外面的ListView冲突。 不显示的ListView Item中的图片就不会加载。
             // <Lazyload height={200} width={172}>
               <div>
-                <span className="video-title">{item.title}</span>
-                <img src={[require("../assets/images/play.png")]} alt="" className="isVideo" style={item.itemType == 'video' ? {} : { display: 'none' }}
-                  onClick={() => {
-                    this.props.history.push({
-                      pathname: `postDetail/${item.postId}`,
-                      state: { data: this.state.item }
-                    })
-                  }}
-                />
-                <span className='title'>{item.name}</span>
-                <img src={`${Constants.ResourceUrl}/${item.poster}`} alt="" className="headPic" onClick={() => {
+                {
+                  item.itemType == 'video' ?
+                  <>
+                    <span className="video-title">{item.title}</span>
+                    <img src={[require("../assets/images/play.png")]} alt="" className="isVideo"
+                      onClick={() => {
+                        this.props.history.push({
+                          pathname: `postDetail/${item.postId}`,
+                          state: { data: this.state.item }
+                        })
+                      }}
+                    />
+                  </>
+                  :
+                  <></>
+                }
+                
+                
+                {/* 不使用img标签，因为img在小程序里面可以长按下载 */}
+                {/* <span className='title'>{item.name}</span> */}
+                {/* <img src={`${Constants.ResourceUrl}/${item.poster}`} alt="" className="headPic" onClick={() => {
                   if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                   {
                     let path=`postDetail/${item.postId}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
@@ -119,7 +129,16 @@ class Post extends Component {
                     Toast.info('请先关注该用户', 2);
                   }
                   
-                }} />
+                }} /> */}
+                <div key={item.id} style={{
+                  background: `url(${Constants.ResourceUrl}/${item.poster}) no-repeat`,
+                  backgroundPosition: 'center',
+                  backgroundSize: `100% auto`,
+                  paddingBottom: '75%'
+                }}>
+                  <div className='title'>{item.name}</div>
+                </div>
+
               </div>
             // </Lazyload>
           }
