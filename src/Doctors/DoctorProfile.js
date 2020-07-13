@@ -140,9 +140,9 @@ class DoctorProfile extends Component {
                 <div className="profileName">
                     <div className="profileItem">
                         <div className="profileItemHeader">
-                            <div className="profileItemBig">{99}</div>
-                            <div className="profileItemBig">{99}</div>
-                            <div className="profileItemBig">{99}</div>
+                            <div className="profileItemBig">{this.state.userInfo.fansCount}</div>
+                            <div className="profileItemBig">{this.state.userInfo.followeeCount}</div>
+                            <div className="profileItemBig">{this.state.userInfo.likeCount}</div>
                         </div>
                         <div className="profileItemHeader">
                             <div className="profileItemSmall">粉丝</div>
