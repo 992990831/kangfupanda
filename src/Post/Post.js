@@ -135,7 +135,24 @@ class Post extends Component {
                   backgroundPosition: 'center',
                   backgroundSize: `100% auto`,
                   paddingBottom: '75%'
-                }}>
+                }}
+                  onClick={() => {
+                    if(item.followed || (userInfoStr && item.openId == userInfo.openid))
+                    {
+                      let path=`postDetail/${item.postId}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
+                      //localStorage.setItem("redirectSearch", path);
+                      this.props.history.push({
+                        pathname: path,
+                        state: { data: this.state.item }
+                      })
+                    }
+                    else
+                    {
+                      Toast.info('请先关注该用户', 2);
+                    }
+                    
+                  }}
+                >
                   <div className='title'>{item.name}</div>
                 </div>
 

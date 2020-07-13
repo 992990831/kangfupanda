@@ -3,6 +3,11 @@
 
 .App {
   text-align: center;
+  /*设置文字不能被选中*/
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
 }
 
 .App-logo {
