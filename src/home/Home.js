@@ -33,7 +33,13 @@ class Home extends Component {
       followerOpenId = JSON.parse(userInfoStr).openid
     }
 
-    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=${count}`, {
+    let endId = 0;
+    if(this.state.videos.length > 0)
+    {
+      endId = this.state.videos[this.state.videos.length-1].postId;
+    }
+
+    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=${count}&endId=${endId}`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {
@@ -54,7 +60,7 @@ class Home extends Component {
 
   loadMore(count)
   {
-    this.GetList(5);
+    this.GetList(10);
   }
 
   render() {

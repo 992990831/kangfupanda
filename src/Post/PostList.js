@@ -5,23 +5,6 @@ import CarouselExt from '../Tool/CarouselExt';
 
 import { PullToRefresh, ListView, Button, Toast } from 'antd-mobile';
 
-const data = [
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: 'Meet hotel',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: 'McDonald\'s invites you',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: 'Eat the week',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
 const NUM_ROWS = 10;
 let pageIndex = 0;
 
@@ -33,7 +16,6 @@ function genData(pIndex = 0) {
   return dataArr;
 }
 
-
 class PostList extends Component {
   constructor(props){
     super(props)
@@ -43,7 +25,7 @@ class PostList extends Component {
     });
 
     this.state = {
-      list: [],
+      //list: [],
       type: '',
 
       dataSource,
@@ -55,7 +37,7 @@ class PostList extends Component {
   }
 
   componentDidMount() {
-    const hei = this.state.height;// - this.lv.offsetTop;
+    //const hei = this.state.height;// - this.lv.offsetTop;
 
     // setTimeout(() => {
     //   debugger;
@@ -84,28 +66,43 @@ class PostList extends Component {
       return;
     }
 
+    const hei = this.state.height;
+    if (Array.isArray(this.rData)) {
+      this.rowData = [...this.rowData, ...nextProps.list];
+    }
+    else {
+      this.rowData = [...nextProps.list];
+    }
     this.setState({
-        list: nextProps.list
-      }, 
-      ()=>{
-        const hei = this.state.height;
+      dataSource: this.state.dataSource.cloneWithRows(this.rowData), //this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
+      height: hei,
+      refreshing: false,
+      isLoading: false,
+    });
+  
 
-        if(Array.isArray(this.rData ))
-        {
-          this.rData = [...this.rData, ...genData(++pageIndex)];
-        }
-        else{
-          this.rData = genData();
-        }
-        
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
-          height: hei,
-          refreshing: false,
-          isLoading: false,
-        });
-      }
-    );
+    // this.setState({
+    //     list: nextProps.list
+    //   }, 
+    //   ()=>{
+    //     const hei = this.state.height;
+
+    //     if(Array.isArray(this.rData ))
+    //     {
+    //       this.rData = [...this.rData, ...genData(++pageIndex)];
+    //     }
+    //     else{
+    //       this.rData = genData();
+    //     }
+
+    //     this.setState({
+    //       dataSource: this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
+    //       height: hei,
+    //       refreshing: false,
+    //       isLoading: false,
+    //     });
+    //   }
+    // );
 
     
   }
@@ -177,20 +174,20 @@ class PostList extends Component {
     );
     
     //let index = data.length - 1;
-    let index = this.state.list.length - 1;
+    let index = 0; //this.state.list.length - 1;
     const row = (rowData, sectionID, rowID) => {
-      if (index < 0) {
-        index = this.state.list.length - 1;
-      }
-      const obj = this.state.list[index--];
+      // if (index == this.state.list.length) {
+      //   index = 0;
+      // }
+      // const obj = this.state.list[index++];
       return (
-        <div key={rowID}
+        <div key={rowData.postId}
           style={{
             padding: '0 15px',
             backgroundColor: 'white',
           }}
         >
-          <Post item={obj} onFollowed={this.onFollowed.bind(this)}/>
+          <Post item={rowData} onFollowed={this.onFollowed.bind(this)}/>
           {/* {obj.name}
           <div style={{ height: '50px', lineHeight: '50px', color: '#888', fontSize: '18px', borderBottom: '1px solid #ddd' }}>
             {obj.title}
