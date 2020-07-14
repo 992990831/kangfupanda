@@ -109,18 +109,23 @@ class PostList extends Component {
 
   /*关注之后更新 */
   onFollowed(openId){
-    let userInfo = JSON.parse(localStorage.getItem("userInfo")); 
-    let newList = this.state.list;
-    newList.forEach(post => {
+    //let userInfo = JSON.parse(localStorage.getItem("userInfo")); 
+    
+    this.rowData.forEach(post => {
       if(post.openId == openId)
       {
           post.followed=true;
       }
     });
-    
+
+    //为了刷新，可能是ListView控件的issue。rowData不变，控件不刷新
     this.setState({
-      list: newList
-    })
+      dataSource: this.state.dataSource.cloneWithRows([]), //this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
+    });
+
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(this.rowData), //this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
+    });
   }
 
   // onRefresh = () => {
