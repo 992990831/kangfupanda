@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import ReactDOM from 'react-dom';
 import './PostList.css'
 import Post from './Post'
 import CarouselExt from '../Tool/CarouselExt';
 
 import { PullToRefresh, ListView, Button, Toast } from 'antd-mobile';
+import { Constants } from '../Utils/Constants';
 
 const NUM_ROWS = 10;
 let pageIndex = 0;
@@ -80,7 +82,40 @@ class PostList extends Component {
       isLoading: false,
     });
   
+    //找到之前最后访问的作品，定位到该作品
+    let lastPostId = localStorage.getItem(Constants.LastPostId);
+    if(lastPostId > 0)
+    {
 
+      window.setTimeout(()=>{
+        var lvContent = document.getElementsByClassName('am-list-view-scrollview-content am-list');
+        if(lvContent && lvContent[0] && lvContent[0].clientHeight)
+        {
+          let scrollHeight = lvContent[0].clientHeight;
+
+          let itemsCount = this.rowData.length;
+          let index = 0;
+
+          for(let i=0; i<itemsCount; i++)
+          {
+            if(lastPostId == this.rowData[i].postId)
+            {
+              index = i;
+              break;
+            }
+          }
+
+          let scrollTo = scrollHeight * (index/itemsCount) - 150;
+
+          localStorage.removeItem(Constants.LastPostId);
+
+          this.lv.scrollTo(0, scrollTo)
+        }
+        
+      }, 700);
+    }
+
+    
     // this.setState({
     //     list: nextProps.list
     //   }, 
@@ -179,7 +214,8 @@ class PostList extends Component {
     );
     
     //let index = data.length - 1;
-    let index = 0; //this.state.list.length - 1;
+    //let index = 0; //this.state.list.length - 1;
+
     const row = (rowData, sectionID, rowID) => {
       // if (index == this.state.list.length) {
       //   index = 0;
@@ -243,6 +279,7 @@ class PostList extends Component {
           border: '1px solid #ddd',
           margin: '5px 0',
         }}
+
         pullToRefresh={false}
         // pullToRefresh={<PullToRefresh
         //   refreshing={this.state.refreshing}

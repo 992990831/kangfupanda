@@ -145,6 +145,8 @@ class Post extends Component {
                         pathname: path,
                         state: { data: this.state.item }
                       })
+
+                      localStorage.setItem(Constants.LastPostId, this.state.item.postId);
                     }
                     else
                     {

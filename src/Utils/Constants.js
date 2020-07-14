@@ -15,5 +15,8 @@ export const Constants = {
     //一健点评'5a544217123aca4505f8a680de415a35',
     AppSecret: '7289786fae8511cbe9e94a8aec93e125',
     RedirectUrl: 'https://app.kangfupanda.com/#/profile',    
+
+    //最后访问的PostId，回退时需要用到
+    LastPostId: 'LastPostId',
 }
 

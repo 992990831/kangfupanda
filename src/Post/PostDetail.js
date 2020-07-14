@@ -135,7 +135,6 @@ class PostDetail extends Component {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
-            debugger;
             this.setState({
                 item: res.data,
                 pics: [...res.data.pics]
