@@ -18,5 +18,6 @@ export const Constants = {
 
     //最后访问的PostId，回退时需要用到
     LastPostId: 'LastPostId',
+    AllPosts: 'AllPosts'
 }
 

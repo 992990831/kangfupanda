@@ -139,6 +139,10 @@ class Post extends Component {
                   onClick={() => {
                     if(item.followed || (userInfoStr && item.openId == userInfo.openid))
                     {
+                      if(this.props.onViewDetail) //把post列表暂存起来，回退时用到
+                      {
+                        this.props.onViewDetail();
+                      }
                       let path=`postDetail/${item.postId}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
                       //localStorage.setItem("redirectSearch", path);
                       this.props.history.push({

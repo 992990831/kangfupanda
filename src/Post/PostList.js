@@ -69,12 +69,14 @@ class PostList extends Component {
     }
 
     const hei = this.state.height;
-    if (Array.isArray(this.rData)) {
-      this.rowData = [...this.rowData, ...nextProps.list];
-    }
-    else {
-      this.rowData = [...nextProps.list];
-    }
+    // if (Array.isArray(this.rData)) {
+    //   this.rowData = [...this.rowData, ...nextProps.list];
+    // }
+    // else {
+    //   this.rowData = [...nextProps.list];
+    // }
+    this.rowData = [...nextProps.list];
+
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(this.rowData), //this.state.dataSource.cloneWithRows(this.rData), //this.state.dataSource.cloneWithRows(genData()),
       height: hei,
@@ -91,11 +93,12 @@ class PostList extends Component {
         var lvContent = document.getElementsByClassName('am-list-view-scrollview-content am-list');
         if(lvContent && lvContent[0] && lvContent[0].clientHeight)
         {
-          let scrollHeight = lvContent[0].clientHeight;
+          let clientHeight = lvContent[0].clientHeight;
 
           let itemsCount = this.rowData.length;
           let index = 0;
 
+         
           for(let i=0; i<itemsCount; i++)
           {
             if(lastPostId == this.rowData[i].postId)
@@ -105,14 +108,15 @@ class PostList extends Component {
             }
           }
 
-          let scrollTo = scrollHeight * (index/itemsCount) - 150;
+          let scrollTo = clientHeight * (index/itemsCount) - 150; //要一次全部渲染的话，记得设置ListView的PageSize和initialListSize属性
 
           localStorage.removeItem(Constants.LastPostId);
 
+          
           this.lv.scrollTo(0, scrollTo)
         }
         
-      }, 700);
+      }, 800);
     }
 
     
@@ -228,7 +232,9 @@ class PostList extends Component {
             backgroundColor: 'white',
           }}
         >
-          <Post item={rowData} onFollowed={this.onFollowed.bind(this)}/>
+          <Post item={rowData} onFollowed={this.onFollowed.bind(this)} onViewDetail={()=>{
+            localStorage.setItem(Constants.AllPosts, JSON.stringify(this.rowData));
+          }} />
           {/* {obj.name}
           <div style={{ height: '50px', lineHeight: '50px', color: '#888', fontSize: '18px', borderBottom: '1px solid #ddd' }}>
             {obj.title}
@@ -286,7 +292,9 @@ class PostList extends Component {
         //   onRefresh={this.onRefresh}
         // />}
         onEndReached={this.onEndReached}
-        pageSize={5}
+        onEndReachedThreshold={400}
+        pageSize={999}
+        initialListSize={999}
       />
     </div>);
   }

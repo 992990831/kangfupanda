@@ -19,8 +19,23 @@ class Home extends Component {
     }
   }
 
-  componentWillMount() {
-    this.GetList(10);
+  componentDidMount() {
+    let postsStr = localStorage.getItem(Constants.AllPosts);
+
+    if(postsStr)
+    {
+      let posts = JSON.parse(postsStr);
+      this.setState({
+        videos: [...posts],
+      });
+
+      localStorage.removeItem(Constants.AllPosts);
+    }
+    else
+    {
+      this.GetList(10);
+    }
+    
   }
 
   GetList(count) {
@@ -47,7 +62,7 @@ class Home extends Component {
           videos: [...this.state.videos, ...res.data],
         });
 
-        localStorage.setItem("videos", JSON.stringify(res.data));
+        //localStorage.setItem("videos", JSON.stringify(res.data));
       })
       .catch(function (error) {
         console.log(error);
