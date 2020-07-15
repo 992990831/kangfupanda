@@ -3,7 +3,7 @@ import './DoctorList.css'
 import Doctor from './Doctor'
 import axios from 'axios';
 import { Constants } from '../Utils/Constants';
-import { Tabs, Badge, Modal, Carousel,WingBlank } from 'antd-mobile';
+import { Tabs, Badge, Modal, Carousel,WingBlank, Toast } from 'antd-mobile';
 
 import ProfileItem from '../Profile/ProfileItem';
 
@@ -50,7 +50,7 @@ class DoctorList extends Component {
     //获取被关注人的作品列表
     GetFolloweePosts() {
         let userInfoStr = localStorage.getItem("userInfo");
-        if (!userInfoStr) {
+        if (!userInfoStr) {           
             return;
         }
 
@@ -61,21 +61,21 @@ class DoctorList extends Component {
             }).then(res => {
                 let followeePosts = res.data;
 
-                //Begin - 从客户端缓存里面找到每个作品的客户端id
-                let videosStr = localStorage.getItem("videos");
-                let allVideos = JSON.parse(videosStr);
-                for(let i=0; i < followeePosts.length; i++)
-                {
-                    let filteredVideos = allVideos.filter(video => {
-                        return video.name == followeePosts[i].name;
-                    });
+                // //Begin - 从客户端缓存里面找到每个作品的客户端id
+                // let videosStr = localStorage.getItem("videos");
+                // let allVideos = JSON.parse(videosStr);
+                // for(let i=0; i < followeePosts.length; i++)
+                // {
+                //     let filteredVideos = allVideos.filter(video => {
+                //         return video.name == followeePosts[i].name;
+                //     });
 
-                    if(filteredVideos && filteredVideos.length > 0)
-                    {
-                        followeePosts[i].id = filteredVideos[0].id;
-                    }
-                }
-                //End
+                //     if(filteredVideos && filteredVideos.length > 0)
+                //     {
+                //         followeePosts[i].id = filteredVideos[0].id;
+                //     }
+                // }
+                // //End
 
                 this.setState({
                     followeePosts: followeePosts,
