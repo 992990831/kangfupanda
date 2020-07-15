@@ -16,11 +16,6 @@ import ProfileComment from './ProfileComment';
 
 const alert = Modal.alert;
 
-const tabs = [
-    { title: <Badge text={'3'}>作品</Badge> },
-    { title: <Badge text={'8'}>评论</Badge> }
-];
-
 function generateGetCodeUrl(redirectURL) {
     return new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
         .addQuery("appid", Constants.AppId)
@@ -41,6 +36,8 @@ class Profile extends Component {
             toEditor: false,
             //我的作品
             posts: [],
+            //待审核评论数
+            pendingCommentCount: 0
         };
     }
 
@@ -123,14 +120,13 @@ class Profile extends Component {
             else {
                 this.wechatLogin(code);
             }
-
-
         }
         else {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
             // this.setState({ userInfo: userInfo });
             this.loadUserInfo(userInfo.openid);
             this.GetMyPostList();
+            this.GetPendingCommentCount();
         }
     }
 
@@ -169,7 +165,26 @@ class Profile extends Component {
           .catch(function (error) {
             console.log(error);
           });
-      }
+    }
+
+    GetPendingCommentCount() {
+        let userInfoStr = localStorage.getItem("userInfo"); //JSON.parse(); 
+        let userInfo = null;
+
+        if (userInfoStr) {
+            userInfo = JSON.parse(userInfoStr);
+        }
+
+        axios.get(`${Constants.APIBaseUrl}/comments/pending/${userInfo.openid}`, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => {
+            this.setState({
+                pendingCommentCount: res.data,
+            });
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
 
     wechatLogin(code) {
         axios.get(`${Constants.APIBaseUrl}/Wechat/user?code=${code}`, {
@@ -209,6 +224,8 @@ class Profile extends Component {
                     }, 300);
                 }
 
+                this.GetMyPostList();
+                this.GetPendingCommentCount();
             })
             .catch(function (error) {
                 alert('获取用户token失败,' + error);
@@ -229,6 +246,11 @@ class Profile extends Component {
         // }
         // const history = createHashHistory();
 
+        const tabs = [
+            { title: `作品(${this.state.posts.length})`},
+            { title: <Badge text={this.state.pendingCommentCount }>评论</Badge>}
+        ];
+        
         return (
             // this.state.toEditor ?
             //     <Redirect to={{
@@ -313,7 +335,7 @@ class Profile extends Component {
                                         margin: '3px', backgroundColor: 'white', textAlign: 'left',
                                         padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
                                     }}>
-                                        <ProfileComment workItem={workItem} />
+                                        <ProfileComment workItem={workItem} showPending={true} />
                                     </div>
                                 )
                             })

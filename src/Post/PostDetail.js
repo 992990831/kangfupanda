@@ -605,7 +605,7 @@ class PostDetail extends Component {
                                                                             <div key={index}>
                                                                                 <div style={{ padding: '0 15px', display: 'flex' }}>
                                                                                     <div className="comment-avator">
-                                                                                        <img src={comment.comment_user_pic} alt="" />
+                                                                                        <img src={comment.comment_user_pic.substring(0,4)=='http'?  comment.comment_user_pic : `${Constants.ResourceUrl}/${comment.comment_user_pic}`} alt="" />
                                                                                     </div>
                                                                                     <div
                                                                                         style={{

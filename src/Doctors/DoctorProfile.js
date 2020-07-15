@@ -17,11 +17,6 @@ import { withRouter } from 'react-router-dom'
 
 const alert = Modal.alert;
 
-const tabs = [
-    { title: <Badge text={'0'}>作品</Badge> },
-    { title: <Badge text={'0'}>评论</Badge> }
-];
-
 class DoctorProfile extends Component {
     constructor(props) {
         super(props);
@@ -106,6 +101,12 @@ class DoctorProfile extends Component {
         //     });
         // }
 
+                
+        const tabs = [
+            { title: `作品(${this.state.posts.length})`},
+            { title: <Badge text={this.state.pendingCommentCount }>评论</Badge>}
+        ];
+        
         let userInfo = null;
         
         if(localStorage.getItem("userInfo"))
@@ -195,7 +196,7 @@ class DoctorProfile extends Component {
                                             margin: '3px', backgroundColor: 'white', textAlign: 'left',
                                             padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
                                         }}>
-                                            <ProfileComment workItem={workItem} />
+                                            <ProfileComment workItem={workItem} showPending={userInfo.openid==this.state.userInfo.openId} />
                                         </div>
                                     )
                                 })
