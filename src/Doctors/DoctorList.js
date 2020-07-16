@@ -171,7 +171,7 @@ class DoctorList extends Component {
                         }
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '0px' }}>
-                        <CarouselExt posts={doctors} config={config}></CarouselExt>
+                        {/* <CarouselExt posts={doctors} config={config}></CarouselExt> */}
                     </div>
                 </Tabs>
 

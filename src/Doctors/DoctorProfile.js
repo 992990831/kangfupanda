@@ -37,7 +37,6 @@ class DoctorProfile extends Component {
         }).then(res => {
             this.setState({
                 userInfo: res.data,
-                followed,
                 openid
             });
         }).catch(function (error) {
@@ -45,6 +44,23 @@ class DoctorProfile extends Component {
         });
 
         this.GetPostList(openid);
+
+        if(!followed) //double check, 有可能是小程序转发过来的，所以location.state里面没有
+        {
+            let userInfo = null;
+        
+            if(localStorage.getItem("userInfo"))
+            {
+                userInfo = JSON.parse(localStorage.getItem("userInfo"));
+                this.GetFollowed(userInfo.openid, openid);
+            }
+        }
+        else
+        {
+            this.setState({
+                followed: true,
+              });
+        }
     }
 
     follow() {
@@ -73,6 +89,22 @@ class DoctorProfile extends Component {
           });
         }
     
+      }
+
+
+      GetFollowed(followerId, followeeId)
+      {
+        axios.get(`${Constants.APIBaseUrl}/follow/${followeeId}/${followerId}`, {
+            headers: { 'Content-Type': 'application/json' }
+          })
+            .then(res => {
+              this.setState({
+                followed: res.data,
+              });
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
       }
 
       GetPostList(openid) {
