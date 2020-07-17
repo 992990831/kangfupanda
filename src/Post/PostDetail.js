@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom'
 //import { Player } from 'video-react';
 
 //import Hammer from "react-hammerjs";
-import { Carousel, Drawer, Toast, List, Button, Popover, Icon, TextareaItem } from 'antd-mobile';
+import { Carousel, Modal, Drawer, Toast, List, Button, Popover, Icon, TextareaItem } from 'antd-mobile';
 
 import { Constants } from '../Utils/Constants';
 
@@ -402,33 +402,34 @@ class PostDetail extends Component {
         });
     }
 
+    
     render() {
         const { item } = this.state;
         let innerHeight = window.innerHeight + 'px';
         let carouselWidth = window.innerWidth + 'px';
         let carouselHeight = parseInt(window.innerHeight / 2) + 'px';
+        
+        let isLogin = this.checkLogin();
         const sidebar = (
             <React.Fragment>
                 <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
-                    <div style={{ margin: 'auto', display: 'flex' }}>
+                    <div style={{ margin: 'auto', display: 'flex', width:'100%' }}>
                         <TextareaItem
                             placeholder="请评论"
                             ref='refComment'
-                            style={{width:'280px'}}
-                            rows={12}
+                            style={{width:'auto'}}
+                            rows={1}
                             onChange={this.onCommentChange.bind(this)}
                         />
-                        {/* <TextareaItem style={{width:'280px'}} placeholder='请评论' ref='refComment'></TextareaItem> */}
-                        <div>
+                        {/* <div>
                             <Button onClick={this.submit.bind(this)} type="ghost" inline size="small" style={{ marginLeft: '4px', marginRight: '4px' }}>提交</Button>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </React.Fragment>
         );
-
-        let isLogin = this.checkLogin();
-
+    
+        
         return (
             // <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)} direction='DIRECTION_ALL'>
             //</Hammer>
@@ -470,25 +471,43 @@ class PostDetail extends Component {
                                             </div>
                                         </div>
 
-                                        {
-                                            this.state.isCommentVisible ?
-                                                <Drawer
-                                                    className="comment-drawer"
-                                                    style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
-                                                    position='bottom'
-                                                    contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
-                                                    sidebar={sidebar}
-                                                    open={this.state.isCommentVisible}
-                                                    onOpenChange={this.onOpenCommentChange.bind(this)}
-                                                    enableDragHandle={false}
-                                                    touch={false}
-                                                    transitions={false}
-                                                >
-                                                    评论区
-                                            </Drawer>
-                                                :
-                                                <div></div>
-                                        }
+                                        {/* {
+                                            this.state.isCommentVisible ? 
+                                            //     <Drawer
+                                            //         className="comment-drawer"
+                                            //         style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
+                                            //         position='bottom'
+                                            //         contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
+                                            //         sidebar={sidebar}
+                                            //         open={this.state.isCommentVisible}
+                                            //         onOpenChange={this.onOpenCommentChange.bind(this)}
+                                            //         enableDragHandle={false}
+                                            //         touch={false}
+                                            //         transitions={false}
+                                            //     >
+                                            //         评论区
+                                            // </Drawer>
+                                              
+                                        //         :
+                                        //         <div></div>
+                                        // } */}
+                                        <Modal visible={this.state.isCommentVisible}
+                                        style={{width:'95vw'}}
+                                        transparent
+                                        maskClosable={false}
+                                        onClose={()=>{ this.setState({isCommentVisible: false}) }}
+                                        title={<div style={{height:'0px'}}></div>}
+                                        footer={[{ text: '取消', 
+                                            onPress: () => { console.log('ok'); this.setState({isCommentVisible: false}) ; } 
+                                        },
+                                        { text: '提交', 
+                                            onPress: () => { this.submit(); } 
+                                        }]}
+                                        // wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+                                        // afterClose={() => { alert('afterClose'); }}
+                                        >
+                                            {sidebar}
+                                        </Modal>
                                         <div>
                                             {
                                                 item.itemType == 'video' ?
@@ -540,26 +559,6 @@ class PostDetail extends Component {
                                                                             </div>
                                                                         ))
                                                                     }
-
-                                                                    {/* {this.state.pics.map(val => (
-                                                                                <a
-                                                                                key={val}
-                                                                                href="http://www.alipay.com"
-                                                                                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
-                                                                                >
-                                                                                <img
-                                                                                    src={`${Constants.ResourceUrl}/${val}`}
-                                                                                    alt=""
-                                                                                    style={{ width: '100%', verticalAlign: 'top' }}
-                                                                                    onLoad={() => {
-                                                                                    // fire window resize event to change height
-                                                                                    window.dispatchEvent(new Event('resize'));
-                                                                                    this.setState({ imgHeight: 'auto' });
-                                                                                    }}
-                                                                                />
-                                                                                </a>
-                                                                            ))} */}
-
                                                                 </Carousel>
                                                                 :
                                                                 <></>
