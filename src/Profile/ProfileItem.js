@@ -7,6 +7,7 @@ import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-ro
 import { createHashHistory } from 'history';
 
 import Lazyload from 'react-lazyload';
+import './ProfileItem.css'
 
 const history = createHashHistory();
 
@@ -17,7 +18,7 @@ const gotoPostDetail = (postId) =>{
 function ProfileItem(props) {
     return(<div>
         <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
-            <span>{props.workItem.name}</span>
+            <div className="profileItemTitle">{props.workItem.name}</div>
         </div>
         {/* <Lazyload> */}
             <img style={{height:'80px'}} src={`${Constants.ResourceUrl}/${props.workItem.poster}`} 

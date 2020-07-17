@@ -107,6 +107,7 @@
     margin: 0px 5px 0px 10px;
     margin-bottom: 50px;
     font-size: 12px;
+    /*这个参数可以在遇到回车时换行显示*/
     white-space: pre-wrap;
     line-height: 20px;
 }
@@ -119,7 +120,8 @@
     margin-bottom: 10px;
     font-size: 16px;
     font-weight: bold;
-    white-space: pre-wrap;
+    /*这个参数可以在遇到回车时换行显示*/
+    white-space: pre-wrap; 
 }
 
 .post-detail .post-profile{

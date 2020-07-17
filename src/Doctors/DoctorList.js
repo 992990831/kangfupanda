@@ -160,8 +160,8 @@ class DoctorList extends Component {
                             this.state.followeePosts.map((post, index) => {
                                 return (
                                     <div style={{
-                                        width: '48%', float: 'left',
-                                        margin: '3px',
+                                        width: '50%', float: 'left',
+                                        margin: '0px',
                                         padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
                                     }}>
                                         <ProfileItem workItem={post} key={index} />
