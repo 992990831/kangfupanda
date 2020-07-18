@@ -73,7 +73,7 @@ function ProfileComment(props) {
                                                                     borderTop: '2px solid #F6F6F6',
                                                                     margin: 'auto'
                                                                 }}
-                                                            >{comment.comment_content} {comment.comment_audit_status==0? <span style={{color:'red'}}>(待审核)</span>: <></> }</div>
+                                                            >{comment.comment_content} {comment.comment_audit_status==0? <span style={{color:'red'}}>(待精选)</span>: <></> }</div>
 
                                                         </div>
                                                 )

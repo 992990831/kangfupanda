@@ -3,6 +3,7 @@ import './App.css';
 
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import Home from './home/Home';
+import UnAuthorized from './home/UnAuthorized';
 import PostDetail from './Post/PostDetail';
 import Profile from './Profile/Profile';
 import DoctorList from './Doctors/DoctorList';
@@ -45,6 +46,7 @@ class App extends Component {
     super(props);
     this.state = {
       selectedTab: 'home',
+      showToolBar: true
     };
   }
 
@@ -63,7 +65,8 @@ class App extends Component {
 
           localStorage.setItem("userInfo",template);
           //window.location.reload();
-          createHashHistory().push(window.location.host);
+          const history = createHashHistory();
+          history.push(window.location.host);
 
         }).catch(function (error) {
             console.log(error);
@@ -89,6 +92,31 @@ class App extends Component {
 
   }
 
+  checkLogin() {
+    let userInfoStr = localStorage.getItem("userInfo");
+
+    if (!userInfoStr) {        
+        const history = createHashHistory();
+        //localStorage是异步存储，所以必须有个延迟
+        window.setTimeout(() => {
+          history.push({
+                pathname: `../profile`,
+            })
+        }, 300);
+        
+        return false;
+    }
+
+    return true;
+};
+
+saveLastVisitUrl()
+{
+  //保存当前链接，在微信登录后可以回到这里
+  let search= window.location.hash;
+  localStorage.setItem("redirectSearch", search.substring(2));
+}
+
   componentDidMount(){
     //this.setSelectedIcon();
     this.init();
@@ -96,37 +124,17 @@ class App extends Component {
 
   componentDidUpdate(){
     //this.setSelectedIcon();
+    //this.checkLogin();
   }
 
   componentWillReceiveProps(){
     //this.setSelectedIcon();
   }
 
-  // setSelectedIcon()
-  // {
-  //   //substring(2)是为了去掉#/
-  //   let firstPathIndex = window.location.hash.substring(2).indexOf('/'); //截取第一段，比如 postDetail/1
-  //   let path = window.location.hash.substring(2);
-  //   if(firstPathIndex != -1)
-  //   {
-  //     path = path.substring(0, firstPathIndex);
-  //   }
-
-  //   if(path == this.state.selectedTab || (path=='postDetail' && this.state.selectedTab=='home'))
-  //   {
-  //     return;
-  //   }
-
-  //   switch(path)
-  //   {
-  //     case 'home': this.setState({selectedTab:'home'}); break;
-  //     case 'postDetail': this.setState({selectedTab:'home'}); break;
-  //     case 'found': this.setState({selectedTab:'found'}); break;
-  //     case 'profile': this.setState({selectedTab:'profile'}); break;
-  //     default: this.setState({selectedTab:'home'}); break;
-  //   }
-
-  // }
+  componentWillMount(){
+    //check login status
+    this.checkLogin();
+  }
 
   render() {
     const history = createHashHistory();
@@ -144,12 +152,13 @@ class App extends Component {
           <div className="nav-link">
             <NavLink to="/profile" activeClassName="selected">我的</NavLink>
           </div> */}
+          {
+            this.state.showToolBar?
             <div style={{ width: '100%' }}>
               <TabBar
                 unselectedTintColor="#949494"
                 tintColor="#80e316"
                 barTintColor="white"
-
               >
                 <TabBar.Item
                   title="研习社"
@@ -237,9 +246,12 @@ class App extends Component {
                 >
                 </TabBar.Item>
               </TabBar>
-
             </div>
+            :
+            <></>
 
+          }
+            
           </div>
           <div className="redBook-main">
             <Switch>
@@ -260,6 +272,15 @@ class App extends Component {
 
               <Route path="/home" 
               exact render={()=>{
+                this.saveLastVisitUrl();
+
+                if(!this.state.showToolBar)
+                {
+                  this.setState({
+                    showToolBar: true
+                  })
+                }
+
                 //为了从外部链接过来的时候，下面的工具条能正常显示
                 if(this.state.selectedTab != 'home')
                 {
@@ -270,11 +291,34 @@ class App extends Component {
               }}
               />
 
+              <Route path="/unauthorized" 
+              exact render={()=>{
+                if(this.state.showToolBar)
+                {
+                  //未授权页面，把工具条隐藏起来
+                  this.setState({
+                    showToolBar: false
+                  })
+                }
+                
+                return <UnAuthorized></UnAuthorized>
+              }}
+              />
+
+
               <Route path="/complain" component={ComplainForm} />
 
               <Route path="/PostDetail/:postId"
               exact 
               render={()=>{
+                this.saveLastVisitUrl();
+                if(!this.state.showToolBar)
+                {
+                  this.setState({
+                    showToolBar: true
+                  })
+                }
+                
                 if(this.state.selectedTab != 'home')
                 {
                   this.setState({selectedTab:'home'});
@@ -286,6 +330,14 @@ class App extends Component {
 
               <Route path="/profile/doctor/:openid"
               render={()=>{
+                //this.checkLogin();
+                if(!this.state.showToolBar)
+                {
+                  this.setState({
+                    showToolBar: true
+                  })
+                }
+
                 if(this.state.selectedTab != 'profile')
                 {
                   this.setState({selectedTab:'profile'});
@@ -297,6 +349,14 @@ class App extends Component {
 
               <Route path="/found" exact
                 render={()=>{
+                  this.saveLastVisitUrl();
+                  if(!this.state.showToolBar)
+                  {
+                    this.setState({
+                      showToolBar: true
+                    })
+                  }
+
                   //为了从外部链接过来的时候，下面的工具条能正常显示
                   if(this.state.selectedTab != 'found')
                   {
@@ -309,6 +369,14 @@ class App extends Component {
 
               <Route path="/found/detail"
                 render={()=>{
+                  this.saveLastVisitUrl();
+                  if(!this.state.showToolBar)
+                  {
+                    this.setState({
+                      showToolBar: true
+                    })
+                  }  
+
                   if(this.state.selectedTab != 'found')
                   {
                     this.setState({selectedTab:'found'});
@@ -331,8 +399,15 @@ class App extends Component {
               <Route path="/profile/edit" component={ProfileEditorForm} />
 
               <Route path="/" render={() => {
-                return false ?
-                  <div>home</div> : <Redirect to={{
+                this.saveLastVisitUrl();
+                 if(!this.state.showToolBar)
+                 {
+                   this.setState({
+                     showToolBar: true
+                   })
+                 } 
+
+                return <Redirect to={{
                     pathname: '/home',
                   }} />
               }}></Route>

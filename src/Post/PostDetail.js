@@ -95,18 +95,19 @@ class PostDetail extends Component {
         let userInfoStr = localStorage.getItem("userInfo");
 
         if (!userInfoStr) {
-            //保存当前链接，在微信登录后可以回到这里
-            let search= window.location.hash;
-            localStorage.setItem("redirectSearch", search.substring(2));
-            //Toast.info(search, 5000);
+            // //保存当前链接，在微信登录后可以回到这里
+            // let search= window.location.hash;
+            // localStorage.setItem("redirectSearch", search.substring(2));
+            // //Toast.info(search, 5000);
 
-            //localStorage是异步存储，所以必须有个延迟
-            window.setTimeout(() => {
-                this.props.history.push({
-                    pathname: `../profile`,
-                })
-            }, 300);
-            
+            // //localStorage是异步存储，所以必须有个延迟
+            // window.setTimeout(() => {
+            //     this.props.history.push({
+            //         pathname: `../profile`,
+            //     })
+            // }, 300);
+
+            //上面的保存、跳转逻辑放到App.js里面            
             return false;
         }
 
@@ -626,7 +627,7 @@ class PostDetail extends Component {
                                                                                     <div>
                                                                                         {
                                                                                             comment.comment_audit_status == 0? 
-                                                                                            <span style={{color:'red', lineHeight: '40px', marginLeft:'10px'}}>(待审核)</span>: <></>
+                                                                                            <span style={{color:'red', lineHeight: '40px', marginLeft:'10px'}}>(待精选)</span>: <></>
                                                                                         }
                                                                                         <span></span>
                                                                                     </div>

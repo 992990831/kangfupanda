@@ -41,7 +41,7 @@ class Profile extends Component {
         };
     }
 
-    init() {
+    initInterCeptor() {
         axios.interceptors.request.use(config => {
           let userInfoStr = localStorage.getItem("userInfo");
           if (userInfoStr) {
@@ -63,7 +63,10 @@ class Profile extends Component {
     registerUser(user) {
         axios.post(`${Constants.APIBaseUrl}/user/register`, user)
         .then(res=>{
-            this.setState({ userInfo: user });
+            this.setState({ userInfo: user }, ()=>{
+                //登录成功后去要去掉地址中的code部分,否则所有的url都会包含这个code，转发会有bug
+                window.location = 'https://app.kangfupanda.com/#/profile';
+            });
         }).catch(function (error) {
             alert('register user fail,' + error);
         });
@@ -84,9 +87,31 @@ class Profile extends Component {
                     localStorage.removeItem("userInfo");
 
                     //const history = createHashHistory();
-                    this.props.history.push('/home');
+                    //this.props.history.push('/home');
+                    this.loginAlert();
                 }
             });
+    }
+
+
+    loginAlert()
+    {
+        alert('登录', '需微信登录后才能访问，是否继续?', [
+            {
+                text: '取消', onPress: () => {
+                    this.props.history.push({
+                        pathname: `../unauthorized`,
+                    })
+                }
+            },
+            {
+                text: '同意',
+                onPress: () => {
+                    //this.wechatLogin();
+                    window.location.href = generateGetCodeUrl(document.location.href);
+                },
+            },
+        ])
     }
 
     componentDidMount() {
@@ -100,22 +125,7 @@ class Profile extends Component {
         if (!userInfoStr) {
 
             if (!code) {
-                alert('登录', '是否使用登录微信?', [
-                    {
-                        text: '取消', onPress: () => {
-                            this.props.history.push({
-                                pathname: `../home`,
-                            })
-                        }
-                    },
-                    {
-                        text: '同意',
-                        onPress: () => {
-                            //this.wechatLogin();
-                            window.location.href = generateGetCodeUrl(document.location.href);
-                        },
-                    },
-                ])
+               this.loginAlert();
             }
             else {
                 this.wechatLogin(code);
@@ -124,6 +134,19 @@ class Profile extends Component {
         else {
             let userInfo = JSON.parse(localStorage.getItem("userInfo"));
             // this.setState({ userInfo: userInfo });
+            this.initInterCeptor();
+
+            //有些用户在收到转发链接后需要登录，登录后需要跳转到对应的作品页面
+            let search = localStorage.getItem("redirectSearch");            
+            if (search) {
+                window.setTimeout(() => {
+                    localStorage.removeItem("redirectSearch");
+                    this.props.history.push({
+                        pathname: search,
+                    })
+                }, 300);
+            }
+
             this.loadUserInfo(userInfo.openid);
             this.GetMyPostList();
             this.GetPendingCommentCount();
@@ -196,7 +219,7 @@ class Profile extends Component {
                 }
 
                 localStorage.setItem("userInfo", res.data);
-                this.setState({ userInfo: JSON.parse(res.data) });
+                // this.setState({ userInfo: JSON.parse(res.data) });
 
                 let originalUser = JSON.parse(res.data);
                 let toUser = {
@@ -210,22 +233,22 @@ class Profile extends Component {
                 };
 
                 this.registerUser(toUser);
-                this.init();
+                // this.initInterCeptor();
 
-                //有些用户在收到转发链接后需要登录，登录后需要跳转到对应的作品页面
-                let search = localStorage.getItem("redirectSearch");
-                if(search)
-                {
-                    window.setTimeout(() => {
-                        localStorage.removeItem("redirectSearch");
-                        this.props.history.push({
-                            pathname: search,
-                          })
-                    }, 300);
-                }
+                // //有些用户在收到转发链接后需要登录，登录后需要跳转到对应的作品页面
+                // let search = localStorage.getItem("redirectSearch");
+                // if(search)
+                // {
+                //     window.setTimeout(() => {
+                //         localStorage.removeItem("redirectSearch");
+                //         this.props.history.push({
+                //             pathname: search,
+                //           })
+                //     }, 300);
+                // }
 
-                this.GetMyPostList();
-                this.GetPendingCommentCount();
+                // this.GetMyPostList();
+                // this.GetPendingCommentCount();
             })
             .catch(function (error) {
                 alert('获取用户token失败,' + error);
