@@ -209,7 +209,7 @@ function ProfileComment(props) {
             transparent
             maskClosable={false}
             onClose={() => { setIsCommentVisible(false) }}
-            title={<div style={{ height: '0px' }}></div>}
+            title='回复评论'
             footer={[{
                 text: '取消',
                 onPress: () => { setIsCommentVisible(false); }
@@ -224,10 +224,10 @@ function ProfileComment(props) {
             <div style={{ background: 'white', display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}>
                 <div style={{ margin: 'auto', display: 'flex', width: '100%' }}>
                     <TextareaItem
-                        placeholder="请评论"
-                        style={{ width: 'auto' }}
+                        placeholder="请回复"
+                        style={{ width: '80vw', fontSize:'13px' }}
                         ref={commentRef}
-                        rows={1}
+                        rows={2}
                     />
                 </div>
             </div>
