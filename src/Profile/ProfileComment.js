@@ -151,7 +151,8 @@ function ProfileComment(props) {
                                                         color: 'black',
                                                         fontSize: 13,
                                                         //   borderTop: '2px solid #F6F6F6',
-                                                        margin: 'auto'
+                                                        margin: 'auto',
+                                                        textAlign: 'left'
                                                     }}
                                                     commentid={comment.comment_id}
                                                     onTouchStart={onItemTouchStart}

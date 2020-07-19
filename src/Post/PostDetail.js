@@ -622,7 +622,8 @@ class PostDetail extends Component {
                                                                                             color: 'black',
                                                                                             fontSize: 13,
                                                                                             //   borderTop: '2px solid #F6F6F6',
-                                                                                            margin: 'auto'
+                                                                                            margin: 'auto',
+                                                                                            textAlign: 'left'
                                                                                         }}
                                                                                     >{comment.comment_content} {comment.comment_audit_status == 0 ? <span style={{ color: 'red' }}>(待精选)</span> : <></>}</div>
                                                                                     {
