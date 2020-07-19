@@ -356,7 +356,8 @@ class Profile extends Component {
                                     <div style={{
                                         width: '98%', float: 'left',
                                         margin: '3px', backgroundColor: 'white', textAlign: 'left',
-                                        padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                        padding: '5px', paddingLeft: '20px', 
+                                        
                                     }}>
                                         <ProfileComment workItem={workItem} showPending={true} />
                                     </div>

@@ -598,8 +598,55 @@ class PostDetail extends Component {
                                                             <div className="post-text">
                                                                 {item.text}
                                                             </div>
-                                                            <div style={{ marginBottom: '110px' }}>
-                                                                <List>
+                                                            <div style={{ marginBottom: '110px', padding:'15px 10px 15px 10px' }}>
+                                                                {
+                                                                    this.state.comments.map((comment, index) => {
+                                                                        return (
+                                                                            <div key={index} style={{ padding: '0px 2px 20px 0px', display: 'flex', width: '100%' }}>
+                                                                                <div className="comment-avator">
+                                                                                    <img src={comment.comment_user_pic.substring(0, 4) == 'http' ? comment.comment_user_pic : `${Constants.ResourceUrl}/${comment.comment_user_pic}`} alt="" />
+                                                                                </div>
+                                                                                <div
+                                                                                    style={{
+                                                                                        lineHeight: '18px',
+                                                                                        color: '#888',
+                                                                                        fontSize: 12,
+                                                                                        // borderTop: '2px solid #F6F6F6',
+                                                                                        marginLeft: '10px'
+                                                                                    }}
+                                                                                >
+                                                                                    <div style={{ lineHeight: '20px', textAlign: 'left' }}>{comment.comment_user_name}</div>
+                                                                                    <div
+                                                                                        style={{
+                                                                                            lineHeight: '18px',
+                                                                                            color: 'black',
+                                                                                            fontSize: 13,
+                                                                                            //   borderTop: '2px solid #F6F6F6',
+                                                                                            margin: 'auto'
+                                                                                        }}
+                                                                                    >{comment.comment_content} {comment.comment_audit_status == 0 ? <span style={{ color: 'red' }}>(待精选)</span> : <></>}</div>
+                                                                                    {
+                                                                                        comment.Replies && comment.Replies.length > 0 ?
+                                                                                            comment.Replies.map((reply, index) => {
+                                                                                                return (
+                                                                                                    <div style={{marginTop:'10px', textAlign:'left', paddingLeft:'6px', borderLeft:'solid 1px rgb(128, 128, 128)'}}>
+                                                                                                        作者
+                                                                                                        <div>
+                                                                                                            {reply.comment_content}
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                )
+                                                                                            })
+                                                                                            :
+                                                                                            <></>
+                                                                                    }
+                                                                                </div>
+                                    
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+                                                                {/* <List>
                                                                     {this.state.comments.map((comment, index) => {
                                                                         return (
                                                                             <div key={index}>
@@ -645,7 +692,7 @@ class PostDetail extends Component {
                                                                             </div>
                                                                         )
                                                                     })}
-                                                                </List>
+                                                                </List> */}
                                                             </div>
                                                         </div>
                                                     </>
