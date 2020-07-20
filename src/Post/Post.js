@@ -64,7 +64,6 @@ class Post extends Component {
     if(this.props.history)
     {
       //this.props.history.push(`../profile/doctor/${this.state.item.openId}`);
-
       this.props.history.push({
         pathname: `../profile/doctor/${this.state.item.openId}`,
         state: { followed: this.state.item.followed }

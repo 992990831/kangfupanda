@@ -79,14 +79,11 @@ class PostDetail extends Component {
         }
 
         this.GetPost(postId);
+
+        let userInfoStr = localStorage.getItem("userInfo");
+        let userInfo = JSON.parse(userInfoStr);
+        this.Follow(postId, userInfo.openid)
         this.GetCommentList(postId);
-        // if (this.state.videos) {
-        //     this.GetCommentList();
-        //     this.loadItem();
-        // }
-        // else {
-        //     this.GetList();
-        // }
 
         this.setState({pics: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI']});
     }
@@ -114,23 +111,17 @@ class PostDetail extends Component {
         return true;
     };
 
-    // GetList() {
-    //     axios.get(`${Constants.APIBaseUrl}/club/list`, {
-    //         headers: { 'Content-Type': 'application/json' }
-    //     })
-    //         .then(res => {
-    //             this.setState({
-    //                 videos: res.data,
-    //             }, () => {
-    //                 localStorage.setItem("videos", JSON.stringify(res.data));
-    //                 this.loadItem();
-    //                 this.GetCommentList();
-    //             });
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //         });
-    // }
+    Follow(postId, followerId)
+    {
+        axios.get(`${Constants.APIBaseUrl}/follow/post/${postId}/${followerId}`, {
+            headers: { 'Content-Type': 'application/json' }
+        }).then(res => {
+          console.log('postDetail -> follow');
+        }).catch(function (error) {
+            console.log(error);
+        });
+    }
+
     GetPost(postId)
     {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
@@ -142,13 +133,6 @@ class PostDetail extends Component {
             }, () => {
                 
             });
-
-            // debugger;
-            // if (this.refs.player) {
-            //     window.setTimeout(() => {
-            //         this.refs.player.play();
-            //     }, 500)
-            // }
         }).catch(function (error) {
             console.log(error);
         });
@@ -156,13 +140,6 @@ class PostDetail extends Component {
     }
 
     GetCommentList(postId) {
-        // var currentItem = this.state.videos.filter(data => {
-        //     return data.id === parseInt(this.props.match.params.postId);
-        // });
-
-        // if (!currentItem || currentItem.length == 0) {
-        //     return;
-        // }
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         let itemType= 'graphic';
         axios.get(`${Constants.APIBaseUrl}/comments/list?postId=${postId}&postType=${itemType}&openId=${userInfo.openid}`, {
@@ -203,34 +180,6 @@ class PostDetail extends Component {
             console.log(error);
         });
     } 
-
-    // loadItem() {
-    //     if (this.props.location.state && this.props.location.state.data) {
-    //         this.setState({
-    //             item: this.props.location.state && this.props.location.state.data
-    //         }, () => {
-    //             this.prepareShare();
-    //             this.getLiked();
-    //             this.getSelectedTags(this.state.item.postId);
-    //         })
-    //     }
-    //     else {
-    //         var currentItem = this.state.videos.filter(data => {
-    //             return data.id === parseInt(this.props.match.params.id);
-    //         });
-
-    //         if (currentItem && currentItem.length > 0) {
-    //             this.setState({
-    //                 item: currentItem[0]
-    //             }, () => {
-    //                 this.prepareShare();
-    //                 this.getLiked();
-    //                 this.getSelectedTags(this.state.item.postId);
-    //                 //this.getLikeCount();
-    //             })
-    //         }
-    //     }
-    // }
 
     like() {
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -276,80 +225,11 @@ class PostDetail extends Component {
         });
     }
 
-    // componentDidMount() {
-    //     if (this.refs.player) {
-    //         window.setTimeout(() => {
-    //             this.refs.player.play();
-    //         }, 500)
-    //     }
-    // }
-
     handleBack = () => {
         this.props.history.push({
             pathname: `../home`,
         })
     }
-
-    // handleSwipe = (e) => {
-    //     if (e.direction !== 8 && e.direction !== 16) {
-    //         return;
-    //     }
-
-    //     if (this.refs.player) {
-    //         this.refs.player.pause();
-    //     }
-
-    //     if (e.deltaY < 0)  //上划
-    //     {
-
-    //         const { item } = this.state;
-    //         var nextItem = this.state.videos.filter(data => {
-    //             return data.id === (item.id + 1);
-    //         });
-
-    //         if (nextItem && nextItem.length > 0) {
-    //             this.setState({
-    //                 item: nextItem[0]
-    //             }, () => {
-    //                 if (this.refs.player) {
-    //                     window.setTimeout(() => {
-    //                         this.refs.player.play();
-    //                     }, 500);
-    //                 }
-    //             })
-
-    //             this.props.history.push({
-    //                 pathname: `../postDetail/${nextItem[0].id}`,
-    //                 state: { data: nextItem[0] }
-    //             })
-    //         }
-    //     }
-    //     else  //下划
-    //     {
-    //         const { item } = this.state;
-    //         var nextItem = this.state.videos.filter(data => {
-    //             return data.id === (item.id - 1);
-    //         });
-
-    //         if (nextItem && nextItem.length > 0) {
-    //             this.setState({
-    //                 item: nextItem[0]
-    //             }, () => {
-    //                 if (this.refs.player) {
-    //                     window.setTimeout(() => {
-    //                         this.refs.player.play();
-    //                     }, 500);
-    //                 }
-    //             })
-
-    //             this.props.history.push({
-    //                 pathname: `../postDetail/${nextItem[0].id}`,
-    //                 state: { data: nextItem[0] }
-    //             })
-    //         }
-
-    //     }
-    // }
 
     onOpenCommentChange = (...args) => {
         window.scrollTo({ left: 0, top: window.innerHeight });
@@ -432,8 +312,6 @@ class PostDetail extends Component {
     
         
         return (
-            // <Hammer onTap={this.handleTap.bind(this)} onSwipe={this.handleSwipe.bind(this)} direction='DIRECTION_ALL'>
-            //</Hammer>
             <Fragment>
                 {
                     isLogin ?
@@ -472,26 +350,6 @@ class PostDetail extends Component {
                                             </div>
                                         </div>
 
-                                        {/* {
-                                            this.state.isCommentVisible ? 
-                                            //     <Drawer
-                                            //         className="comment-drawer"
-                                            //         style={{ minHeight: (document.documentElement.clientHeight - 200), marginBottom: '100px' }}
-                                            //         position='bottom'
-                                            //         contentStyle={{ color: '#A6A6A6', textAlign: 'center', paddingTop: 42 }}
-                                            //         sidebar={sidebar}
-                                            //         open={this.state.isCommentVisible}
-                                            //         onOpenChange={this.onOpenCommentChange.bind(this)}
-                                            //         enableDragHandle={false}
-                                            //         touch={false}
-                                            //         transitions={false}
-                                            //     >
-                                            //         评论区
-                                            // </Drawer>
-                                              
-                                        //         :
-                                        //         <div></div>
-                                        // } */}
                                         <Modal visible={this.state.isCommentVisible}
                                         style={{width:'95vw'}}
                                         transparent
@@ -647,53 +505,6 @@ class PostDetail extends Component {
                                                                         )
                                                                     })
                                                                 }
-                                                                {/* <List>
-                                                                    {this.state.comments.map((comment, index) => {
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                <div style={{ padding: '0 15px', display: 'flex' }}>
-                                                                                    <div className="comment-avator">
-                                                                                        <img src={comment.comment_user_pic.substring(0,4)=='http'?  comment.comment_user_pic : `${Constants.ResourceUrl}/${comment.comment_user_pic}`} alt="" />
-                                                                                    </div>
-                                                                                    <div
-                                                                                        style={{
-                                                                                            lineHeight: '40px',
-                                                                                            color: 'black',
-                                                                                            fontSize: 12,
-                                                                                            borderTop: '2px solid #F6F6F6',
-                                                                                            marginLeft: '10px'
-                                                                                        }}
-                                                                                    >
-                                                                                        <div style={{ lineHeight: '20px' }}>
-                                                                                            {comment.comment_user_name}
-                                                                                        </div>
-                                                                                        <div style={{ lineHeight: '12px', fontSize: '10px', color: 'rgb(128,128,128)' }}>
-                                                                                            {comment.createdAt.substring(0, 10)}
-                                                                                        </div>
-
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        {
-                                                                                            comment.comment_audit_status == 0? 
-                                                                                            <span style={{color:'red', lineHeight: '40px', marginLeft:'10px'}}>(待精选)</span>: <></>
-                                                                                        }
-                                                                                        <span></span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div
-                                                                                    style={{
-                                                                                        lineHeight: '35px',
-                                                                                        color: 'black',
-                                                                                        fontSize: 12,
-                                                                                        // borderTop: '2px solid #F6F6F6',
-                                                                                        marginLeft: '50px',
-                                                                                        textAlign: 'left'
-                                                                                    }}
-                                                                                >{comment.comment_content}</div>
-                                                                            </div>
-                                                                        )
-                                                                    })}
-                                                                </List> */}
                                                             </div>
                                                         </div>
                                                     </>
@@ -708,14 +519,6 @@ class PostDetail extends Component {
                         <div></div>
                 }
                 <div className="post-message">
-                    {/* <img src={[require("../assets/images/ellipsis.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} 
-                    onClick={()=>{
-                        //Toast.info('请在微信中提交举报信息', 2, ()=>{}, true);
-                        this.props.history.push({
-                            pathname: `../complain`,
-                            state: { ...this.state.item }
-                        });
-                    }} /> */}
                     <Popover mask
                         overlayStyle={{ position:'absolute', left: '20px' }}
                         visible={this.state.visible}
@@ -770,10 +573,6 @@ class PostDetail extends Component {
                     <span style={{ marginLeft: '3px', fontSize: '14px', paddingTop: '2px' }}>{this.state.item.likeCount ? this.state.item.likeCount : 0}</span>
                     
                     <div className='wechatButton' onClick={()=>{
-                        // Toast.info(<div>
-                        //     <img src={[require("../assets/images/arrow_up_right.png")]} alt="" style={{ width: '100px', height: '100px', margin: '0px 0px 5px 10px', display:'flex' }} />
-                        //     <span>请点击右上角的菜单分享</span>
-                        // </div>, 4, ()=>{}, true);
                         let search= `postDetail/${this.state.item.id}?title=${this.state.item.name.length>=10? this.state.item.name.substring(0,10) : this.state.item.name}`;
                         const url = `/pages/share/share?poster=${this.state.item.pics[0]}&title=${this.state.item.name}&search=${search}`;//对应小程序项目里建立的wePay.js的路径
                         wx.miniProgram.navigateTo({
