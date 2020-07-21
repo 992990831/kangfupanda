@@ -70,6 +70,18 @@ function ProfileComment(props) {
     }
 
     const onItemTouchStart = (e) => {
+        let userStr = localStorage.getItem("userInfo");
+        if(!userStr)
+        {
+            return;
+        }
+
+        let userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        if(props.workItem.openId != userInfo.openid) //登录人和作者不是同一人
+        {
+            return;
+        }
+
         if (e.target && e.target.innerText) {
             let title = e.target.innerText;
             let commentId = e.target.getAttribute('commentid');
