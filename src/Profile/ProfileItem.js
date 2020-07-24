@@ -5,17 +5,25 @@ import { Constants } from '../Utils/Constants';
 
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import { createHashHistory } from 'history';
+import { withRouter } from 'react-router-dom'
 
 import Lazyload from 'react-lazyload';
 import './ProfileItem.css'
 
-const history = createHashHistory();
-
-const gotoPostDetail = (postId) =>{
-    history.push(`/postDetail/${postId}`);
-}
+//const history = createHashHistory();
 
 function ProfileItem(props) {
+    
+    const gotoPostDetail = (postId) =>{
+        // history.push(`/postDetail/${postId}`, {
+        //     back: '/found'
+        // });
+        props.history.push({
+            pathname: `/postDetail/${postId}`,
+            state: { back: props.location.pathname }
+        });
+    }
+
     return(<div>
         <div style={{fontSize:'12px', textAlign:'left', paddingBottom:'2px'}}>
             <div className="profileItemTitle">{props.workItem.name}</div>
@@ -39,4 +47,4 @@ function ProfileItem(props) {
     </div>)
 }
 
-export default ProfileItem
+export default withRouter(ProfileItem)

@@ -113,8 +113,13 @@ class App extends Component {
 saveLastVisitUrl()
 {
   //保存当前链接，在微信登录后可以回到这里
-  let search= window.location.hash;
-  localStorage.setItem("redirectSearch", search.substring(2));
+  //仅在localstorage中没有userInfo的情况下
+  let userInfoStr = localStorage.getItem("userInfo");
+
+  if (!userInfoStr) {      
+    let search= window.location.hash;
+    localStorage.setItem("redirectSearch", search.substring(2));
+  }
 }
 
   componentDidMount(){

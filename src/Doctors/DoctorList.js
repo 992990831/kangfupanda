@@ -8,12 +8,14 @@ import { Tabs, Badge, Modal, Carousel,WingBlank, Toast } from 'antd-mobile';
 import ProfileItem from '../Profile/ProfileItem';
 
 import VerticalCarousel from '../Tool/VerticalCarousel';
-import CarouselExt from '../Tool/CarouselExt';
+//import CarouselExt from '../Tool/CarouselExt';
+import { withRouter } from 'react-router-dom'
 
 import { getJSSDK } from '../Utils/wxshare';
 
 const tabs = [
-    { title: <Badge text={'1'}>推荐</Badge> },
+    // { title: <Badge text={'1'}>推荐</Badge> },
+    { title: '推荐' },
     { title: '关注' },
     { title: '参加' }
 ];
@@ -128,7 +130,10 @@ class DoctorList extends Component {
                     </div>
                 </div>
                 <Tabs tabs={tabs}
-                    initialPage={0}
+                    initialPage={
+                        (this.props.location.state && this.props.location.state.initialPage)?
+                        this.props.location.state.initialPage : 0
+                    }
                     onChange={(tab, index) => { console.log('onChange', index, tab); }}
                     onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                 >
@@ -180,4 +185,4 @@ class DoctorList extends Component {
     }
 }
 
-export default DoctorList;
+export default withRouter(DoctorList);

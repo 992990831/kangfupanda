@@ -226,6 +226,30 @@ class PostDetail extends Component {
     }
 
     handleBack = () => {
+        if(this.props.location.state && this.props.location.state.back)
+        {
+            if(this.props.location.state.back === '/found') //如果是从发现页过来的，需要退回到发现页，并且initialPage=1
+            {
+                this.props.history.push({
+                    pathname: this.props.location.state.back,
+                    state: {
+                        initialPage: 1
+                    }
+                })
+
+                return;
+            }
+            
+            if(this.props.location.state.back === '/profile') //如果是从"我的"页过来的
+            {
+                this.props.history.push({
+                    pathname: this.props.location.state.back,
+                })
+
+                return;
+            }
+        }
+
         this.props.history.push({
             pathname: `../home`,
         })
