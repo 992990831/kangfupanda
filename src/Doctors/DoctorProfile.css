@@ -30,6 +30,12 @@
     color: black;
 }
 
+.profileHeaderQRContainer{
+    width: 180px;
+    margin: 10px 10px 10px 10px;
+}
+
+
 .profileHeaderContent{
     width:33%;
 }

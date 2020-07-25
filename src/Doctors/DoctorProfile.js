@@ -25,6 +25,7 @@ class DoctorProfile extends Component {
             followed: false,
             //专家的作品
             posts: [],
+            qrCode: null
         };
     }
 
@@ -43,6 +44,7 @@ class DoctorProfile extends Component {
             console.log(error);
         });
 
+        this.GetQRCode(openid);
         this.GetPostList(openid);
 
         if(!followed) //double check, 有可能是小程序转发过来的，所以location.state里面没有
@@ -121,6 +123,21 @@ class DoctorProfile extends Component {
           });
       }
 
+      GetQRCode(openId)
+      {
+        axios.get(`${Constants.APIBaseUrl}/user/mini/qrcode?openId=${openId}`, {
+            headers: { 'Content-Type': 'application/json' }
+          })
+            .then(res => {
+              this.setState({
+                qrCode: res.data.Data,
+              });
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+      }
+
     render() {
         // let workItems = [];
         // let videosStr = localStorage.getItem("videos");
@@ -168,6 +185,12 @@ class DoctorProfile extends Component {
                                 }
                             </span>
                         </div>
+                    </div>
+                    <div className="profileHeaderQRContainer">
+                        {
+                            this.state.qrCode?
+                            <img style={{width:'100%'}} src={`data:image/jpeg;base64,${this.state.qrCode}`} />: <></>
+                        }
                     </div>
                 </div>
                 <div className="profileName">
