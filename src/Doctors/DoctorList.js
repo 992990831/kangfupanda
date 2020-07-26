@@ -58,27 +58,10 @@ class DoctorList extends Component {
 
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo.openid) {
-            axios.get(`${Constants.APIBaseUrl}/follow/list/${userInfo.openid}`, {
+            axios.get(`${Constants.APIBaseUrl}/follow/list/v2/${userInfo.openid}`, {
                 headers: { 'Content-Type': 'application/json' }
             }).then(res => {
                 let followeePosts = res.data;
-
-                // //Begin - 从客户端缓存里面找到每个作品的客户端id
-                // let videosStr = localStorage.getItem("videos");
-                // let allVideos = JSON.parse(videosStr);
-                // for(let i=0; i < followeePosts.length; i++)
-                // {
-                //     let filteredVideos = allVideos.filter(video => {
-                //         return video.name == followeePosts[i].name;
-                //     });
-
-                //     if(filteredVideos && filteredVideos.length > 0)
-                //     {
-                //         followeePosts[i].id = filteredVideos[0].id;
-                //     }
-                // }
-                // //End
-
                 this.setState({
                     followeePosts: followeePosts,
                 });
@@ -162,15 +145,43 @@ class DoctorList extends Component {
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '255px' }}>
                         {
-                            this.state.followeePosts.map((post, index) => {
+                            this.state.followeePosts.map((postGroup, index) => {
                                 return (
-                                    <div style={{
-                                        width: '50%', float: 'left',
-                                        margin: '0px',
-                                        padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
-                                    }}>
-                                        <ProfileItem workItem={post} key={index} />
-                                    </div>
+                                    postGroup.posts && postGroup.posts.length>0 ? //必须有文章才显示关注的专家
+                                    <div style={{clear:'both', borderTop:'1px solid rgba(188,188,188,1)'}}>
+                                        <div style={{margin:'5px 0 0 0', textAlign:'left', padding:'5px 0px 5px 20px', display:'flex'}}>
+                                            <img src={postGroup.author.headpic && postGroup.author.headpic.startsWith('http') ? postGroup.author.headpic : `${Constants.ResourceUrl}${postGroup.author.headpic}`} alt="" className="doctor-avator" />
+                                            <div className="doctor-description">
+                                                <div style={{ width: '90%', textAlign: 'left' }}>
+                                                    <div style={{ fontSize: '14px' }}>
+                                                        {postGroup.author.nickName}
+                                                    </div>
+                                                </div>
+                                                <div style={{ marginTop: '5px', textAlign: 'left' }}>
+                                                    <span style={{ fontSize: '12px', color:'rgba(108,108,108,1)' }}>
+                                                        {
+                                                            postGroup.author.note ? postGroup.author.note : '这个人还没有写简介哦~'
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {
+                                            postGroup.posts.map((post, index) => {
+                                                return (
+                                                    <div style={{
+                                                        width: '50%', float: 'left',
+                                                        margin: '0px',
+                                                        padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                                    }}>
+                                                        <ProfileItem workItem={post} key={index} />
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>:
+                                    <></>
+
                                 )
                             })
                         }

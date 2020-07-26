@@ -47,3 +47,15 @@
 .doctorListContainer{
     display: flex;
 }
+
+.doctor-avator{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.doctor-description{
+    width: 100%;
+    margin-left: 20px;
+    color: black;
+}
