@@ -40,6 +40,10 @@ class PostDetail extends Component {
             selectedTags: [],
             //初始化一定要给几个图片，否则Carousel控件会失效
             pics: ['', ''],
+            isAuthor: false, //当前是否作者本人
+            isReplyDialog: false, //弹出的对话框是一级评论 或 作者对一级评论的回复 
+            dialogTitle: '', //回复时显示的对话框标题
+            commentId: 0  //回复的commentId
         }
     }
 
@@ -127,7 +131,17 @@ class PostDetail extends Component {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
+            debugger;
+            let isAuthor = false;            
+            //判断是否作者本人
+            let userInfoStr = localStorage.getItem("userInfo");
+            let userInfo = JSON.parse(userInfoStr);
+            if(userInfo.openid === res.data.openId)
+            {
+                isAuthor = true;
+            }
             this.setState({
+                isAuthor,
                 item: res.data,
                 pics: [...res.data.pics]
             }, () => {
@@ -255,7 +269,16 @@ class PostDetail extends Component {
         })
     }
 
-    onOpenCommentChange = (...args) => {
+    onOpenCommentChange = (isReplyDialog, title, commentId) => {
+        if(isReplyDialog)
+        {
+            this.setState({isReplyDialog: true, dialogTitle: title, commentId});
+        }
+        else
+        {
+            this.setState({isReplyDialog: false, dialogTitle: null, commentId:0});
+        }
+
         window.scrollTo({ left: 0, top: window.innerHeight });
         this.setState({ isCommentVisible: !this.state.isCommentVisible });
     }
@@ -274,39 +297,98 @@ class PostDetail extends Component {
         }
 
         //let comment = this.refs.refComment.value;
-
-        let body = {
-            comment_post_id: this.state.item.postId,
-            comment_post_type: this.state.item.itemType,
-            comment_user_id: userInfo.openid,
-            comment_user_name: userInfo.nickname,
-            comment_user_pic: userInfo.headimgurl,
-            comment_content: this.state.comment,
+        if(!this.state.isReplyDialog) //发表评论
+        {
+            let body = {
+                comment_post_id: this.state.item.postId,
+                comment_post_type: this.state.item.itemType,
+                comment_user_id: userInfo.openid,
+                comment_user_name: userInfo.nickname,
+                comment_user_pic: userInfo.headimgurl,
+                comment_content: this.state.comment,
+            }
+    
+            axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(() => {
+                Toast.info('评论已提交', 2);
+                // debugger;
+                // this.setState({isCommentVisible: false});
+                //this.refs.refComment.value = '';
+                this.setState({isCommentVisible: false});
+    
+                let postId = 0;
+            
+                if(this.props.match.params.postId.indexOf('?') > -1)
+                {
+                    postId = this.props.match.params.postId.substring(0, this.props.match.params.postId.indexOf('?'));
+                }
+                else
+                {
+                    postId = this.props.match.params.postId;
+                }
+                this.GetCommentList(postId);
+            }).catch(function (error) {
+                Toast.info('添加评论失败', 2);
+            });
         }
-
-        axios.post(`${Constants.APIBaseUrl}/comments/add`, body).then(() => {
-            Toast.info('评论已提交', 2);
-            // debugger;
-            // this.setState({isCommentVisible: false});
-            //this.refs.refComment.value = '';
-            this.setState({isCommentVisible: false});
-
-            let postId = 0;
-        
-            if(this.props.match.params.postId.indexOf('?') > -1)
-            {
-                postId = this.props.match.params.postId.substring(0, this.props.match.params.postId.indexOf('?'));
+        else{ //回复评论
+            let body = {
+                comment_user_id: userInfo.openid,
+                comment_user_name: userInfo.nickname,
+                comment_user_pic: userInfo.headimgurl,
+                comment_content: this.state.comment,
+                parentId: this.state.commentId
             }
-            else
-            {
-                postId = this.props.match.params.postId;
-            }
-            this.GetCommentList(postId);
-        }).catch(function (error) {
-            alert('添加评论失败');
-        });
+    
+            axios.post(`${Constants.APIBaseUrl}/comments/author/add`, body).then(() => {
+                Toast.info('回复已提交', 2);
+                this.setState({isCommentVisible: false});
+    
+                let postId = 0;
+            
+                if(this.props.match.params.postId.indexOf('?') > -1)
+                {
+                    postId = this.props.match.params.postId.substring(0, this.props.match.params.postId.indexOf('?'));
+                }
+                else
+                {
+                    postId = this.props.match.params.postId;
+                }
+                this.GetCommentList(postId);
+
+            }).catch(function (error) {
+                Toast.info('回复失败', 2);
+            });
+        }
     }
 
+    onItemTouchStart = (e) => {
+        let that = this;
+
+        if (e.target && e.target.innerText) {
+            let title = e.target.innerText;
+            let commentId = e.target.getAttribute('commentid');
+            this.timer = setTimeout(function () {
+                console.log('LongPress');
+                e.preventDefault();
+                that.LongPress(commentId, title);
+            }, 800);
+        }
+    }
+
+    onTouchMove = (e) => {
+        console.log('onItemTouchMove');
+        clearTimeout(this.timer);
+        this.timer = 0;
+    }
+
+    onItemTouchEnd = (e) => {
+        console.log('onItemTouchEnd');
+        clearTimeout(this.timer);
+    }
+
+    LongPress = (commentId, title) => {
+        this.onOpenCommentChange(true, title, commentId);
+    }
     
     render() {
         const { item } = this.state;
@@ -379,7 +461,7 @@ class PostDetail extends Component {
                                         transparent
                                         maskClosable={false}
                                         onClose={()=>{ this.setState({isCommentVisible: false}) }}
-                                        title={<div style={{height:'0px'}}></div>}
+                                        title={this.state.dialogTitle}
                                         footer={[{ text: '取消', 
                                             onPress: () => { console.log('ok'); this.setState({isCommentVisible: false}) ; } 
                                         },
@@ -497,7 +579,7 @@ class PostDetail extends Component {
                                                                                         marginLeft: '10px'
                                                                                     }}
                                                                                 >
-                                                                                    <div style={{ lineHeight: '20px', textAlign: 'left' }}>{comment.comment_user_name}</div>
+                                                                                    <div style={{ lineHeight: '20px', textAlign: 'left' }}>{comment.comment_user_name}</div>                                                                                   
                                                                                     <div
                                                                                         style={{
                                                                                             lineHeight: '18px',
@@ -507,7 +589,19 @@ class PostDetail extends Component {
                                                                                             margin: 'auto',
                                                                                             textAlign: 'left'
                                                                                         }}
-                                                                                    >{comment.comment_content} {comment.comment_audit_status == 0 ? <span style={{ color: 'red' }}>(待精选)</span> : <></>}</div>
+                                                                                        commentid={comment.comment_id}
+                                                                                        onTouchStart={
+                                                                                           this.state.isAuthor? this.onItemTouchStart.bind(this) : ()=>{} 
+                                                                                        }
+                                                                                        onTouchEnd={
+                                                                                            this.state.isAuthor?  this.onItemTouchEnd.bind(this) : ()=>{}
+                                                                                        }
+                                                                                        onTouchMove={
+                                                                                            this.state.isAuthor? this.onTouchMove.bind(this) : ()=>{}
+                                                                                        }
+                                                                                    >
+                                                                                        {comment.comment_content} {comment.comment_audit_status == 0 ? <span style={{ color: 'red' }}>(待精选)</span> : <></>}
+                                                                                    </div>
                                                                                     {
                                                                                         comment.Replies && comment.Replies.length > 0 ?
                                                                                             comment.Replies.map((reply, index) => {
@@ -578,7 +672,9 @@ class PostDetail extends Component {
                     
                     
                     <div className="comment-input" onClick={
-                        this.onOpenCommentChange.bind(this)
+                       ()=>{
+                        this.onOpenCommentChange(false);
+                       } 
                     }>
                         <img src={[require("../assets/images/pen-white.png")]} alt="" className="comment-icon" />
                         <span>赶快评论吧</span>
