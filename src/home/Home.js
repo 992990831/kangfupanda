@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { forceCheck } from 'react-lazyload';
 import './Home.css';
+import { SearchBar } from 'antd-mobile';
 // import { Player } from 'video-react';
 // import "video-react/dist/video-react.css";
 
@@ -15,7 +16,8 @@ class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      videos: []
+      posts: [],
+      filter: ''
     }
   }
 
@@ -26,7 +28,7 @@ class Home extends Component {
     {
       let posts = JSON.parse(postsStr);
       this.setState({
-        videos: [...posts],
+        posts: [...posts],
       });
 
       localStorage.removeItem(Constants.AllPosts);
@@ -49,17 +51,17 @@ class Home extends Component {
     }
 
     let endId = 0;
-    if(this.state.videos.length > 0)
+    if(this.state.posts.length > 0)
     {
-      endId = this.state.videos[this.state.videos.length-1].postId;
+      endId = this.state.posts[this.state.posts.length-1].postId;
     }
 
-    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=${count}&endId=${endId}`, {
+    axios.get(`${Constants.APIBaseUrl}/club/list?openId=${followerOpenId}&count=${count}&endId=${endId}&filter=${this.state.filter}`, {
       headers: { 'Content-Type': 'application/json' }
     })
       .then(res => {
         this.setState({
-          videos: [...this.state.videos, ...res.data],
+          posts: [...this.state.posts, ...res.data],
         });
 
         //localStorage.setItem("videos", JSON.stringify(res.data));
@@ -69,22 +71,35 @@ class Home extends Component {
       });
   }
 
-  openCamera() {
-    this.refs.btnCamera.click();
-  }
+  // openCamera() {
+  //   this.refs.btnCamera.click();
+  // }
 
   loadMore(count)
   {
     this.GetList(10);
   }
 
+  onSubmitSearch(text){
+    this.setState({
+      posts: [],
+      filter: text
+    }, ()=>{
+      this.GetList(10)
+    });
+  }
+
+  onCancelSearch(){
+    this.refs.searchBox.doClear();
+  }
+
   render() {
-    var listData = this.state.videos; //mockData;
+    //var listData = this.state.posts; //mockData;
 
     return (
       <div className="home-container">
         <div className="homeHeader">
-          <div className="search-nav" onClick={() => {
+          {/* <div className="search-nav" onClick={() => {
             console.log('click search')
           }}>
             <img src={[require("../assets/images/search.png")]} alt="" className="search-icon" />
@@ -92,13 +107,16 @@ class Home extends Component {
             <button className="publish" onClick={this.openCamera.bind(this)}>
               <img src={[require("../assets/images/publish2.png")]} alt="" />
             </button>
-          </div>
+          </div> */}
+          <SearchBar placeholder='大家都在搜"医学护肤，医学减重"' maxLength={20} onSubmit={this.onSubmitSearch.bind(this)}  ref='searchBox'
+          cancelText='清除' onChange={this.onSubmitSearch.bind(this)}
+          onCancel={this.onCancelSearch.bind(this)} onClear={this.onSubmitSearch.bind(this)}></SearchBar>
         </div>
-        <input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
-        </input>
+        {/* <input type="file" accept="image/*" ref='btnCamera' style={{ display: 'none' }}>
+        </input> */}
 
         <div className="Found-container">
-          <PostList list={listData} loadMore={this.loadMore.bind(this)} />
+          <PostList list={this.state.posts} loadMore={this.loadMore.bind(this)} filter />
         </div>
       </div>
     );

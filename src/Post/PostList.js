@@ -261,7 +261,7 @@ class PostList extends Component {
     //       }
     //     </div>
     // </div>
-    <div style={{paddingTop:'60px'}}>
+    <div style={{paddingTop:'40px'}}>
       {/* <Button
         style={{ margin: '30px 15px' }}
         inline
