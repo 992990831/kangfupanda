@@ -47,96 +47,121 @@ class DoctorProfile extends Component {
         this.GetQRCode(openid);
         this.GetPostList(openid);
 
-        if(!followed) //double check, 有可能是小程序转发过来的，所以location.state里面没有
+        if (!followed) //double check, 有可能是小程序转发过来的，所以location.state里面没有
         {
             let userInfo = null;
-        
-            if(localStorage.getItem("userInfo"))
-            {
+
+            if (localStorage.getItem("userInfo")) {
                 userInfo = JSON.parse(localStorage.getItem("userInfo"));
                 this.GetFollowed(userInfo.openid, openid);
             }
         }
-        else
-        {
+        else {
             this.setState({
                 followed: true,
-              });
+            });
         }
     }
 
     follow() {
         let userInfoStr = localStorage.getItem("userInfo");
-        if(!userInfoStr)
-        {
-          if (!userInfoStr) {
-            this.props.history.push({
-                pathname: `../profile`,
-            })
-            return;
-          }
+        if (!userInfoStr) {
+            if (!userInfoStr) {
+                this.props.history.push({
+                    pathname: `../profile`,
+                })
+                return;
+            }
         }
-    
-        let userInfo = JSON.parse(userInfoStr); 
-    
+
+        let userInfo = JSON.parse(userInfoStr);
+
         if (this.state.userInfo) {
-          let body = {
-            followee: this.state.userInfo.openId,
-            follower: userInfo.openid
-          }
-          axios.post(`${Constants.APIBaseUrl}/follow`, body).then((res)=>{
-            this.setState({followed: true});
-          }).catch(function (error) {
-            alert('关注失败');
-          });
+            let body = {
+                followee: this.state.userInfo.openId,
+                follower: userInfo.openid
+            }
+            axios.post(`${Constants.APIBaseUrl}/follow`, body).then((res) => {
+                this.setState({ followed: true });
+            }).catch(function (error) {
+                alert('关注失败');
+            });
         }
-    
-      }
+
+    }
 
 
-      GetFollowed(followerId, followeeId)
-      {
+    GetFollowed(followerId, followeeId) {
         axios.get(`${Constants.APIBaseUrl}/follow/${followeeId}/${followerId}`, {
             headers: { 'Content-Type': 'application/json' }
-          })
+        })
             .then(res => {
-              this.setState({
-                followed: res.data,
-              });
+                this.setState({
+                    followed: res.data,
+                });
             })
             .catch(function (error) {
-              console.log(error);
+                console.log(error);
             });
-      }
+    }
 
-      GetPostList(openid) {
+    GetPostList(openid) {
         axios.get(`${Constants.APIBaseUrl}/message/list/my?openId=${openid}`, {
-          headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' }
         })
-          .then(res => {
-            this.setState({
-              posts: res.data,
+            .then(res => {
+                this.setState({
+                    posts: res.data,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      }
+    }
 
-      GetQRCode(openId)
-      {
+    GetQRCode(openId) {
         axios.get(`${Constants.APIBaseUrl}/user/mini/qrcode?openId=${openId}`, {
             headers: { 'Content-Type': 'application/json' }
-          })
+        })
             .then(res => {
-              this.setState({
-                qrCode: res.data.Data,
-              });
+                this.setState({
+                    qrCode: res.data.Data,
+                });
             })
             .catch(function (error) {
-              console.log(error);
+                console.log(error);
             });
-      }
+    }
+
+    handleBack = () => {
+        if(this.props.location.state && this.props.location.state.back)
+        {
+            if(this.props.location.state.back === '/found') //如果是从发现页过来的，需要退回到发现页，并且initialPage=1
+            {
+                this.props.history.push({
+                    pathname: this.props.location.state.back,
+                    state: {
+                        initialPage: 1
+                    }
+                })
+
+                return;
+            }
+            
+            if(this.props.location.state.back.startsWith('/postDetail')) //如果是从"我的"页过来的
+            {
+                this.props.history.push({
+                    pathname: this.props.location.state.back,
+                })
+
+                return;
+            }
+        }
+
+        this.props.history.push({
+            pathname: `../home`,
+        })
+    }
 
     render() {
         // let workItems = [];
@@ -150,24 +175,27 @@ class DoctorProfile extends Component {
         //     });
         // }
 
-                
+
         const tabs = [
-            { title: `作品(${this.state.posts.length})`},
-            { title: <Badge text={this.state.pendingCommentCount }>评论</Badge>}
+            { title: `作品(${this.state.posts.length})` },
+            { title: <Badge text={this.state.pendingCommentCount}>评论</Badge> }
         ];
-        
+
         let userInfo = null;
-        
-        if(localStorage.getItem("userInfo"))
-        {
+
+        if (localStorage.getItem("userInfo")) {
             userInfo = JSON.parse(localStorage.getItem("userInfo"));
         }
 
         return (
             <React.Fragment>
+                <div className="doctor-profile-back">
+                    <img src={[require('../assets/images/arrow.png')]} alt="" className="post-left"
+                        onClick={() => this.handleBack()} />
+                </div>
                 <div className="profileHeader">
                     <div className="profileHeaderPicContainer">
-                        <img src={this.state.userInfo.headpic && this.state.userInfo.headpic.startsWith('http')?  this.state.userInfo.headpic : `${Constants.ResourceUrl}${this.state.userInfo.headpic}`} alt="" className="profileHeadPic" />
+                        <img src={this.state.userInfo.headpic && this.state.userInfo.headpic.startsWith('http') ? this.state.userInfo.headpic : `${Constants.ResourceUrl}${this.state.userInfo.headpic}`} alt="" className="profileHeadPic" />
                     </div>
                     <div className="profileHeaderContentContainer">
                         <div style={{ width: '90%', textAlign: 'left' }}>
@@ -188,8 +216,8 @@ class DoctorProfile extends Component {
                     </div>
                     <div className="profileHeaderQRContainer">
                         {
-                            this.state.qrCode?
-                            <img style={{width:'100%'}} src={`data:image/jpeg;base64,${this.state.qrCode}`} />: <></>
+                            this.state.qrCode ?
+                                <img style={{ width: '100%' }} src={`data:image/jpeg;base64,${this.state.qrCode}`} /> : <></>
                         }
                     </div>
                 </div>
@@ -208,15 +236,15 @@ class DoctorProfile extends Component {
                     </div>
                     <div style={{ width: '25%', float: 'left' }}>
                         {
-                            !this.state.followed?
-                            <Button type='primary' inline size='small' style={{ margin: '4px', fontWeight:'bold' }} onClick={this.follow.bind(this)}>关注</Button>
-                            :
-                            <></>
+                            !this.state.followed ?
+                                <Button type='primary' inline size='small' style={{ margin: '4px', fontWeight: 'bold' }} onClick={this.follow.bind(this)}>关注</Button>
+                                :
+                                <></>
                         }
-                        
+
                     </div>
                 </div>
-                <div style={{ height: '8px', backgroundColor: 'transparent', clear:'both' }}></div>
+                <div style={{ height: '8px', backgroundColor: 'transparent', clear: 'both' }}></div>
                 <Tabs tabs={tabs}
 
                     initialPage={0}
@@ -251,7 +279,7 @@ class DoctorProfile extends Component {
                                             margin: '3px', backgroundColor: 'white', textAlign: 'left',
                                             padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
                                         }}>
-                                            <ProfileComment workItem={workItem} showPending={userInfo.openid==this.state.userInfo.openId} />
+                                            <ProfileComment workItem={workItem} showPending={userInfo.openid == this.state.userInfo.openId} />
                                         </div>
                                     )
                                 })

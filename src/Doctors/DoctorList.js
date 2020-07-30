@@ -157,7 +157,7 @@ class DoctorList extends Component {
                                                 {
                                                      this.props.history.push({
                                                      pathname: `../profile/doctor/${postGroup.author.openId}`,
-                                                     state: { followed: true }
+                                                     state: { followed: true, back: this.props.location.pathname }
                                                    });
                                                 }
                                                 

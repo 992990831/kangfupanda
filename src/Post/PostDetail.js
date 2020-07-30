@@ -131,7 +131,6 @@ class PostDetail extends Component {
         axios.get(`${Constants.APIBaseUrl}/club/${postId}`, {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
-            debugger;
             let isAuthor = false;            
             //判断是否作者本人
             let userInfoStr = localStorage.getItem("userInfo");
@@ -440,7 +439,7 @@ class PostDetail extends Component {
                                                                    {
                                                                         this.props.history.push({
                                                                         pathname: `../profile/doctor/${item.openId}`,
-                                                                        state: { followed: item.followed }
+                                                                        state: { followed: item.followed, back: this.props.location.pathname + this.props.location.search}
                                                                       });
                                                                    }
                                                                    
