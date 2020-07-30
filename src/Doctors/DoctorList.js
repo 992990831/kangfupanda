@@ -149,8 +149,20 @@ class DoctorList extends Component {
                                 return (
                                     postGroup.posts && postGroup.posts.length>0 ? //必须有文章才显示关注的专家
                                     <div style={{clear:'both', borderTop:'1px solid rgba(188,188,188,1)'}}>
-                                        <div style={{margin:'5px 0 0 0', textAlign:'left', padding:'5px 0px 5px 20px', display:'flex'}}>
-                                            <img src={postGroup.author.headpic && postGroup.author.headpic.startsWith('http') ? postGroup.author.headpic : `${Constants.ResourceUrl}${postGroup.author.headpic}`} alt="" className="doctor-avator" />
+                                        <div style={{margin:'5px 0 0 0', textAlign:'left', padding:'5px 0px 5px 20px', display:'flex'}} >
+                                            <img src={postGroup.author.headpic && postGroup.author.headpic.startsWith('http') ? postGroup.author.headpic : `${Constants.ResourceUrl}${postGroup.author.headpic}`} 
+                                            alt="" className="doctor-avator"
+                                            onClick={() => {
+                                                if(postGroup.author.openId)
+                                                {
+                                                     this.props.history.push({
+                                                     pathname: `../profile/doctor/${postGroup.author.openId}`,
+                                                     state: { followed: true }
+                                                   });
+                                                }
+                                                
+                                              }}
+                                            />
                                             <div className="doctor-description">
                                                 <div style={{ width: '90%', textAlign: 'left' }}>
                                                     <div style={{ fontSize: '14px' }}>
