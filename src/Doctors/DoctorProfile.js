@@ -175,8 +175,15 @@ class DoctorProfile extends Component {
         //     });
         // }
 
-
+        //非专家、无证书
         const tabs = [
+            { title: `作品(${this.state.posts.length})` },
+            { title: <Badge text={this.state.pendingCommentCount}>评论</Badge> }
+        ];
+
+        //有证书的专家
+        const tabsDoctor = [
+            { title: `资质证书` },
             { title: `作品(${this.state.posts.length})` },
             { title: <Badge text={this.state.pendingCommentCount}>评论</Badge> }
         ];
@@ -245,49 +252,103 @@ class DoctorProfile extends Component {
                     </div>
                 </div>
                 <div style={{ height: '8px', backgroundColor: 'transparent', clear: 'both' }}></div>
-                <Tabs tabs={tabs}
-
-                    initialPage={0}
-                    onChange={(tab, index) => { console.log('onChange', index, tab); }}
-                    onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
-                >
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
-                        {
-                            this.state.followed || (userInfo && this.state.openid == userInfo.openid) ?
-                                this.state.posts.map(workItem => {
-                                    return (
-                                        <div style={{
-                                            width: '48%', float: 'left',
-                                            margin: '3px',
-                                            padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
-                                        }}>
-                                            <ProfileItem workItem={workItem} />
-                                        </div>
-                                    )
-                                })
-                                :
-                                <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
-                        }
-                    </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
-                        {
-                            this.state.followed ?
-                                this.state.posts.map(workItem => {
-                                    return (
-                                        <div style={{
-                                            width: '98%', float: 'left',
-                                            margin: '3px', backgroundColor: 'white', textAlign: 'left',
-                                            padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
-                                        }}>
-                                            <ProfileComment workItem={workItem} showPending={userInfo.openid == this.state.userInfo.openId} />
-                                        </div>
-                                    )
-                                })
-                                :
-                                <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
-                        }
-                    </div>
-                </Tabs>
+                {
+                    //普通用户/没有经过认证/没有证书 的人只有两个Tab, 经过认证且有证书的人有三个Tab
+                    (!this.state.userInfo || this.state.userInfo.usertype=='普通用户' || !this.state.userInfo.verified || !this.state.userInfo.certificate) ?
+                    <Tabs tabs={tabs}
+                        initialPage={0}
+                        onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                        onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                    >
+                        <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
+                            {
+                                this.state.followed || (userInfo && this.state.openid == userInfo.openid) ?
+                                    this.state.posts.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '48%', float: 'left',
+                                                margin: '3px',
+                                                padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileItem workItem={workItem} />
+                                            </div>
+                                        )
+                                    })
+                                    :
+                                    <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
+                            }
+                        </div>
+                        <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
+                            {
+                                this.state.followed ?
+                                    this.state.posts.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '98%', float: 'left',
+                                                margin: '3px', backgroundColor: 'white', textAlign: 'left',
+                                                padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileComment workItem={workItem} showPending={userInfo.openid == this.state.userInfo.openId} />
+                                            </div>
+                                        )
+                                    })
+                                    :
+                                    <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
+                            }
+                        </div>
+                    </Tabs>
+                    :
+                    <Tabs tabs={tabsDoctor}
+                        initialPage={0}
+                        onChange={(tab, index) => { console.log('onChange', index, tab); }}
+                        onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+                    >
+                        <div style={{
+                            background: `url(${Constants.ResourceCertUrl}/${this.state.userInfo.certificate}) no-repeat`,
+                            backgroundPosition: 'center',
+                            backgroundSize: `auto 100%`,
+                            paddingBottom: '90%'
+                        }}>
+                        </div>
+                        <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
+                            {
+                                this.state.followed || (userInfo && this.state.openid == userInfo.openid) ?
+                                    this.state.posts.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '48%', float: 'left',
+                                                margin: '3px',
+                                                padding: '5px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileItem workItem={workItem} />
+                                            </div>
+                                        )
+                                    })
+                                    :
+                                    <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
+                            }
+                        </div>
+                        <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px' }}>
+                            {
+                                this.state.followed ?
+                                    this.state.posts.map(workItem => {
+                                        return (
+                                            <div style={{
+                                                width: '98%', float: 'left',
+                                                margin: '3px', backgroundColor: 'white', textAlign: 'left',
+                                                padding: '5px', paddingLeft: '20px', borderBottomColor: 'rgb(215, 215, 215)', borderBottomStyle: 'solid', borderBottomWidth: '1px'
+                                            }}>
+                                                <ProfileComment workItem={workItem} showPending={userInfo.openid == this.state.userInfo.openId} />
+                                            </div>
+                                        )
+                                    })
+                                    :
+                                    <div style={{ paddingTop: '30px' }}>请先关注该用户</div>
+                            }
+                        </div>
+                    </Tabs>
+                }
+                
             </React.Fragment>
         )
     }
