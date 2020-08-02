@@ -183,7 +183,7 @@ class DoctorProfile extends Component {
 
         //有证书的专家
         const tabsDoctor = [
-            { title: `资质证书` },
+            { title: `我是谁` },
             { title: `作品(${this.state.posts.length})` },
             { title: <Badge text={this.state.pendingCommentCount}>评论</Badge> }
         ];
@@ -210,8 +210,18 @@ class DoctorProfile extends Component {
                                 {this.state.userInfo.nickName}
                             </div>
                         </div>
-                        <div style={{ marginTop: '5px' }}>
-                            <Badge text={this.state.userInfo.city} style={{ width: '60px' }}></Badge>
+                        <div style={{ marginTop: '5px', display:'flex' }}>
+                            {
+                                this.state.userInfo.city?
+                                <Badge text={this.state.userInfo.city} style={{ width: '60px' }}></Badge>
+                                : <></>
+                            }
+                            
+                            {
+                                this.state.userInfo.verified?
+                                <Badge text='已认证' style={{ width: '60px',backgroundColor: 'rgb(128, 227, 22)' }}></Badge>
+                                : <></>
+                            }
                         </div>
                         <div style={{ marginTop: '5px', textAlign: 'left' }}>
                             <span style={{ fontSize: '12px' }}>
