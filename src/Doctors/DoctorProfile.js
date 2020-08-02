@@ -254,7 +254,7 @@ class DoctorProfile extends Component {
                 <div style={{ height: '8px', backgroundColor: 'transparent', clear: 'both' }}></div>
                 {
                     //普通用户/没有经过认证/没有证书 的人只有两个Tab, 经过认证且有证书的人有三个Tab
-                    (!this.state.userInfo || this.state.userInfo.usertype=='普通用户' || !this.state.userInfo.verified || !this.state.userInfo.certificate) ?
+                    (!this.state.userInfo || this.state.userInfo.usertype=='普通用户' || !this.state.userInfo.verified) ?
                     <Tabs tabs={tabs}
                         initialPage={0}
                         onChange={(tab, index) => { console.log('onChange', index, tab); }}
@@ -303,13 +303,34 @@ class DoctorProfile extends Component {
                         onChange={(tab, index) => { console.log('onChange', index, tab); }}
                         onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                     >
-                        <div style={{
+                        <div style={{ alignItems: 'center', justifyContent: 'center', height: '55vh', marginBottom: '0px', backgroundColor: '#fff' }}>
+                            {
+                                this.state.userInfo.certs && this.state.userInfo.certs.length>0?
+                                this.state.userInfo.certs.map((obj)=>{
+                                    return(
+                                    <>
+                                        <div style={{padding:'3px 0px 3px 0px', fontSize:'18px'}}>{obj.text}</div>
+                                        <div style={{
+                                            background: `url(${Constants.ResourceCertUrl}/${obj.cert}) no-repeat`,
+                                            backgroundPosition: 'center',
+                                            backgroundSize: `auto 100%`,
+                                            paddingBottom: '90%',
+                                            borderBottom: '1px rgb(128,128,128, 0.9) solid'
+                                        }}> 
+                                        </div>
+                                    </>
+                                    )
+                                }):
+                                <></>
+                            }
+                        </div>
+                        {/* <div style={{
                             background: `url(${Constants.ResourceCertUrl}/${this.state.userInfo.certificate}) no-repeat`,
                             backgroundPosition: 'center',
                             backgroundSize: `auto 100%`,
                             paddingBottom: '90%'
-                        }}>
-                        </div>
+                        }}> 
+                        </div>*/}
                         <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '55px', backgroundColor: '#fff' }}>
                             {
                                 this.state.followed || (userInfo && this.state.openid == userInfo.openid) ?
