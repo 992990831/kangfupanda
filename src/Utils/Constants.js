@@ -11,6 +11,9 @@ export const Constants = {
     //专家证书
     ResourceCertUrl: process.env.NODE_ENV === "production"? "https://api.kangfupanda.com/Upload/certificate/" : "https://localhost:44362/Upload/certificate/",
 
+    //专家介绍录像
+    ResourceIntroVideoUrl: process.env.NODE_ENV === "production"? "https://api.kangfupanda.com/Upload/introvideo/" : "https://localhost:44362/Upload/introvideo/",
+
     //快熊康复 AppId:'wxc10ff63ecf588c90',
     //一健点评 AppId:'wx496e5a01291ad836',
     AppId:'wxc10ff63ecf588c90',

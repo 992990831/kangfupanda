@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import './DoctorProfile.css';
-import { ActionSheet, Button, Tabs, Badge, Modal } from 'antd-mobile';
+import { ActionSheet, Button, Tabs, Badge, Modal, Icon } from 'antd-mobile';
 
 import URI from 'URIjs';
 import axios from 'axios';
@@ -14,6 +14,8 @@ import ProfileItem from '../Profile/ProfileItem';
 import ProfileComment from '../Profile/ProfileComment';
 
 import { withRouter } from 'react-router-dom'
+
+import {PlayVideo} from '../Utils/PlayVideo';
 
 const alert = Modal.alert;
 
@@ -196,9 +198,25 @@ class DoctorProfile extends Component {
 
         return (
             <React.Fragment>
+                <div ref={node => this.mask = node}  className='mask' style={{display:'none'}}>
+                    <canvas ref={node => this.canvas = node} width={ window.innerWidth + 'px'} height="300px" style={{marginTop:'100px'}}></canvas>
+                    <div>
+                        <img ref={node=> this.btnPlay = node} src={[require("../assets/images/play.png")]} alt="" className='video-btn' />
+                        <img ref={node=> this.btnStop = node} src={[require("../assets/images/stop.png")]} alt="" className='video-btn'/>
+                        <img ref={node=> this.btnExit = node} src={[require("../assets/images/exit.png")]} alt="" className='video-btn'/>
+                    </div>
+                </div>
                 <div className="doctor-profile-back">
                     <img src={[require('../assets/images/arrow.png')]} alt="" className="post-left"
-                        onClick={() => this.handleBack()} />
+                        onClick={() => {
+                            // if (this.mask) {
+                            //     this.mask.style.display='block';
+                            //     PlayVideo(this.canvas, this.btnStop, this.btnPlay, this.btnExit, ()=>{
+                            //         this.mask.style.display='none';
+                            //     });
+                            // }
+                            this.handleBack();
+                        }} />
                 </div>
                 <div className="profileHeader">
                     <div className="profileHeaderPicContainer">
@@ -213,13 +231,13 @@ class DoctorProfile extends Component {
                         <div style={{ marginTop: '5px', display:'flex' }}>
                             {
                                 this.state.userInfo.city?
-                                <Badge text={this.state.userInfo.city} style={{ width: '60px' }}></Badge>
+                                <Badge text={this.state.userInfo.city} style={{ width: '60px', zIndex:'1' }}></Badge>
                                 : <></>
                             }
                             
                             {
                                 this.state.userInfo.verified?
-                                <Badge text='已认证' style={{ width: '60px',backgroundColor: 'rgb(128, 227, 22)' }}></Badge>
+                                <Badge text='已认证' style={{ width: '60px',backgroundColor: 'rgb(128, 227, 22)', zIndex:'1' }}></Badge>
                                 : <></>
                             }
                         </div>
@@ -314,6 +332,25 @@ class DoctorProfile extends Component {
                         onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                     >
                         <div style={{ alignItems: 'center', justifyContent: 'center', height: '55vh', marginBottom: '0px', backgroundColor: '#fff' }}>
+                                <div style={{
+                                    background: `url(${Constants.ResourceIntroVideoUrl}/20200622235350536宣传片-鲍峰.png) no-repeat`,
+                                    backgroundPosition: 'center',
+                                    backgroundSize: `100% auto`,
+                                    paddingBottom: '90%',
+                                    borderBottom: '1px rgb(128,128,128, 0.9) solid',
+                                    position: 'relative'
+                                }}>
+                                    <img src={[require("../assets/images/play.png")]} alt="" className="play-icon"
+                                        onClick={() => {
+                                            if (this.mask) {
+                                                this.mask.style.display='block';
+                                                PlayVideo(this.canvas, this.btnStop, this.btnPlay, this.btnExit, ()=>{
+                                                    this.mask.style.display='none';
+                                                });
+                                            }
+                                        }}
+                                    />
+                                </div>
                             {
                                 this.state.userInfo.certs && this.state.userInfo.certs.length>0?
                                 this.state.userInfo.certs.map((obj)=>{
