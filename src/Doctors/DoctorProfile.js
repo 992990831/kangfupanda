@@ -332,25 +332,30 @@ class DoctorProfile extends Component {
                         onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
                     >
                         <div style={{ alignItems: 'center', justifyContent: 'center', height: '55vh', marginBottom: '0px', backgroundColor: '#fff' }}>
-                                <div style={{
-                                    background: `url(${Constants.ResourceIntroVideoUrl}/20200622235350536宣传片-鲍峰.png) no-repeat`,
-                                    backgroundPosition: 'center',
-                                    backgroundSize: `100% auto`,
-                                    paddingBottom: '90%',
-                                    borderBottom: '1px rgb(128,128,128, 0.9) solid',
-                                    position: 'relative'
-                                }}>
-                                    <img src={[require("../assets/images/play.png")]} alt="" className="play-icon"
-                                        onClick={() => {
-                                            if (this.mask) {
-                                                this.mask.style.display='block';
-                                                PlayVideo(this.canvas, this.btnStop, this.btnPlay, this.btnExit, ()=>{
-                                                    this.mask.style.display='none';
-                                                });
-                                            }
-                                        }}
-                                    />
-                                </div>
+                                {
+                                    this.state.userInfo.profilevideo && this.state.userInfo.profilevideoposter ?
+                                    <div style={{
+                                        background: `url(${Constants.ResourceIntroVideoUrl}${this.state.userInfo.profilevideoposter}) no-repeat`,
+                                        backgroundPosition: 'center',
+                                        backgroundSize: `100% auto`,
+                                        paddingBottom: '90%',
+                                        borderBottom: '1px rgb(128,128,128, 0.9) solid',
+                                        position: 'relative'
+                                    }}>
+                                        <img src={[require("../assets/images/play.png")]} alt="" className="play-icon"
+                                            onClick={() => {
+                                                if (this.mask) {
+                                                    this.mask.style.display='block';
+                                                    PlayVideo(this.canvas, this.btnStop, this.btnPlay, this.btnExit, ()=>{
+                                                        this.mask.style.display='none';
+                                                    }, this.state.userInfo.profilevideo);
+                                                }
+                                            }}
+                                        />
+                                    </div> :
+                                    <></>
+                                }
+                                
                             {
                                 this.state.userInfo.certs && this.state.userInfo.certs.length>0?
                                 this.state.userInfo.certs.map((obj)=>{

@@ -2,7 +2,7 @@ import { Constants } from '../Utils/Constants';
 
 //https://www.cnblogs.com/zhangbob/p/10039440.html
 //https://www.w3school.com.cn/html5/canvas_drawimage.asp
-export const PlayVideo = (canvas, stopBtn, playBtn, exitBtn, closeCallBack) => {
+export const PlayVideo = (canvas, stopBtn, playBtn, exitBtn, closeCallBack, videoUrl) => {
     //这里一定要单独定义，不能用匿名方法，否则removeEventListener的时候会不知道移除哪个方法
     //https://blog.csdn.net/hangGe0111/article/details/90447905
     
@@ -32,7 +32,7 @@ export const PlayVideo = (canvas, stopBtn, playBtn, exitBtn, closeCallBack) => {
  
         video.preload = true;
         video.autoplay = true;
-        video.src=`${Constants.ResourceIntroVideoUrl}intro.mp4`;
+        video.src=`${Constants.ResourceIntroVideoUrl}${videoUrl}`;
         //document.body.appendChild(video);
  
         //监听video的play事件，一旦开始，就把video逐帧绘制到canvas上
