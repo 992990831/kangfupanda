@@ -143,7 +143,7 @@ class DoctorList extends Component {
                             />
                         </div>
                     </div>
-                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '255px' }}>
+                    <div style={{ alignItems: 'center', justifyContent: 'center', height: '500px', overflowY:'scroll' }}>
                         {
                             this.state.followeePosts.map((postGroup, index) => {
                                 return (
