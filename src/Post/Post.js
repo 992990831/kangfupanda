@@ -129,37 +129,54 @@ class Post extends Component {
                   }
                   
                 }} /> */}
-                <div key={item.id} style={{
-                  background: `url(${Constants.ResourceUrl}/${item.poster}) no-repeat`,
-                  backgroundPosition: 'center',
-                  backgroundSize: `100% auto`,
-                  paddingBottom: '75%'
-                }}
-                  onClick={() => {
-                    if(item.followed || (userInfoStr && item.openId == userInfo.openid))
-                    {
-                      if(this.props.onViewDetail) //把post列表暂存起来，回退时用到
-                      {
-                        this.props.onViewDetail();
-                      }
-                      let path=`postDetail/${item.postId}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
-                      //localStorage.setItem("redirectSearch", path);
-                      this.props.history.push({
-                        pathname: path,
-                        state: { data: this.state.item }
-                      })
-
-                      localStorage.setItem(Constants.LastPostId, this.state.item.postId);
-                    }
-                    else
-                    {
-                      Toast.info('请先关注该用户', 2);
-                    }
-                    
+                {
+                  !item.wechatUrl? //图文作品
+                    <div key={item.id} style={{
+                      background: `url(${Constants.ResourceUrl}/${item.poster}) no-repeat`,
+                      backgroundPosition: 'center',
+                      backgroundSize: `100% auto`,
+                      paddingBottom: '75%'
+                    }}
+                      onClick={() => {
+                        if(item.followed || (userInfoStr && item.openId == userInfo.openid))
+                        {
+                          if(this.props.onViewDetail) //把post列表暂存起来，回退时用到
+                          {
+                            this.props.onViewDetail();
+                          }
+                          let path=`postDetail/${item.postId}?title=${item.name.length>=10? item.name.substring(0,10) : item.name}`;
+                          //localStorage.setItem("redirectSearch", path);
+                          this.props.history.push({
+                            pathname: path,
+                            state: { data: this.state.item }
+                          })
+    
+                          localStorage.setItem(Constants.LastPostId, this.state.item.postId);
+                        }
+                        else
+                        {
+                          Toast.info('请先关注该用户', 2);
+                        }
+                        
+                      }}
+                    >
+                      <div className='title'>{item.name}</div>
+                    </div>
+                  : //从微信导入的图文
+                  <div key={item.id} style={{
+                    background: `url(${Constants.ResourceUrl}/${item.poster}) no-repeat`,
+                    backgroundPosition: 'center',
+                    backgroundSize: `100% auto`,
+                    paddingBottom: '50%'
                   }}
-                >
-                  <div className='title'>{item.name}</div>
-                </div>
+                    onClick={() => {
+                      window.location= item.wechatUrl;
+                    }}
+                  >
+                    <div className='title'>{item.name}</div>
+                  </div>
+                }
+                
 
               </div>
             // </Lazyload>
