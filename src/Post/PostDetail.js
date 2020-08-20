@@ -698,8 +698,8 @@ class PostDetail extends Component {
                             url: url
                         }); 
                     }}>
-                        <img src={[require("../assets/images/forward.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} />
-                        <span style={{ marginLeft: '3px', fontSize: '15px', paddingTop: '3px' }}>转发</span>
+                        {/* <img src={[require("../assets/images/forward.png")]} alt="" style={{ width: '25px', height: '25px', margin: '0px 0px 5px 10px', display:'flex' }} /> */}
+                        <span style={{ marginLeft: '15px', fontSize: '14px', fontWeight:'bold', paddingTop: '3px', lineHeight:'19px' }}>+福利群</span>
                     </div>
                     
                 </div>
