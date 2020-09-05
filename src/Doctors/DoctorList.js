@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './DoctorList.css'
 import Doctor from './Doctor'
+import Feedback from './Feedback';
 import axios from 'axios';
 import { Constants } from '../Utils/Constants';
 import { Tabs, Badge, Modal, Carousel,WingBlank, Toast } from 'antd-mobile';
@@ -17,7 +18,7 @@ const tabs = [
     // { title: <Badge text={'1'}>推荐</Badge> },
     { title: '推荐' },
     { title: '关注' },
-    { title: '参加' }
+    { title: '反馈' }
 ];
 
 class DoctorList extends Component {
@@ -199,7 +200,7 @@ class DoctorList extends Component {
                         }
                     </div>
                     <div style={{ alignItems: 'center', justifyContent: 'center', height: '100%', marginBottom: '0px' }}>
-                        {/* <CarouselExt posts={doctors} config={config}></CarouselExt> */}
+                        <Feedback></Feedback>
                     </div>
                 </Tabs>
 
